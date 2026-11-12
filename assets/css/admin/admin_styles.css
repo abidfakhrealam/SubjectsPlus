@@ -554,7 +554,7 @@ html, button, input, select, textarea {
   padding: 0;
 }
 
-#main-options {background-color:transparent;}
+#main-options {background-color:transparent; z-index: 99999; /* above the fixed guide header (z 99998), which otherwise covered the top of the open panels, more so when an admin notice pushes the header down */}
 
 #main-options .trigger-main-options {
     background-color: #c03957;

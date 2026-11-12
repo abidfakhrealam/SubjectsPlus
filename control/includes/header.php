@@ -32,7 +32,7 @@ if( !file_exists( dirname(__FILE__) . '/config.php' ) || filesize( dirname(__FIL
 		exit;
 	}
 
-	header("location:{$lstrURL}includes/configErrorPage.php?error=nofile");
+	header( "location:{$lstrURL}installer/" ); // no config.php yet: start the installer wizard
 	exit;
 }
 
@@ -96,7 +96,7 @@ if( !isset( $installCheck ) || $installCheck != 'no' )
 	{
 		$lstrURL = getControlURL();
 
-		header("location:{$lstrURL}install.php");
+		header( "location:{$lstrURL}installer/" );
 		exit;
 	}
 }
@@ -227,6 +227,21 @@ mb_internal_encoding('UTF-8');
 		</div>
 	</header>
 	<?php
+	// tell admins while installer files are still on the server (they refuse to run once installed,
+	// but are best removed)
+	if ( ! empty( $_SESSION['admin'] ) ) {
+		$sp_left = array();
+		foreach ( array( 'control/installer/', 'control/setup-config.php', 'control/install.php', 'control/includes/install-code.php' ) as $sp_f ) {
+			if ( file_exists( dirname( __DIR__, 2 ) . '/' . $sp_f ) ) {
+				$sp_left[] = $sp_f;
+			}
+		}
+		if ( $sp_left ) {
+			print '<div role="alert" class="sp-installer-left" style="background:#fff4e5;border-left:5px solid #e07b00;margin:8px 16px;padding:10px 14px;font-size:15px">'
+				. _( 'Installation files are still on the server. They no longer run, but remove them:' ) . ' <code>rm -r ' . sp_h( implode( ' ', $sp_left ) ) . '</code></div>';
+		}
+	}
+
 	// tell admins when database updates for this version have not been applied yet
 	// (the new admin pages and record boxes stay hidden or incomplete until they are).
 	if ( ! empty( $_SESSION['admin'] ) && ( ! isset( $page_title ) || $page_title !== 'Database Updates' ) ) {

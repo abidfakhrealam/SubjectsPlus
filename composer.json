@@ -1,7 +1,7 @@
 {
     "name": "subjectsplus/subjectsplus",
     "description": "SubjectsPlus: research guides, A-Z database list, staff directory, FAQs and TalkBack for libraries",
-    "version": "4.6.1",
+    "version": "4.7.0",
     "homepage": "https://github.com/subjectsplus/SubjectsPlus",
     "keywords": ["library", "research guides", "a-z databases", "ezproxy", "openathens"],
     "support": { "issues": "https://github.com/subjectsplus/SubjectsPlus/issues" },

@@ -1,4 +1,4 @@
-# Installing, configuring and upgrading SubjectsPlus 4.6.0
+# Installing, configuring and upgrading SubjectsPlus 4.7
 
 Contents: [Requirements](#1-requirements) · [New installation](#2-new-installation) ·
 [Apache 2.4](#3-apache-24) · [Nginx](#4-nginx) · [PHP settings](#5-php-settings) ·
@@ -29,43 +29,79 @@ Composer is not needed on the server — PHP libraries are shipped in `lib/vendo
 
 ## 2. New installation
 
-1. **Database** — create an empty database and a user:
+Installation runs in the browser through the **installer wizard** (`/control/installer/`). It checks the server,
+can create the database for you, lets you choose the administrator password, and switches itself off when it
+has finished.
+
+1. **Files** — unpack the release (verify it first with `sha256sum -c SHA256SUMS.txt`):
+
+   ```sh
+   unzip SubjectsPlus-4.7.0-stable.zip -d /var/www
+   mv /var/www/SubjectsPlus-4.7.0-stable /var/www/subjectsplus
+   cd /var/www/subjectsplus
+   chown -R root:root .
+   chown -R www-data:www-data assets/cache assets/users assets/records assets/images/guide_thumbs
+   ```
+
+   `control/includes/` may stay **read-only** (recommended): the wizard then lets you download `config.php`
+   and upload it yourself. If you prefer the wizard to save it, make that folder writable for the installation
+   only (`chown www-data control/includes`).
+
+2. **Web server** — configure Apache ([§3](#3-apache-24)) or Nginx ([§4](#4-nginx)).
+
+3. **Install code** — on the server, in the SubjectsPlus folder:
+
+   ```sh
+   sudo -u www-data php tools/install-code.php      # prints e.g. K7QM-2HXP-9WRT-4CNA
+   ```
+
+   Only someone who can run this (or write files on the server) can install the site, so a stranger who
+   finds the site before you cannot point it at their own database. Without shell access, create
+   `control/includes/install-code.php` containing `<?php return 'a-phrase-of-at-least-12-characters';`
+   (Windows / WampServer: `C:\wamp64\bin\php\php8.x\php.exe tools\install-code.php`; containers: set
+   the `SP_INSTALL_CODE` environment variable). The code is deleted when the installation finishes.
+
+4. **Wizard** — open `https://library.edu/control/` (you are sent to `/control/installer/`) and follow the steps:
+
+   | Step | What happens |
+   |---|---|
+   | Install code | Enter the code from step 3 |
+   | Requirements | PHP version and extensions, writable folders, `upload_max_filesize`, `display_errors`, HTTPS, and a live test that `control/includes/` and `lib/` are **not** downloadable (i.e. `.htaccess` / the Nginx rules work). Red items block the installation; each shows how to fix it |
+   | Database | Either use a database and user you created, or tick **Create the database and user for me** and give a database administrator account (used once, never stored): the wizard creates the `utf8mb4` database, a user with rights on that database only, and a strong generated password. *Test connection* checks the account first |
+   | Site & administrator | Site address (detected, also behind a reverse proxy via `X-Forwarded-Proto`/`X-Forwarded-Host`; editable), **Always use HTTPS**, site and library name, and the administrator's name, email and **password of your choice** (12+ characters, strength meter) |
+   | Options | SMTP server with a **Send a test message** button, off-campus access (EZproxy / OpenAthens / other link template), and **sample content** |
+   | Install | Creates the tables, applies all database updates, writes `config.php` (or offers it for download), deletes the install code and locks the installer |
+
+   To create the database by hand instead:
 
    ```sql
    CREATE DATABASE subjectsplus CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-   CREATE USER 'sp'@'localhost' IDENTIFIED BY 'a-long-random-password';
-   GRANT ALL PRIVILEGES ON subjectsplus.* TO 'sp'@'localhost';
+   CREATE USER 'subjectsplus'@'localhost' IDENTIFIED BY 'a-long-random-password';
+   GRANT ALL PRIVILEGES ON subjectsplus.* TO 'subjectsplus'@'localhost';
    ```
 
-2. **Files** — unpack the release and give the web server write access to these folders only:
-
-   ```sh
-   unzip SubjectsPlus-4.6.0-stable.zip -d /var/www
-   mv /var/www/SubjectsPlus-4.6.0-stable /var/www/subjectsplus
-   cd /var/www/subjectsplus
-   chown -R root:root . && chown -R www-data:www-data control/includes assets/cache assets/users assets/records assets/images/guide_thumbs
-   ```
-
-   Verify the download first: `sha256sum -c SHA256SUMS.txt`.
-
-3. **Web server** — configure Apache ([§3](#3-apache-24)) or Nginx ([§4](#4-nginx)).
-
-4. **Installer** — open `https://library.edu/control/setup-config.php`:
-   - enter the database host, port, user, password and database name → *Save Config*;
-   - on the next page enter the **administrator email** (it becomes the admin login) and the other site
-     settings → *Run the install*;
-   - **write down the generated admin password** shown on the last page.
-
-   The installer creates the tables, applies all 4.6 database updates (login throttling, record settings,
-   workflow, access providers, guide features) and writes `control/includes/config.php` with random values
-   for `$salt`, `$api_key` and `$sp_encryption_key`.
+   MariaDB on Debian/Ubuntu lets `root` sign in only through the local socket, which a web application cannot
+   use. For the *create for me* option, make a temporary administrator with a password and drop it afterwards:
+   `CREATE USER 'spsetup'@'localhost' IDENTIFIED BY '…'; GRANT ALL ON *.* TO 'spsetup'@'localhost' WITH GRANT OPTION;`
 
 5. **After installing**
-   - sign in at `/control/`, change the admin password (*Edit your profile*), add staff in *Admin → Users*;
-   - make `control/includes/` read-only again: `chown -R root:root control/includes && chmod 644 control/includes/config.php`
-     (or `chown root:www-data` + `chmod 640` so PHP can still read it);
+   - remove the installer: `rm -r control/installer` (it already refuses to run; admins see a reminder until it is gone);
+   - keep `control/includes/` read-only: `chown -R root:root control/includes && chown root:www-data control/includes/config.php && chmod 640 control/includes/config.php`;
    - add the [daily task](#6-daily-task-cron);
+   - add staff in *Admin → Users*, the domains for your off-campus access provider, and single sign-on if you use it;
    - work through the [hardening checklist](#17-hardening-checklist).
+
+**Sample content** (optional in the wizard): a public guide *Getting Started with Research* (`getting-started`),
+a hidden *Course Guide Template*, three open-access databases on the A–Z list (DOAJ, PubMed, Google Scholar)
+and an FAQ. Edit or delete them like any other content.
+
+**Secrets outside config.php** (optional): the database password and keys can come from environment variables
+or a `.env` file outside the web root (default: the folder above SubjectsPlus; or set `SP_ENV_FILE`):
+`SP_DB_HOST`, `SP_DB_PORT`, `SP_DB_NAME`, `SP_DB_USER`, `SP_DB_PASSWORD`, `SP_SALT`, `SP_ENCRYPTION_KEY`,
+`SP_API_KEY`, `SP_SMTP_PASSWORD`. Values found there override `config.php`.
+
+**Always use HTTPS** sets `$sp_force_https = TRUE;` (every http:// request is redirected; behind a TLS
+proxy on a private address `X-Forwarded-Proto` is honoured) and `$enforce_https_upload_url = TRUE;`.
 
 ## 3. Apache 2.4
 
@@ -142,7 +178,7 @@ The scripts in `tools/` refuse to run from a browser.
 ## 7. Upgrading an existing 4.x site
 
 1. **Back up** the database (`mysqldump --single-transaction subjectsplus > sp-backup.sql`) and the whole folder.
-2. Unpack 4.6.0 into a **new folder** (do not unpack over the old one).
+2. Unpack the new release into a **new folder** (do not unpack over the old one).
 3. Copy from the old site:
    - `control/includes/config.php`
    - `assets/users/` (headshots, uploaded files), `assets/records/`, `assets/images/guide_thumbs/`
@@ -160,7 +196,8 @@ The scripts in `tools/` refuse to run from a browser.
 
    Keep an existing `$cryptKey`: it is needed to read staff data encrypted by older versions.
    If `$api_key` is still the old shared default (`a5h&vv5$#45`), replace it with a random value.
-5. Empty `assets/cache/` (old JavaScript/CSS bundles) and make the writable folders writable (§2).
+5. Empty `assets/cache/` (old JavaScript/CSS bundles), make the writable folders writable (§2) and delete
+   `control/installer/` (an upgraded site never needs it).
 6. Apply the database updates — **Admin → Database Updates** in the browser (a notice appears on every admin
    page while any are pending), or on the command line:
 
@@ -329,8 +366,7 @@ request while the key is empty. Examples: `/api/staff/email/someone@library.edu/
 - [ ] HTTPS only; HSTS on (`Strict-Transport-Security`), `$enforce_https_upload_url = TRUE;`.
 - [ ] `.htaccess` active (Apache: `AllowOverride All`) or the Nginx server block in use — verify with the URLs in §8.
 - [ ] `control/includes/config.php` not writable by the web server after installation.
-- [ ] Remove or block `control/setup-config.php`, `control/install.php` and `control/update.php` once installed
-      (they refuse to run on an installed site, but less code is less risk).
+- [ ] Remove `control/installer/` once installed (it refuses to run on an installed site, but less code is less risk).
 - [ ] Optional: restrict `/control/` to campus / VPN addresses (example in `docs/server/apache-subjectsplus.conf`).
 - [ ] Single sign-on with `$sp_auth_allowed_domains` set; `$sp_auth_local = FALSE;` once it works.
 - [ ] Collect less staff personal data: hide home address / emergency contact columns with `$omit_user_columns`.

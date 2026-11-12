@@ -92,37 +92,127 @@ async function login(page, email, pass) {
 
 async function install(browser) {
   current.vp = 'install';
-  const page = await browser.newPage();
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const page = await ctx.newPage();
   const issues = watch(page);
-  await step('setup-config.php: database form loads cleanly', () => cleanLoad(page, issues, '/control/setup-config.php'));
-  await step('setup-config.php: save database settings', async () => {
-    await page.fill('input[name=hname]', process.env.SP_DB_HOST || '127.0.0.1');
-    await page.fill('input[name=uname]', process.env.SP_DB_USER || 'sp');
-    await page.fill('input[name=pword]', process.env.SP_DB_PASS || '');
-    await page.fill('input[name=dbName_SPlus]', process.env.SP_DB_NAME || 'sp');
-    if (process.env.SP_DB_PORT) await page.fill('input[name=db_port]', process.env.SP_DB_PORT);
-    await Promise.all([page.waitForLoadState('networkidle'), page.click('input[name=submit_setup_db_config]')]);
+  const msgs = async () => (await page.$$eval('.msg', e => e.map(x => x.textContent.trim()))).join(' | ');
+  const CODE = process.env.SP_INSTALL_CODE || '';
+  const CREATE = !!process.env.SP_DB_ADMIN_USER;
+  if (!ADMIN_PASS) ADMIN_PASS = 'E2e-Admin-Pass-2026!';
+
+  await step('installer: /control/ sends a new site to the wizard', async () => {
+    await page.goto(BASE + '/control/', { waitUntil: 'networkidle' });
+    if (!/\/control\/installer\//.test(page.url())) throw new Error('landed on ' + page.url());
+    return cleanLoad(page, issues, '/control/installer/');
+  });
+  await step('installer: later steps are locked until the install code is entered', async () => {
+    await page.goto(BASE + '/control/installer/index.php?step=database', { waitUntil: 'domcontentloaded' });
+    if (!/step=code/.test(page.url())) throw new Error('reached ' + page.url());
+  });
+  await step('installer: a wrong install code is refused', async () => {
+    await page.fill('#f-code', 'AAAA-BBBB-CCCC-DDDD');
+    await Promise.all([page.waitForLoadState('domcontentloaded'), page.click('button[type=submit]')]);
+    if (!/not correct/.test(await msgs())) throw new Error('no refusal: ' + await msgs());
+  });
+  await step('installer: the install code from tools/install-code.php unlocks the wizard', async () => {
+    if (!CODE) throw new Error('set SP_INSTALL_CODE (php tools/install-code.php)');
+    await page.fill('#f-code', CODE);
+    await Promise.all([page.waitForLoadState('networkidle'), page.click('button[type=submit]')]);
+    if (!/step=requirements/.test(page.url())) throw new Error(await msgs());
+  });
+  await step('installer: requirements all pass (no red items), web-server protection detected', async () => {
+    const rows = await page.$$eval('table tr', r => r.map(x => x.innerText.replace(/\s+/g, ' ')));
+    const fails = rows.filter(r => /\bFix\b/.test(r));
+    if (fails.length) throw new Error(fails.join(' | '));
+    if (!rows.some(r => /Configuration files are protected OK/.test(r))) throw new Error('protection not confirmed: ' + rows.filter(r => /protected/.test(r)).join(' | '));
+    await shot(page, 'installer-requirements');
+    await Promise.all([page.waitForLoadState('networkidle'), page.click('button[name=next]')]);
+    return `${rows.length} rows`;
+  });
+  const dbName = CREATE ? (process.env.SP_DB_CREATE_NAME || 'sp_created') : (process.env.SP_DB_NAME || 'sp');
+  const dbUser = CREATE ? (process.env.SP_DB_CREATE_NAME || 'sp_created') : (process.env.SP_DB_USER || 'sp');
+  // a password with characters that broke the 4.x config writer ($ " \ ')
+  const dbPass = CREATE ? 'Te$t"pa\\ss\'word-2026' : (process.env.SP_DB_PASS || '');
+  const fillDb = async () => {
+    if (CREATE) {
+      await page.check('#m-create');
+      await page.fill('#f-admin_user', process.env.SP_DB_ADMIN_USER);
+      await page.fill('#f-admin_pass', process.env.SP_DB_ADMIN_PASS || '');
+    } else {
+      await page.check('#m-existing');
+    }
+    await page.fill('#f-db_host', process.env.SP_DB_HOST || '127.0.0.1');
+    await page.fill('#f-db_port', process.env.SP_DB_PORT || '3306');
+    await page.fill('#f-db_name', dbName);
+    await page.fill('#f-db_user', dbUser);
+    await page.fill('#f-db_pass', dbPass);
+  };
+  await step(`installer: database — test connection (${CREATE ? 'administrator account' : 'existing database'})`, async () => {
+    await fillDb();
+    await Promise.all([page.waitForLoadState('networkidle'), page.click('button[value=test]')]);
+    const m = await msgs();
+    if (!/Signed in to|Connected to/.test(m)) throw new Error(m);
+    return m.slice(0, 120);
+  });
+  await step(`installer: database — ${CREATE ? 'create the database and its user' : 'use the existing database'}`, async () => {
+    await fillDb();
+    await Promise.all([page.waitForLoadState('networkidle'), page.click('button[value=next]')]);
+    if (!/step=site/.test(page.url())) throw new Error(await msgs());
+  });
+  await step('installer: site address detected and administrator chooses the password', async () => {
+    const detected = await page.inputValue('#f-base_url');
+    if (detected !== BASE + '/') throw new Error('detected ' + detected);
+    await page.fill('#f-password', 'short');
+    await page.fill('#f-password2', 'short');
+    await page.fill('#f-fname', 'Ada'); await page.fill('#f-lname', 'Admin'); await page.fill('#f-email', ADMIN_EMAIL);
+    await page.$eval('#f-password', e => e.removeAttribute('minlength')); await page.$eval('#f-password2', e => e.removeAttribute('minlength'));
+    await Promise.all([page.waitForLoadState('networkidle'), page.click('button[name=next]')]);
+    if (!/at least 12/.test(await msgs())) throw new Error('weak password accepted');
+    await page.fill('#f-password', ADMIN_PASS); await page.fill('#f-password2', ADMIN_PASS);
+    await Promise.all([page.waitForLoadState('networkidle'), page.click('button[name=next]')]);
+    if (!/step=options/.test(page.url())) throw new Error(await msgs());
+    return 'detected ' + detected;
+  });
+  await step('installer: options — EZproxy and sample content', async () => {
+    await page.selectOption('#f-proxy_kind', 'ezproxy');
+    await page.fill('#f-proxy_template', 'https://ezproxy.library.edu/login?url={url}');
+    await page.check('#f-sample');
+    await Promise.all([page.waitForLoadState('networkidle'), page.click('button[value=next]')]);
+    if (!/step=install/.test(page.url())) throw new Error(await msgs());
+    await shot(page, 'installer-summary');
+  });
+  await step('installer: install', async () => {
+    await Promise.all([page.waitForLoadState('networkidle', { timeout: 180000 }), page.click('button[name=install]')]);
+    if (/step=config/.test(page.url())) {
+      // control/includes is read-only: download config.php and "upload" it
+      const href = await page.getAttribute('a[href*="download=1"]', 'href');
+      const r = await page.request.get(BASE + '/control/installer/' + href);
+      const src = await r.text();
+      if (!/\$dbName_SPlus = '/.test(src)) throw new Error('download is not a config file');
+      if (!process.env.SP_UPLOAD_CONFIG_TO) throw new Error('config download offered; set SP_UPLOAD_CONFIG_TO to test it');
+      fs.writeFileSync(process.env.SP_UPLOAD_CONFIG_TO, src);
+      await Promise.all([page.waitForLoadState('networkidle'), page.click('button[name=check]')]);
+    }
+    if (!/step=done/.test(page.url())) throw new Error(await msgs() || page.url());
     const t = await page.textContent('body');
-    if (/can't write|could not|error/i.test(t) && !/install/i.test(t)) throw new Error(t.slice(0, 200));
-    return page.url().replace(BASE, '');
+    if (!/SubjectsPlus is installed/.test(t)) throw new Error('no completion page');
+    await shot(page, 'installer-done');
+    return (await page.$$eval('li', l => l.map(x => x.textContent))).filter(x => /config\.php|applied|Sample/.test(x)).join('; ').slice(0, 200);
   });
-  await step('install.php: site settings + run installer', async () => {
-    if (!/install\.php/.test(page.url())) await page.goto(BASE + '/control/install.php', { waitUntil: 'networkidle' });
-    await page.evaluate(email => { const f = document.querySelector('[name=administrator_email]'); if (f) f.value = email; }, ADMIN_EMAIL);
-    const submit = page.locator('[name=submit_setup_site_config]');
-    await Promise.all([page.waitForLoadState('networkidle', { timeout: 120000 }), submit.click()]);
+  await step('installer: answers 404 once installed', async () => {
+    const r = await page.request.get(BASE + '/control/installer/');
+    if (r.status() !== 404) throw new Error('HTTP ' + r.status());
+    const r2 = await page.request.get(BASE + '/control/installer/index.php?step=database');
+    if (r2.status() !== 404) throw new Error('step page HTTP ' + r2.status());
+  });
+  await step('installer: sample guide and databases are public', async () => {
+    await page.goto(BASE + '/subjects/guide.php?subject=getting-started', { waitUntil: 'networkidle' });
+    if (!/Getting Started with Research/.test(await page.textContent('body'))) throw new Error('sample guide missing');
+    await page.goto(BASE + '/subjects/databases.php?letter=All', { waitUntil: 'networkidle' });
     const t = await page.textContent('body');
-    const m = t.match(/Password:\s*(\S+)/i);
-    if (!m) throw new Error('no generated password on page: ' + t.replace(/\s+/g, ' ').slice(0, 300));
-    ADMIN_PASS = m[1];
-    await shot(page, 'install-complete');
-    return 'admin password captured';
+    if (!/PubMed/.test(t) || !/Directory of Open Access Journals/.test(t)) throw new Error('sample databases missing');
   });
-  await step('install.php refuses to run again once installed', async () => {
-    await page.goto(BASE + '/control/install.php', { waitUntil: 'domcontentloaded' });
-    if (!/Already Installed/i.test(await page.textContent('body'))) throw new Error('installer still open');
-  });
-  await page.close();
+  await ctx.close();
 }
 
 async function suite(browser, vp) {
@@ -294,6 +384,15 @@ async function suite(browser, vp) {
       return (await page.locator('#check_options_content').innerText()).replace(/\s+/g, ' ').slice(0, 120);
     });
     // ------------------------------------------------------------ records, access rules, workflow, users
+    await step('admins are told to remove the installer files', async () => {
+      await page.goto(BASE + '/control/index.php', { waitUntil: 'networkidle' });
+      const w = await page.locator('.sp-installer-left').count();
+      if (!w) throw new Error('no warning shown');
+    });
+    await step('installer-configured EZproxy provider is listed under Off-campus Access', async () => {
+      await page.goto(BASE + '/control/admin/access.php', { waitUntil: 'networkidle' });
+      if (!/ezproxy\.library\.edu\/login\?url=\{url\}/.test(await page.content())) throw new Error('provider missing');
+    });
     await step('Off-campus access: add an EZproxy provider and test a link', async () => {
       await page.goto(BASE + '/control/admin/access.php', { waitUntil: 'networkidle' });
       const f = page.locator('form:has(input[name=action][value=save])').first();

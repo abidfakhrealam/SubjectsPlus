@@ -34,7 +34,7 @@ if ( ! file_exists( "includes/config.php" ) || filesize( "includes/config.php" )
 		exit;
 	}
 
-	header( "location:{$lstrURL}includes/configErrorPage.php?error=nofile" );
+	header( "location:{$lstrURL}installer/" ); // no config.php yet: start the installer wizard
 	exit;
 }
 
@@ -112,7 +112,7 @@ if ( ! isset( $installCheck ) || $installCheck != 'no' ) {
 	if ( ! $isInstalled ) {
 		$lstrURL = getControlURL();
 
-		header( "location:{$lstrURL}install.php" );
+		header( "location:{$lstrURL}installer/" );
 		exit;
 	}
 }

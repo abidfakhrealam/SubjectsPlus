@@ -6,6 +6,48 @@ History up to the original 4.6.0 code base (July 2021) is in [docs/history/CHANG
 
 ## [Unreleased]
 
+## [4.7.0] - 2026-11-12
+
+A guided, safer installation. Existing sites upgrade as usual (INSTALL.md §7); no database update. Includes the 4.6.1 `.htaccess` fix.
+
+### Added
+- **Installer wizard** (`control/installer/`) replacing `control/setup-config.php` and `control/install.php`:
+  install code → requirements → database → site & administrator → options → install.
+- **One-time install code** (`php tools/install-code.php`, a file you create yourself, or `SP_INSTALL_CODE`):
+  nobody can install the site without access to the server. The code is deleted after installation.
+- **Requirements check**: PHP version and extensions, writable folders, upload limit, `display_errors`, HTTPS,
+  and a live test that configuration and code folders are not downloadable (shipped `.htaccess` / Nginx rules
+  active). Each problem shows its fix; red items block the installation.
+- **Create the database and user from the wizard** with a database administrator account that is used once and
+  never stored: `utf8mb4` database, a user with rights on it only, strong generated password, connection test.
+- **Administrator chooses the password** (12+ characters, strength meter, common-password check) instead of a
+  generated password shown once.
+- **config.php without a writable folder**: when `control/includes/` is read-only the wizard offers
+  `config.php` for download and checks the uploaded copy. Values are written with `var_export()`, so passwords
+  containing `$ " \ '` work (the 4.x writer broke on them).
+- **Secrets outside config.php**: `SP_DB_*`, `SP_SALT`, `SP_ENCRYPTION_KEY`, `SP_API_KEY`, `SP_SMTP_PASSWORD`
+  from environment variables or a `.env` file outside the web root.
+- **Site address detection behind proxies** (`X-Forwarded-Proto`, `X-Forwarded-Host`, trusted only from
+  private/loopback addresses), editable, and **Always use HTTPS** (`$sp_force_https`).
+- **Email test** (SMTP) and **off-campus access provider** set-up in the wizard.
+- **Sample content** (optional): public guide, hidden course-guide template, three open-access databases, an FAQ.
+- **Installer locks itself** after a successful run (`control/includes/.installed`, HTTP 404) and admins see a
+  reminder until the installer files are removed.
+- Browser tests for the wizard (code, requirements, create / existing database, read-only config download,
+  password rules, lock-out, sample content).
+
+### Changed
+- `/control/` on a site without `config.php` opens the wizard (was an error page / the old installer).
+- The guide editor's side panel now sits above the fixed guide header, so the top of the Boxes / Layouts /
+  Analytics / Check panels is no longer hidden when an admin notice pushes the header down.
+
+### Removed
+- `control/setup-config.php` and `control/install.php` (superseded by the wizard).
+
+### Fixed
+- `build/package-release.sh` is now stored as executable in Git (mode `100755`); in 4.6.1 it was still
+  `100644`, so `release.yml` could not run it directly.
+
 ## [4.6.1] - 2026-11-12
 
 ### Fixed
@@ -121,6 +163,7 @@ tabs, Excel / CSV / KBART import & export with usage reports, box show/hide date
 analytics, review reminders, the editor accessibility check and public-interface translations. Those
 releases are folded into 4.6.0.
 
-[Unreleased]: https://github.com/abidfakhrealam/SubjectsPlus/compare/v4.6.1...HEAD
+[Unreleased]: https://github.com/abidfakhrealam/SubjectsPlus/compare/v4.7.0...HEAD
+[4.7.0]: https://github.com/abidfakhrealam/SubjectsPlus/releases/tag/v4.7.0
 [4.6.1]: https://github.com/abidfakhrealam/SubjectsPlus/releases/tag/v4.6.1
 [4.6.0]: https://github.com/abidfakhrealam/SubjectsPlus/releases/tag/v4.6.0
