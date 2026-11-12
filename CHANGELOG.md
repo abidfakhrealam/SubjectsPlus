@@ -121,5 +121,6 @@ tabs, Excel / CSV / KBART import & export with usage reports, box show/hide date
 analytics, review reminders, the editor accessibility check and public-interface translations. Those
 releases are folded into 4.6.0.
 
-[Unreleased]: https://github.com/subjectsplus/SubjectsPlus/compare/v4.6.0...HEAD
-[4.6.0]: https://github.com/subjectsplus/SubjectsPlus/releases/tag/v4.6.0
+[Unreleased]: https://github.com/abidfakhrealam/SubjectsPlus/compare/v4.6.1...HEAD
+[4.6.1]: https://github.com/abidfakhrealam/SubjectsPlus/releases/tag/v4.6.1
+[4.6.0]: https://github.com/abidfakhrealam/SubjectsPlus/releases/tag/v4.6.0
