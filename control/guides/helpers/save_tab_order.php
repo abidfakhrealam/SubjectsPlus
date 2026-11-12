@@ -21,6 +21,14 @@ $header = "noshow";
 
 include("../../includes/header.php");
 
+// every tab being re-ordered must belong to a guide this person may edit
+parse_str( (string) ( $_POST['data'] ?? '' ), $sp_order );
+$sp_guides = array();
+foreach ( (array) ( $sp_order['item'] ?? array() ) as $sp_tab ) {
+	$sp_guides = array_merge( $sp_guides, \SubjectsPlus\Control\Guide\GuideAccess::guidesForTab( (int) $sp_tab ) );
+}
+\SubjectsPlus\Control\Guide\GuideAccess::requireFound( array_unique( $sp_guides ), true );
+
 $db = new Querier;
 
 $tabs = new TabData($db);

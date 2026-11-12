@@ -1,0 +1,4945 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Path in include_once\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: includeOnce.fileNotFound
+			count: 1
+			path: api/index.php
+
+		-
+			message: '#^Variable \$dbName_SPlus might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: api/index.php
+
+		-
+			message: '#^Variable \$hname might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: api/index.php
+
+		-
+			message: '#^Variable \$pword might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: api/index.php
+
+		-
+			message: '#^Variable \$uname might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: api/index.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/api_clients.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/departments.php
+
+		-
+			message: '#^Variable \$rusure might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/departments.php
+
+		-
+			message: '#^Variable \$textno might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/departments.php
+
+		-
+			message: '#^Variable \$textyes might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/departments.php
+
+		-
+			message: '#^Variable \$db might not be defined\.$#'
+			identifier: variable.undefined
+			count: 4
+			path: control/admin/disciplines.php
+
+		-
+			message: '#^Variable \$rusure might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/disciplines.php
+
+		-
+			message: '#^Variable \$textno might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/disciplines.php
+
+		-
+			message: '#^Variable \$textyes might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/disciplines.php
+
+		-
+			message: '#^Variable \$and might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/export_contacts.php
+
+		-
+			message: '#^Variable \$rusure might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/faq_collections.php
+
+		-
+			message: '#^Variable \$textno might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/faq_collections.php
+
+		-
+			message: '#^Variable \$textyes might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/faq_collections.php
+
+		-
+			message: '#^Variable \$administrator_email might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/health.php
+
+		-
+			message: '#^Variable \$email_port might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/health.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/admin/helpers/collections.php
+
+		-
+			message: '#^Variable \$collection_id might not be defined\.$#'
+			identifier: variable.undefined
+			count: 6
+			path: control/admin/helpers/collections.php
+
+		-
+			message: '#^Variable \$description might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/admin/helpers/collections.php
+
+		-
+			message: '#^Variable \$guide_id might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/admin/helpers/collections.php
+
+		-
+			message: '#^Variable \$shortform might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: control/admin/helpers/collections.php
+
+		-
+			message: '#^Variable \$title might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/admin/helpers/collections.php
+
+		-
+			message: '#^Variable \$use_disciplines might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/index.php
+
+		-
+			message: '#^Variable \$guide_types might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/manage_guides.php
+
+		-
+			message: '#^Class SubjectsPlus\\Control\\Staff constructor invoked with 3 parameters, 0\-2 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: control/admin/profile.php
+
+		-
+			message: '#^Variable \$rusure might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/profile.php
+
+		-
+			message: '#^Variable \$textno might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/profile.php
+
+		-
+			message: '#^Variable \$textyes might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/profile.php
+
+		-
+			message: '#^Variable \$rusure might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/sources.php
+
+		-
+			message: '#^Variable \$textno might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/sources.php
+
+		-
+			message: '#^Variable \$textyes might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/sources.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/upgrade.php
+
+		-
+			message: '#^Class SubjectsPlus\\Control\\Staff constructor invoked with 3 parameters, 0\-2 required\.$#'
+			identifier: arguments.count
+			count: 4
+			path: control/admin/user.php
+
+		-
+			message: '#^Variable \$all_ptags might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/user.php
+
+		-
+			message: '#^Variable \$rusure might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/user.php
+
+		-
+			message: '#^Variable \$textno might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/user.php
+
+		-
+			message: '#^Variable \$textyes might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/admin/user.php
+
+		-
+			message: '#^Variable \$email might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/auth.php
+
+		-
+			message: '#^Variable \$api_key might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/edit-config.php
+
+		-
+			message: '#^Variable \$db might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/faq/browse_faq.php
+
+		-
+			message: '#^Variable \$rusure might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/faq/faq.php
+
+		-
+			message: '#^Variable \$textno might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/faq/faq.php
+
+		-
+			message: '#^Variable \$textyes might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/faq/faq.php
+
+		-
+			message: '#^Variable \$CpanelPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/faq/faq_bits.php
+
+		-
+			message: '#^Variable \$administrator_email might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/faq/faq_bits.php
+
+		-
+			message: '#^Variable \$FAQPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/faq/index.php
+
+		-
+			message: '#^Variable \$limit in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.variable
+			count: 1
+			path: control/faq/index.php
+
+		-
+			message: '#^Path in include\(\) "\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: control/guides/create_guide_from_tabs.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/guides/flyouts/layouts.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 5
+			path: control/guides/guide.php
+
+		-
+			message: '#^Variable \$CpanelPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/guide.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/guides/guide.php
+
+		-
+			message: '#^Variable \$jobj might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/guide.php
+
+		-
+			message: '#^Variable \$this_id in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.variable
+			count: 1
+			path: control/guides/guide.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/guide_bb_course.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: control/guides/guide_bb_course.php
+
+		-
+			message: '#^Path in include\(\) "\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: control/guides/guide_copy.php
+
+		-
+			message: '#^Variable \$db might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/guides/helpers/ajax_mod.php
+
+		-
+			message: '#^Variable \$rank_id on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.variable
+			count: 1
+			path: control/guides/helpers/ajax_mod.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/box_schedule.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/favorite_pluslets_data.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/fetch_all_pluslet_ids.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/fetch_clone_parent_pluslets_by_section_id.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/fetch_cloned_pluslets.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/fetch_cloned_pluslets_by_tab_id.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/fetch_guide_data.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/fetch_pluslet_data.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/fetch_pluslets_by_section_id.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/fetch_section_ids_by_subject_id.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/fetch_tab_ids.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/fetch_tabs.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/guide_analytics.php
+
+		-
+			message: '#^Variable \$administrator_email might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/helpers/guide_bits.php
+
+		-
+			message: '#^Variable \$db might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: control/guides/helpers/guide_bits.php
+
+		-
+			message: '#^Variable \$mail_to might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/guides/helpers/guide_bits.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/guide_check.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/save_section.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/save_tab.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/save_tab_order.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/stats_data.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/subject_code_guides_helper.php
+
+		-
+			message: '#^Variable \$guide_id might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/helpers/subject_code_guides_helper.php
+
+		-
+			message: '#^Variable \$subject_code_id might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/guides/helpers/subject_code_guides_helper.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/update_section_layout.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/helpers/user_guides.php
+
+		-
+			message: '#^Path in include\(\) "\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: control/guides/index.php
+
+		-
+			message: '#^Instantiated class RichterLibrary\\Helpers\\CatalogMigrator not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: control/guides/lgimporter/lg_importer.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/guides/lgimporter/lg_importer.php
+
+		-
+			message: '#^Instantiated class RichterLibrary\\Helpers\\CatalogMigrator not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: control/guides/lgimporter/lg_importer_json.php
+
+		-
+			message: '#^Path in include\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: control/guides/lgimporter/lg_importer_json.php
+
+		-
+			message: '#^Instantiated class RichterLibrary\\Helpers\\CatalogMigrator not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: control/guides/lgimporter/lg_importer_links_json.php
+
+		-
+			message: '#^Path in include\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: control/guides/lgimporter/lg_importer_links_json.php
+
+		-
+			message: '#^Instantiated class RichterLibrary\\Helpers\\CatalogMigrator not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: control/guides/lgimporter/lg_importer_user_selection.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/guides/lgimporter/lg_importer_user_selection.php
+
+		-
+			message: '#^Variable \$proxyURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/guides/link_checker.php
+
+		-
+			message: '#^Variable \$CpanelPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/manage.php
+
+		-
+			message: '#^Variable \$DelishPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/manage.php
+
+		-
+			message: '#^Variable \$UserPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/manage.php
+
+		-
+			message: '#^Variable \$owner might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/manage.php
+
+		-
+			message: '#^Variable \$rusure might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/manage.php
+
+		-
+			message: '#^Variable \$textno might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/manage.php
+
+		-
+			message: '#^Variable \$textyes might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/manage.php
+
+		-
+			message: '#^Variable \$use_unix_find in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.variable
+			count: 1
+			path: control/guides/manage.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/manage_items.php
+
+		-
+			message: '#^Variable \$db might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: control/guides/manage_items.php
+
+		-
+			message: '#^Variable \$response might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/manage_items.php
+
+		-
+			message: '#^Variable \$rusure might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/manage_items.php
+
+		-
+			message: '#^Variable \$shortform might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/manage_items.php
+
+		-
+			message: '#^Variable \$subject_id might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/guides/manage_items.php
+
+		-
+			message: '#^Variable \$textno might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/manage_items.php
+
+		-
+			message: '#^Variable \$textyes might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/manage_items.php
+
+		-
+			message: '#^Variable \$record might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: control/guides/metadata.php
+
+		-
+			message: '#^Variable \$rusure might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/metadata.php
+
+		-
+			message: '#^Variable \$textno might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/metadata.php
+
+		-
+			message: '#^Variable \$textyes might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/metadata.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/guides/sp-bb-special-codes/controller/sp-bb-special-codes-helper.php
+
+		-
+			message: '#^Variable \$addSpecialCourseCode might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/sp-bb-special-codes/views/partials/add-course-code-form.php
+
+		-
+			message: '#^Variable \$associatedCourseCodesLabel might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/sp-bb-special-codes/views/partials/add-course-code-form.php
+
+		-
+			message: '#^Variable \$description might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/sp-bb-special-codes/views/partials/add-course-code-form.php
+
+		-
+			message: '#^Variable \$uniqueCodeLabel might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/sp-bb-special-codes/views/partials/add-course-code-form.php
+
+		-
+			message: '#^Variable \$special_courses might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/sp-bb-special-codes/views/partials/course-code-list.php
+
+		-
+			message: '#^Variable \$associatedCourseCodesLabel might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/sp-bb-special-codes/views/partials/edit-course-code-form.php
+
+		-
+			message: '#^Variable \$description might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/sp-bb-special-codes/views/partials/edit-course-code-form.php
+
+		-
+			message: '#^Variable \$saveSpecialCourseCode might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/sp-bb-special-codes/views/partials/edit-course-code-form.php
+
+		-
+			message: '#^Variable \$style might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/sp-bb-special-codes/views/partials/edit-course-code-form.php
+
+		-
+			message: '#^Variable \$uniqueCodeLabel might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/sp-bb-special-codes/views/partials/edit-course-code-form.php
+
+		-
+			message: '#^Variable \$addNewSpecialCodeTemplate might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/sp-bb-special-codes/views/sp-bb-codes-main.php
+
+		-
+			message: '#^Variable \$currentCodesList might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/sp-bb-special-codes/views/sp-bb-codes-main.php
+
+		-
+			message: '#^Variable \$editSpecialCodeTemplate might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/guides/sp-bb-special-codes/views/sp-bb-codes-main.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/guides/stats.php
+
+		-
+			message: '#^Instantiated class Assetic\\Util\\TraversableString not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: control/includes/assetic_functions.php
+
+		-
+			message: '#^Parameter \$factory of function assetic_init\(\) has invalid type Assetic\\Factory\\AssetFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: control/includes/assetic_functions.php
+
+		-
+			message: '#^Instantiated class Assetic\\Asset\\AssetCollection not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: control/includes/assets.php
+
+		-
+			message: '#^Instantiated class Assetic\\Asset\\GlobAsset not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: control/includes/assets.php
+
+		-
+			message: '#^Instantiated class Symfony\\Component\\ClassLoader\\UniversalClassLoader not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: control/includes/autoloader.php
+
+		-
+			message: '#^Variable \$db might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/includes/config_bits.php
+
+		-
+			message: '#^Instantiated class Assetic\\AssetManager not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: control/includes/css.php
+
+		-
+			message: '#^Instantiated class Assetic\\Asset\\AssetCache not found\.$#'
+			identifier: class.notFound
+			count: 8
+			path: control/includes/css.php
+
+		-
+			message: '#^Instantiated class Assetic\\Asset\\AssetCollection not found\.$#'
+			identifier: class.notFound
+			count: 8
+			path: control/includes/css.php
+
+		-
+			message: '#^Instantiated class Assetic\\Asset\\AssetReference not found\.$#'
+			identifier: class.notFound
+			count: 8
+			path: control/includes/css.php
+
+		-
+			message: '#^Instantiated class Assetic\\Asset\\FileAsset not found\.$#'
+			identifier: class.notFound
+			count: 8
+			path: control/includes/css.php
+
+		-
+			message: '#^Instantiated class Assetic\\Cache\\FilesystemCache not found\.$#'
+			identifier: class.notFound
+			count: 8
+			path: control/includes/css.php
+
+		-
+			message: '#^Function feedBack\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: control/includes/functions.php
+
+		-
+			message: '#^Function makePluslet\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: control/includes/functions.php
+
+		-
+			message: '#^Instantiated class Pluslet_TOC not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: control/includes/functions.php
+
+		-
+			message: '#^Path in include_once\(\) "config\.php" is not a file or it does not exist\.$#'
+			identifier: includeOnce.fileNotFound
+			count: 1
+			path: control/includes/functions.php
+
+		-
+			message: '#^Undefined variable\: \$institution_code$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/functions.php
+
+		-
+			message: '#^Undefined variable\: \$relative_asset_path$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/functions.php
+
+		-
+			message: '#^Variable \$cat_url might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/functions.php
+
+		-
+			message: '#^Variable \$current_ctags might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/functions.php
+
+		-
+			message: '#^Variable \$institution_code in isset\(\) is never defined\.$#'
+			identifier: isset.variable
+			count: 1
+			path: control/includes/functions.php
+
+		-
+			message: '#^Variable \$linkit might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/functions.php
+
+		-
+			message: '#^Variable \$linktext might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/functions.php
+
+		-
+			message: '#^Variable \$list_collections might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/functions.php
+
+		-
+			message: '#^Variable \$list_guides might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/functions.php
+
+		-
+			message: '#^Variable \$lq might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/functions.php
+
+		-
+			message: '#^Variable \$show_desc might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/includes/functions.php
+
+		-
+			message: '#^Variable \$show_icons might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/includes/functions.php
+
+		-
+			message: '#^Variable \$staffer might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/functions.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/header.php
+
+		-
+			message: '#^Variable \$CpanelPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 6
+			path: control/includes/header.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/includes/header.php
+
+		-
+			message: '#^Variable \$mod_rewrite might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/header.php
+
+		-
+			message: '#^Instantiated class Assetic\\AssetManager not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: control/includes/js_custom.php
+
+		-
+			message: '#^Instantiated class Assetic\\Asset\\AssetCache not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: control/includes/js_custom.php
+
+		-
+			message: '#^Instantiated class Assetic\\Asset\\AssetCollection not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: control/includes/js_custom.php
+
+		-
+			message: '#^Instantiated class Assetic\\Asset\\AssetReference not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: control/includes/js_custom.php
+
+		-
+			message: '#^Instantiated class Assetic\\Asset\\GlobAsset not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: control/includes/js_custom.php
+
+		-
+			message: '#^Instantiated class Assetic\\Cache\\FilesystemCache not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: control/includes/js_custom.php
+
+		-
+			message: '#^Instantiated class Assetic\\AssetManager not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: control/includes/js_vendor.php
+
+		-
+			message: '#^Instantiated class Assetic\\Asset\\AssetCache not found\.$#'
+			identifier: class.notFound
+			count: 5
+			path: control/includes/js_vendor.php
+
+		-
+			message: '#^Instantiated class Assetic\\Asset\\AssetCollection not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: control/includes/js_vendor.php
+
+		-
+			message: '#^Instantiated class Assetic\\Asset\\AssetReference not found\.$#'
+			identifier: class.notFound
+			count: 5
+			path: control/includes/js_vendor.php
+
+		-
+			message: '#^Instantiated class Assetic\\Asset\\FileAsset not found\.$#'
+			identifier: class.notFound
+			count: 4
+			path: control/includes/js_vendor.php
+
+		-
+			message: '#^Instantiated class Assetic\\Asset\\GlobAsset not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: control/includes/js_vendor.php
+
+		-
+			message: '#^Instantiated class Assetic\\Cache\\FilesystemCache not found\.$#'
+			identifier: class.notFound
+			count: 5
+			path: control/includes/js_vendor.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/includes/linkchecker.php
+
+		-
+			message: '#^Variable \$lc might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/linkchecker.php
+
+		-
+			message: '#^Variable \$mailReport might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/linkchecker.php
+
+		-
+			message: '#^Class upload referenced with incorrect case\: Upload\.$#'
+			identifier: class.nameCase
+			count: 1
+			path: control/includes/set_image.php
+
+		-
+			message: '#^Variable \$UserPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/set_picture.php
+
+		-
+			message: '#^Access to an undefined property upload\:\:\$file_max_size_raw\.$#'
+			identifier: property.notFound
+			count: 2
+			path: control/includes/upload/class.upload.php
+
+		-
+			message: '#^Access to an undefined property upload\:\:\$lang\.$#'
+			identifier: property.notFound
+			count: 1
+			path: control/includes/upload/class.upload.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''docx'' \(''docx'', ''docx''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: control/includes/upload/class.upload.php
+
+		-
+			message: '#^Method upload\:\:process\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: control/includes/upload/class.upload.php
+
+		-
+			message: '#^Variable \$alpha might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/upload/class.upload.php
+
+		-
+			message: '#^Variable \$blue might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/upload/class.upload.php
+
+		-
+			message: '#^Variable \$f might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/upload/class.upload.php
+
+		-
+			message: '#^Variable \$filter might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: control/includes/upload/class.upload.php
+
+		-
+			message: '#^Variable \$green might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/upload/class.upload.php
+
+		-
+			message: '#^Variable \$image_manipulation might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/includes/upload/class.upload.php
+
+		-
+			message: '#^Variable \$image_src might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/upload/class.upload.php
+
+		-
+			message: '#^Variable \$red might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/includes/upload/class.upload.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: control/index.php
+
+		-
+			message: '#^Variable \$all_bgs might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/index.php
+
+		-
+			message: '#^Path in require_once\(\) "includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/login.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/login.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/login.php
+
+		-
+			message: '#^Variable \$administrator_email might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/login.php
+
+		-
+			message: '#^Variable \$email_key might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/login.php
+
+		-
+			message: '#^File ends with a trailing whitespace\. This may cause problems when running the code in the web browser\. Remove the closing \?\> mark or remove the whitespace\.$#'
+			identifier: whitespace.fileEnd
+			count: 1
+			path: control/logout.php
+
+		-
+			message: '#^Path in include\(\) "includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: control/logout.php
+
+		-
+			message: '#^Path in include\(\) "config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: control/lti_controller/LTICourseController.php
+
+		-
+			message: '#^Path in include\(\) "lti_view/multiple_guides_view\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 2
+			path: control/lti_controller/LTICourseController.php
+
+		-
+			message: '#^Variable \$course_code might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: control/lti_controller/LTICourseController.php
+
+		-
+			message: '#^Variable \$last_file might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/lti_controller/LTICourseController.php
+
+		-
+			message: '#^Variable \$matches in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: control/lti_controller/LTICourseController.php
+
+		-
+			message: '#^Path in include\(\) "config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: control/lti_controller/coursesCodeImport.php
+
+		-
+			message: '#^Constant admin not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: control/migrate_to_v1_from_v09.php
+
+		-
+			message: '#^Constant article_linker not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: control/migrate_to_v1_from_v09.php
+
+		-
+			message: '#^Constant audio_files not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: control/migrate_to_v1_from_v09.php
+
+		-
+			message: '#^Constant faq not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: control/migrate_to_v1_from_v09.php
+
+		-
+			message: '#^Constant fulltextCol not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: control/migrate_to_v1_from_v09.php
+
+		-
+			message: '#^Constant image_files not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: control/migrate_to_v1_from_v09.php
+
+		-
+			message: '#^Constant rxs not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: control/migrate_to_v1_from_v09.php
+
+		-
+			message: '#^Constant rxs_eres not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: control/migrate_to_v1_from_v09.php
+
+		-
+			message: '#^Constant talkback not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: control/migrate_to_v1_from_v09.php
+
+		-
+			message: '#^Instantiated class Querier not found\.$#'
+			identifier: class.notFound
+			count: 4
+			path: control/migrate_to_v1_from_v09.php
+
+		-
+			message: '#^Variable \$db might not be defined\.$#'
+			identifier: variable.undefined
+			count: 18
+			path: control/migrate_to_v1_from_v09.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/records/bulk.php
+
+		-
+			message: '#^Path in include\(\) "\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: control/records/get_record.php
+
+		-
+			message: '#^Path in include\(\) "\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: control/records/get_record_list.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/records/helpers/subject_databases_helper.php
+
+		-
+			message: '#^Variable \$rank_id might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/records/helpers/subject_databases_helper.php
+
+		-
+			message: '#^Variable \$subject_id might not be defined\.$#'
+			identifier: variable.undefined
+			count: 4
+			path: control/records/helpers/subject_databases_helper.php
+
+		-
+			message: '#^Variable \$title_id might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: control/records/helpers/subject_databases_helper.php
+
+		-
+			message: '#^Variable \$all_ctags might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/records/index.php
+
+		-
+			message: '#^Variable \$record_count might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/records/index.php
+
+		-
+			message: '#^Path in include\(\) "\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: control/records/insert_record.php
+
+		-
+			message: '#^File ends with a trailing whitespace\. This may cause problems when running the code in the web browser\. Remove the closing \?\> mark or remove the whitespace\.$#'
+			identifier: whitespace.fileEnd
+			count: 1
+			path: control/records/record.php
+
+		-
+			message: '#^Variable \$proxyURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/records/record.php
+
+		-
+			message: '#^Variable \$rusure might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/records/record.php
+
+		-
+			message: '#^Variable \$textno might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/records/record.php
+
+		-
+			message: '#^Variable \$textyes might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/records/record.php
+
+		-
+			message: '#^Variable \$CpanelPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/records/record_bits.php
+
+		-
+			message: '#^Variable \$IconPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/records/record_bits.php
+
+		-
+			message: '#^Variable \$administrator_email might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/records/record_bits.php
+
+		-
+			message: '#^Variable \$label_text might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/records/record_bits.php
+
+		-
+			message: '#^Variable \$proxyURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/records/record_bits.php
+
+		-
+			message: '#^Path in require_once\(\) "\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: control/records/subject_databases.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/records/subject_databases.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/records/subject_databases.php
+
+		-
+			message: '#^Path in include\(\) "\.\./includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: control/records/update_record.php
+
+		-
+			message: '#^Variable \$CpanelPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/search.php
+
+		-
+			message: '#^Variable \$IconPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/search.php
+
+		-
+			message: '#^Variable \$faq_results might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/search.php
+
+		-
+			message: '#^Variable \$guides_results might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/search.php
+
+		-
+			message: '#^Variable \$pluslets_results might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/search.php
+
+		-
+			message: '#^Variable \$records_results might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/search.php
+
+		-
+			message: '#^Variable \$staff_results might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/search.php
+
+		-
+			message: '#^Variable \$talkback_results might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/search.php
+
+		-
+			message: '#^Variable \$TalkBackPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/talkback/index.php
+
+		-
+			message: '#^Variable \$all_cattags might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/talkback/index.php
+
+		-
+			message: '#^Variable \$all_tbtags might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/talkback/index.php
+
+		-
+			message: '#^Variable \$short_answer might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/talkback/index.php
+
+		-
+			message: '#^Variable \$rusure might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/talkback/talkback.php
+
+		-
+			message: '#^Variable \$textno might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/talkback/talkback.php
+
+		-
+			message: '#^Variable \$textyes might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/talkback/talkback.php
+
+		-
+			message: '#^Instantiated class Querier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: control/talkback/tb_bits.php
+
+		-
+			message: '#^Variable \$CpanelPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/talkback/tb_bits.php
+
+		-
+			message: '#^Variable \$administrator_email might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/talkback/tb_bits.php
+
+		-
+			message: '#^Variable \$short_answer might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/talkback/tb_bits.php
+
+		-
+			message: '#^Variable \$VideoPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/videos/index.php
+
+		-
+			message: '#^Variable \$base might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/videos/ingest.php
+
+		-
+			message: '#^Variable \$this_vid_date might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/videos/ingest.php
+
+		-
+			message: '#^Variable \$this_vid_description might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/videos/ingest.php
+
+		-
+			message: '#^Variable \$this_vid_duration might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/videos/ingest.php
+
+		-
+			message: '#^Variable \$this_vid_id might not be defined\.$#'
+			identifier: variable.undefined
+			count: 5
+			path: control/videos/ingest.php
+
+		-
+			message: '#^Variable \$this_vid_owner might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/videos/ingest.php
+
+		-
+			message: '#^Variable \$this_vid_thumbnail_medium might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/videos/ingest.php
+
+		-
+			message: '#^Variable \$this_vid_thumbnail_small might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/videos/ingest.php
+
+		-
+			message: '#^Variable \$this_vid_title might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: control/videos/ingest.php
+
+		-
+			message: '#^Variable \$this_vid_url might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/videos/ingest.php
+
+		-
+			message: '#^Variable \$vid_data might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/videos/ingest.php
+
+		-
+			message: '#^Variable \$ok_record_id might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: control/videos/video.php
+
+		-
+			message: '#^Variable \$rusure might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/videos/video.php
+
+		-
+			message: '#^Variable \$textno might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/videos/video.php
+
+		-
+			message: '#^Variable \$textyes might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: control/videos/video.php
+
+		-
+			message: '#^Call to an undefined method SubjectsPlus\\API\\WebService\:\:generateQuery\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: lib/SubjectsPlus/API/WebService.php
+
+		-
+			message: '#^Call to an undefined method SubjectsPlus\\API\\WebService\:\:sanitizeParams\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: lib/SubjectsPlus/API/WebService.php
+
+		-
+			message: '#^Constructor of class SubjectsPlus\\API\\WebServiceHandler has an unused parameter \$dbName_SPlus\.$#'
+			identifier: constructor.unusedParameter
+			count: 1
+			path: lib/SubjectsPlus/API/WebServiceHandler.php
+
+		-
+			message: '#^Constructor of class SubjectsPlus\\API\\WebServiceHandler has an unused parameter \$hname\.$#'
+			identifier: constructor.unusedParameter
+			count: 1
+			path: lib/SubjectsPlus/API/WebServiceHandler.php
+
+		-
+			message: '#^Constructor of class SubjectsPlus\\API\\WebServiceHandler has an unused parameter \$pword\.$#'
+			identifier: constructor.unusedParameter
+			count: 1
+			path: lib/SubjectsPlus/API/WebServiceHandler.php
+
+		-
+			message: '#^Constructor of class SubjectsPlus\\API\\WebServiceHandler has an unused parameter \$uname\.$#'
+			identifier: constructor.unusedParameter
+			count: 1
+			path: lib/SubjectsPlus/API/WebServiceHandler.php
+
+		-
+			message: '#^Variable \$lobjWebService might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: lib/SubjectsPlus/API/WebServiceHandler.php
+
+		-
+			message: '#^Variable \$locations_array might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/AzRecord/AzRecord.php
+
+		-
+			message: '#^Variable \$subjects_array might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/AzRecord/AzRecord.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\AzRecord\\LocationDb\:\:\$connection\.$#'
+			identifier: property.notFound
+			count: 10
+			path: lib/SubjectsPlus/Control/AzRecord/LocationDb.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\AzRecord\\LocationTitleDb\:\:\$connection\.$#'
+			identifier: property.notFound
+			count: 6
+			path: lib/SubjectsPlus/Control/AzRecord/LocationTitleDb.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\AzRecord\\LocationTitleDb\:\:\$last_insert\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/AzRecord/LocationTitleDb.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\AzRecord\\TitleDb\:\:\$connection\.$#'
+			identifier: property.notFound
+			count: 13
+			path: lib/SubjectsPlus/Control/AzRecord/TitleDb.php
+
+		-
+			message: '#^Caught class SubjectsPlus\\Control\\AzRecord\\PDOExecption not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/AzRecord/TitleDb.php
+
+		-
+			message: '#^Variable \$azchecked might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/Checkbox.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\CompleteMe\:\:\$collection\.$#'
+			identifier: property.notFound
+			count: 4
+			path: lib/SubjectsPlus/Control/CompleteMe.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\CompleteMe\:\:\$display\.$#'
+			identifier: property.notFound
+			count: 3
+			path: lib/SubjectsPlus/Control/CompleteMe.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\CompleteMe\:\:\$num\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/CompleteMe.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\CompleteMe\:\:\$search_box_size\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/CompleteMe.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\CompleteMe\:\:\$sortby\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/CompleteMe.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\CompleteMe\:\:\$value\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/CompleteMe.php
+
+		-
+			message: '#^Variable \$lobjValues might not be defined\.$#'
+			identifier: variable.undefined
+			count: 15
+			path: lib/SubjectsPlus/Control/Config.php
+
+		-
+			message: '#^Undefined variable\: \$letter$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/DbHandler.php
+
+		-
+			message: '#^Undefined variable\: \$q$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/DbHandler.php
+
+		-
+			message: '#^Variable \$results might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: lib/SubjectsPlus/Control/DbHandler.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Dropdown\:\:\$_dropdown_type\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Dropdown.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Dropdown\:\:\$_introselect\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Dropdown.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Dropdown\:\:\$_show_keys\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Dropdown.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\FAQ\:\:\$_all_collections\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/FAQ.php
+
+		-
+			message: '#^Instantiated class SubjectsPlus\\Control\\CKEditor not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/FAQ.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\:\:\$_discipline_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Guide.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\:\:\$_discipline_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Guide.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\:\:\$_discipliners\.$#'
+			identifier: property.notFound
+			count: 3
+			path: lib/SubjectsPlus/Control/Guide.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\:\:\$_ok_disciplines\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Guide.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\:\:\$_ok_parents\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Guide.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\:\:\$_parent_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Guide.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\:\:\$_parent_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Guide.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\:\:\$_staff_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Guide.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\:\:\$_staff_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Guide.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\:\:\$_staffers\.$#'
+			identifier: property.notFound
+			count: 3
+			path: lib/SubjectsPlus/Control/Guide.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\:\:\$db\.$#'
+			identifier: property.notFound
+			count: 4
+			path: lib/SubjectsPlus/Control/Guide.php
+
+		-
+			message: '#^Variable \$main_col_size in isset\(\) is never defined\.$#'
+			identifier: isset.variable
+			count: 1
+			path: lib/SubjectsPlus/Control/Guide.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\\CopyGuide\:\:\$_staff_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Guide/CopyGuide.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\\CopyGuide\:\:\$db\.$#'
+			identifier: property.notFound
+			count: 21
+			path: lib/SubjectsPlus/Control/Guide/CopyGuide.php
+
+		-
+			message: '#^Undefined variable\: \$active$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/Guide/CopyGuide.php
+
+		-
+			message: '#^Variable \$connection might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/Guide/CopyGuide.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\\GuideBase\:\:\$_keyswords\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Guide/GuideBase.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\\GuideBase\:\:\$db\.$#'
+			identifier: property.notFound
+			count: 7
+			path: lib/SubjectsPlus/Control/Guide/GuideBase.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\\GuideList\:\:\$active\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Guide/GuideList.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\\GuideList\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Guide/GuideList.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\\PlusletData\:\:\$connection\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Guide/PlusletData.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\\PlusletData\:\:\$pluslets\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Guide/PlusletData.php
+
+		-
+			message: '#^Instantiated class SubjectsPlus\\Control\\Guide\\Querier not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Guide/SectionData.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Guide\\UserGuide\:\:\$staff_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Guide/UserGuide.php
+
+		-
+			message: '#^Constructor of class SubjectsPlus\\Control\\Guide\\UserGuide has an unused parameter \$db\.$#'
+			identifier: constructor.unusedParameter
+			count: 1
+			path: lib/SubjectsPlus/Control/Guide/UserGuide.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\LGImport\:\:\$cm\.$#'
+			identifier: property.notFound
+			count: 7
+			path: lib/SubjectsPlus/Control/LGImport.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\LGImport\:\:\$connection\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/LGImport.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\LGImport\:\:\$db\.$#'
+			identifier: property.notFound
+			count: 67
+			path: lib/SubjectsPlus/Control/LGImport.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\LGImport\:\:\$libguidesxml\.$#'
+			identifier: property.notFound
+			count: 5
+			path: lib/SubjectsPlus/Control/LGImport.php
+
+		-
+			message: '#^Parameter \$cm of method SubjectsPlus\\Control\\LGImport\:\:__construct\(\) has invalid type RichterLibrary\\Helpers\\CatalogMigrator\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/LGImport.php
+
+		-
+			message: '#^Undefined variable\: \$new_catalog_url$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/LGImport.php
+
+		-
+			message: '#^Variable \$location_id might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: lib/SubjectsPlus/Control/LGImport.php
+
+		-
+			message: '#^Variable \$section_uniqid might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/LGImport.php
+
+		-
+			message: '#^Variable \$title_id might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: lib/SubjectsPlus/Control/LGImport.php
+
+		-
+			message: '#^Variable \$body might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/LinkChecker.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Mailer\:\:\$_msg\.$#'
+			identifier: property.notFound
+			count: 9
+			path: lib/SubjectsPlus/Control/Mailer.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\PGFeed\:\:\$authorElements\.$#'
+			identifier: property.notFound
+			count: 3
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\PGFeed\:\:\$authors\.$#'
+			identifier: property.notFound
+			count: 3
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\PGFeed\:\:\$cloudAttributes\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\PGFeed\:\:\$contributors\.$#'
+			identifier: property.notFound
+			count: 3
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\PGFeed\:\:\$enclosureAttributes\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\PGFeed\:\:\$entryElements\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\PGFeed\:\:\$errorMessage\.$#'
+			identifier: property.notFound
+			count: 3
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\PGFeed\:\:\$imageElements\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\PGFeed\:\:\$isInFeedAuthor\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\PGFeed\:\:\$isInTextInput\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\PGFeed\:\:\$itemElements\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\PGFeed\:\:\$textInputElements\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Variable \$author might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Variable \$contributor might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Variable \$isAtom might not be defined\.$#'
+			identifier: variable.undefined
+			count: 46
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Variable \$isInAuthor might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Variable \$isInContributor might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Variable \$isInDescription might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Variable \$isInImage might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Variable \$isInItem might not be defined\.$#'
+			identifier: variable.undefined
+			count: 19
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Variable \$isInSource might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Variable \$isInTextInput might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Variable \$item might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Variable \$itemNumber might not be defined\.$#'
+			identifier: variable.undefined
+			count: 4
+			path: lib/SubjectsPlus/Control/PGFeed.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_1\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 5
+			path: lib/SubjectsPlus/Control/Pluslet/1.php
+
+		-
+			message: '#^Variable \$first_line might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/1.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_2\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/2.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_3\:\:\$_relative_asset_path\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/3.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_3\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/3.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_4\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/4.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_5\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/5.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_6\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/6.php
+
+		-
+			message: '#^Instantiated class SubjectsPlus\\Control\\CKEditor not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/Basic.php
+
+		-
+			message: '#^Constructor of class SubjectsPlus\\Control\\Pluslet_BookList has an unused parameter \$clone_id\.$#'
+			identifier: constructor.unusedParameter
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/BookList.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_Card\:\:\$_card_title\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/Card.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_Card\:\:\$_editor\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/Card.php
+
+		-
+			message: '#^Instantiated class SubjectsPlus\\Control\\CKEditor not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/Card.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_Clone\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/Clone.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_Clone\:\:\$db\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/Clone.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_CollectionList\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/CollectionList.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_CollectionList\:\:\$db\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/CollectionList.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_Experts\:\:\$db\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/Experts.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_GuideEditorList\:\:\$_isclone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/GuideEditorList.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_GuideEditorList\:\:\$_staffArray\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/GuideEditorList.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_GuideEditorList\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/GuideEditorList.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_GuideEditorList\:\:\$tel_prefix\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/GuideEditorList.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_GuideList\:\:\$db\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/GuideList.php
+
+		-
+			message: '#^Variable \$list_guides might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/GuideList.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_GuideSelect\:\:\$course_guides\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/GuideSelect.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_GuideSelect\:\:\$db\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/GuideSelect.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_GuideSelect\:\:\$subject_guides\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/GuideSelect.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_GuideSelect\:\:\$topic_guides\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/GuideSelect.php
+
+		-
+			message: '#^Caught class SubjectsPlus\\Control\\Exception not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/HTML5Video.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_LinkList\:\:\$_editor\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/LinkList.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_LinkList\:\:\$_isclone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/LinkList.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_LinkList\:\:\$_linkText\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/LinkList.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_LinkList\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/LinkList.php
+
+		-
+			message: '#^Instantiated class SubjectsPlus\\Control\\CKEditor not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/LinkList.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_NewDBs\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/NewDBs.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_NewDBs\:\:\$db\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/NewDBs.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_NewGuides\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/NewGuides.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_NewGuides\:\:\$db\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/NewGuides.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet\:\:\$_isclone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/Pluslet.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet\:\:\$_message\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/Pluslet.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet\:\:\$_relative_asset_path\.$#'
+			identifier: property.notFound
+			count: 4
+			path: lib/SubjectsPlus/Control/Pluslet/Pluslet.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/Pluslet.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet\:\:\$_visible_id\.$#'
+			identifier: property.notFound
+			count: 6
+			path: lib/SubjectsPlus/Control/Pluslet/Pluslet.php
+
+		-
+			message: '#^Constructor of class SubjectsPlus\\Control\\Pluslet has an unused parameter \$flag\.$#'
+			identifier: constructor.unusedParameter
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/Pluslet.php
+
+		-
+			message: '#^Variable \$cat_url might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/Pluslet.php
+
+		-
+			message: '#^Variable \$linktext might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/Pluslet.php
+
+		-
+			message: '#^Variable \$note might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/Pluslet.php
+
+		-
+			message: '#^Variable \$show_desc might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/Pluslet.php
+
+		-
+			message: '#^Variable \$show_icons might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/Pluslet.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_QP\:\:\$_color\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/QP.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_QP\:\:\$_inst_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/QP.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_QP\:\:\$_lang_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/QP.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_Related\:\:\$_isclone\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/Related.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_Related\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 3
+			path: lib/SubjectsPlus/Control/Pluslet/Related.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_Related\:\:\$db\.$#'
+			identifier: property.notFound
+			count: 6
+			path: lib/SubjectsPlus/Control/Pluslet/Related.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SocialMedia\:\:\$smAccounts\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SocialMedia.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$_array_keys\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$_data_array\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$_editors\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$_relative_asset_path\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$facebook\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$fullname\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$img_url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$instagram\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$pinterest\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$showEmail\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$showFacebook\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$showInstagram\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$showName\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$showPhone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$showPhoto\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$showPinterest\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$showTitle\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$showTwitter\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$staff_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$tel\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$tel_prefix\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_SubjectSpecialist\:\:\$twitter\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Instantiated class SubjectsPlus\\Control\\CKEditor not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Variable \$keyNoUserId in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.variable
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Variable \$value in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.variable
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/SubjectSpecialist.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_TOC\:\:\$_current_id\.$#'
+			identifier: property.notFound
+			count: 8
+			path: lib/SubjectsPlus/Control/Pluslet/TOC.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_TOC\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/TOC.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Pluslet_TOC\:\:\$_tocArray\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/TOC.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 16
+			path: lib/SubjectsPlus/Control/Pluslet/views/ArticlesPlus.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: lib/SubjectsPlus/Control/Pluslet/views/BookListEditOutput.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/views/BookListViewOutput.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/views/Card.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 4
+			path: lib/SubjectsPlus/Control/Pluslet/views/CardEdit.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 14
+			path: lib/SubjectsPlus/Control/Pluslet/views/CatalogView.php
+
+		-
+			message: '#^File ends with a trailing whitespace\. This may cause problems when running the code in the web browser\. Remove the closing \?\> mark or remove the whitespace\.$#'
+			identifier: whitespace.fileEnd
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/views/ChatView.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 4
+			path: lib/SubjectsPlus/Control/Pluslet/views/ChatView.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/Pluslet/views/GuideEditorListEditOutput.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 13
+			path: lib/SubjectsPlus/Control/Pluslet/views/PrimoSearchView.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: lib/SubjectsPlus/Control/Pluslet/views/QPChatEditOutput.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: lib/SubjectsPlus/Control/Pluslet/views/QPChatViewOutput.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 4
+			path: lib/SubjectsPlus/Control/Pluslet/views/SocialMedia.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 28
+			path: lib/SubjectsPlus/Control/Pluslet/views/SubjectSpecialist.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 34
+			path: lib/SubjectsPlus/Control/Pluslet/views/SubjectSpecialistEdit.php
+
+		-
+			message: '#^Instantiated class ReCaptcha\\ReCaptcha not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/ReCaptchaService.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Record\:\:\$_boxcount\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Record.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Record\:\:\$_formats\.$#'
+			identifier: property.notFound
+			count: 3
+			path: lib/SubjectsPlus/Control/Record.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Record\:\:\$_restrictions\.$#'
+			identifier: property.notFound
+			count: 3
+			path: lib/SubjectsPlus/Control/Record.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Record\:\:\$_title_id\.$#'
+			identifier: property.notFound
+			count: 10
+			path: lib/SubjectsPlus/Control/Record.php
+
+		-
+			message: '#^Instantiated class SubjectsPlus\\Control\\CKEditor not found\.$#'
+			identifier: class.notFound
+			count: 3
+			path: lib/SubjectsPlus/Control/Record.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\RefStat\:\:\$_debug\.$#'
+			identifier: property.notFound
+			count: 3
+			path: lib/SubjectsPlus/Control/RefStat.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\RefStat\:\:\$_locations\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/RefStat.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\RefStat\:\:\$_message\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/RefStat.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\RefStat\:\:\$_modes\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/RefStat.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\RefStat\:\:\$_types\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/RefStat.php
+
+		-
+			message: '#^Variable \$rInsert might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/RefStat.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_active\.$#'
+			identifier: property.notFound
+			count: 7
+			path: lib/SubjectsPlus/Control/Staff.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_active_or_not\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Staff.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_answer\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Staff.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_department_count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Staff.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_departmenters\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Staff.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_departments\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Staff.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_ip\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Staff.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_supervisors\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Staff.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_user_types\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Staff.php
+
+		-
+			message: '#^Instantiated class SubjectsPlus\\Control\\CKEditor not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Staff.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_active\.$#'
+			identifier: property.notFound
+			count: 6
+			path: lib/SubjectsPlus/Control/StaffBrief.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_active_or_not\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/StaffBrief.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_answer\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/StaffBrief.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_debug\.$#'
+			identifier: property.notFound
+			count: 6
+			path: lib/SubjectsPlus/Control/StaffBrief.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_departments\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/StaffBrief.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_fullname\.$#'
+			identifier: property.notFound
+			count: 4
+			path: lib/SubjectsPlus/Control/StaffBrief.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_headshot_loc\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/StaffBrief.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_ip\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/StaffBrief.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Staff\:\:\$_user_types\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/StaffBrief.php
+
+		-
+			message: '#^Instantiated class SubjectsPlus\\Control\\CKEditor not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/StaffBrief.php
+
+		-
+			message: '#^Undefined variable\: \$db$#'
+			identifier: variable.undefined
+			count: 15
+			path: lib/SubjectsPlus/Control/StaffBrief.php
+
+		-
+			message: '#^Variable \$shortsub might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: lib/SubjectsPlus/Control/StaffDisplay.php
+
+		-
+			message: '#^Constructor of class SubjectsPlus\\Control\\Stats\\GuideStats has an unused parameter \$db\.$#'
+			identifier: constructor.unusedParameter
+			count: 1
+			path: lib/SubjectsPlus/Control/Stats/GuideStats.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Talkback\:\:\$_date_entered\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Talkback.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Talkback\:\:\$_debug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Talkback.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Talkback\:\:\$_staffers\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Talkback.php
+
+		-
+			message: '#^Instantiated class SubjectsPlus\\Control\\CKEditor not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Talkback.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\TextTokenizer\:\:\$_relative_asset_path\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/TextTokenizer.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\TextTokenizer\:\:\$_subject_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/TextTokenizer.php
+
+		-
+			message: '#^Variable \$cat_url might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/TextTokenizer.php
+
+		-
+			message: '#^Variable \$linktext might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/TextTokenizer.php
+
+		-
+			message: '#^Variable \$note might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: lib/SubjectsPlus/Control/TextTokenizer.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Upload\:\:\$file_max_size_raw\.$#'
+			identifier: property.notFound
+			count: 2
+			path: lib/SubjectsPlus/Control/Upload.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Upload\:\:\$lang\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Upload.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''docx'' \(''docx'', ''docx''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: lib/SubjectsPlus/Control/Upload.php
+
+		-
+			message: '#^Instantiated class SubjectsPlus\\Control\\finfo not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Upload.php
+
+		-
+			message: '#^Method SubjectsPlus\\Control\\Upload\:\:process\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: lib/SubjectsPlus/Control/Upload.php
+
+		-
+			message: '#^Variable \$alpha might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/Upload.php
+
+		-
+			message: '#^Variable \$blue might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/Upload.php
+
+		-
+			message: '#^Variable \$f might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/Upload.php
+
+		-
+			message: '#^Variable \$filter might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: lib/SubjectsPlus/Control/Upload.php
+
+		-
+			message: '#^Variable \$green might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/Upload.php
+
+		-
+			message: '#^Variable \$image_manipulation might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: lib/SubjectsPlus/Control/Upload.php
+
+		-
+			message: '#^Variable \$image_src might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/Upload.php
+
+		-
+			message: '#^Variable \$red might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: lib/SubjectsPlus/Control/Upload.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Video\:\:\$_a_from\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Video.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Video\:\:\$_message\.$#'
+			identifier: property.notFound
+			count: 8
+			path: lib/SubjectsPlus/Control/Video.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Video\:\:\$_staffers\.$#'
+			identifier: property.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Video.php
+
+		-
+			message: '#^Access to an undefined property SubjectsPlus\\Control\\Video\:\:\$_vid_loc\.$#'
+			identifier: property.notFound
+			count: 3
+			path: lib/SubjectsPlus/Control/Video.php
+
+		-
+			message: '#^Instantiated class SubjectsPlus\\Control\\CKEditor not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: lib/SubjectsPlus/Control/Video.php
+
+		-
+			message: '#^Path in include_once\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: includeOnce.fileNotFound
+			count: 1
+			path: oai/oai.php
+
+		-
+			message: '#^Variable \$BaseURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: oai/oai.php
+
+		-
+			message: '#^Variable \$administrator_email might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: oai/oai.php
+
+		-
+			message: '#^Variable \$institution_name might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: oai/oai.php
+
+		-
+			message: '#^Variable \$resource_name might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: oai/oai.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/blank-404.php
+
+		-
+			message: '#^Variable \$subjects_theme might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/blank-404.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/collection.php
+
+		-
+			message: '#^Variable \$mod_rewrite might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/collection.php
+
+		-
+			message: '#^Variable \$proxyURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/collection.php
+
+		-
+			message: '#^Variable \$subjects_theme might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/collection.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/databases.php
+
+		-
+			message: '#^Variable \$layout might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/databases.php
+
+		-
+			message: '#^Variable \$proxyURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/databases.php
+
+		-
+			message: '#^Variable \$subjects_theme might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/databases.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/faq.php
+
+		-
+			message: '#^Variable \$full_query might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/faq.php
+
+		-
+			message: '#^Variable \$subjects_theme might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/faq.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/guide.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/guide.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/guide.php
+
+		-
+			message: '#^Variable \$subjects_theme might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/guide.php
+
+		-
+			message: '#^Path in include_once\(\) "\.\./\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: includeOnce.fileNotFound
+			count: 1
+			path: subjects/includes/feedme.php
+
+		-
+			message: '#^Variable \$administrator might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/includes/footer.php
+
+		-
+			message: '#^Variable \$administrator_email might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/includes/footer.php
+
+		-
+			message: '#^Variable \$administrator might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/includes/footer_custom.php
+
+		-
+			message: '#^Variable \$administrator_email might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/includes/footer_custom.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/includes/footer_med.php
+
+		-
+			message: '#^Path in include\(\) "themes/splux/site\-footer\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/includes/footer_splux.php
+
+		-
+			message: '#^Path in include\(\) "themes/splux/site\-scripts\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/includes/footer_splux.php
+
+		-
+			message: '#^Path in include\(\) "includes/jekyll\-site\-footer\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/includes/footer_um-new.php
+
+		-
+			message: '#^Path in include\(\) "includes/jekyll\-site\-scripts\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/includes/footer_um-new.php
+
+		-
+			message: '#^Variable \$google_analytics_ua might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/includes/google-analytics-tag-manager.php
+
+		-
+			message: '#^Variable \$google_tag_manager might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/includes/google-analytics-tag-manager.php
+
+		-
+			message: '#^Variable \$google_analytics_ua might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/includes/google-analytics-tracker.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 6
+			path: subjects/includes/header.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/includes/header.php
+
+		-
+			message: '#^Variable \$page_title might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/includes/header.php
+
+		-
+			message: '#^Variable \$v2styles in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.variable
+			count: 2
+			path: subjects/includes/header.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 5
+			path: subjects/includes/header_chc.php
+
+		-
+			message: '#^Variable \$page_title might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/includes/header_chc.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 6
+			path: subjects/includes/header_custom.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/includes/header_custom.php
+
+		-
+			message: '#^Variable \$page_title might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/includes/header_custom.php
+
+		-
+			message: '#^Variable \$v2styles in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.variable
+			count: 2
+			path: subjects/includes/header_custom.php
+
+		-
+			message: '#^Path in include_once\(\) "includes/google\-analytics\-tracker\.php" is not a file or it does not exist\.$#'
+			identifier: includeOnce.fileNotFound
+			count: 1
+			path: subjects/includes/header_med.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 6
+			path: subjects/includes/header_med.php
+
+		-
+			message: '#^Variable \$page_title might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/includes/header_med.php
+
+		-
+			message: '#^Path in include\(\) "themes/splux/site\-header\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/includes/header_splux.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/includes/header_splux.php
+
+		-
+			message: '#^Variable \$page_title might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/includes/header_splux.php
+
+		-
+			message: '#^Path in include\(\) "includes/jekyll\-site\-header\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/includes/header_um-new.php
+
+		-
+			message: '#^Path in include_once\(\) "includes/google\-analytics\-tag\-manager\.php" is not a file or it does not exist\.$#'
+			identifier: includeOnce.fileNotFound
+			count: 1
+			path: subjects/includes/header_um-new.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/includes/header_um-new.php
+
+		-
+			message: '#^Variable \$page_title might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/includes/header_um-new.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 5
+			path: subjects/includes/header_um.php
+
+		-
+			message: '#^Variable \$page_title might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/includes/header_um.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/index.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/index.php
+
+		-
+			message: '#^Variable \$guide_path might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/index.php
+
+		-
+			message: '#^Variable \$guide_types might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/index.php
+
+		-
+			message: '#^Variable \$mod_rewrite might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/index.php
+
+		-
+			message: '#^Variable \$proxyURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/index.php
+
+		-
+			message: '#^Variable \$resource_name might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/index.php
+
+		-
+			message: '#^Variable \$subjects_theme might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/index.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/index_c.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/noguide.php
+
+		-
+			message: '#^Variable \$subjects_theme might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/noguide.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/record.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/record.php
+
+		-
+			message: '#^Variable \$subjects_theme might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/record.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/request.php
+
+		-
+			message: '#^Variable \$subjects_theme might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/request.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/search.php
+
+		-
+			message: '#^Variable \$IconPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/search.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/search.php
+
+		-
+			message: '#^Variable \$databases_results might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/search.php
+
+		-
+			message: '#^Variable \$faq_results might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/search.php
+
+		-
+			message: '#^Variable \$guides_results might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/search.php
+
+		-
+			message: '#^Variable \$staff_results might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/search.php
+
+		-
+			message: '#^Variable \$subjects_theme might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/search.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/staff.php
+
+		-
+			message: '#^Variable \$subjects_theme might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/staff.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/staff_details.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/staff_details.php
+
+		-
+			message: '#^Variable \$UserPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/staff_details.php
+
+		-
+			message: '#^Variable \$mod_rewrite might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/staff_details.php
+
+		-
+			message: '#^Variable \$ok_names might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/staff_details.php
+
+		-
+			message: '#^Variable \$subjects_theme might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/staff_details.php
+
+		-
+			message: '#^Variable \$tel_prefix might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/staff_details.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/talkback.php
+
+		-
+			message: '#^Variable \$subjects_theme might not be defined\.$#'
+			identifier: variable.undefined
+			count: 7
+			path: subjects/talkback.php
+
+		-
+			message: '#^Variable \$tb_bonus_css might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/talkback.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_custom\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/blank-404.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_custom\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/blank-404.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_custom\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/collection.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_custom\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/collection.php
+
+		-
+			message: '#^Variable \$mod_rewrite might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/collection.php
+
+		-
+			message: '#^Variable \$proxyURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/collection.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_custom\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/databases.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_custom\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/databases.php
+
+		-
+			message: '#^Variable \$layout might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/databases.php
+
+		-
+			message: '#^Variable \$proxyURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/databases.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_custom\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/faq.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_custom\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/faq.php
+
+		-
+			message: '#^Variable \$full_query might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/faq.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_custom\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/index.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_custom\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/index.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/index.php
+
+		-
+			message: '#^Variable \$guide_path might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/themes/custom/index.php
+
+		-
+			message: '#^Variable \$guide_types might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/themes/custom/index.php
+
+		-
+			message: '#^Variable \$mod_rewrite might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/themes/custom/index.php
+
+		-
+			message: '#^Variable \$proxyURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/index.php
+
+		-
+			message: '#^Variable \$resource_name might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/index.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_custom\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/noguide.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_custom\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/noguide.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_custom\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/staff.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_custom\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/staff.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/staff_details.php
+
+		-
+			message: '#^Path in include\(\) "includes/header\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/staff_details.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/themes/custom/staff_details.php
+
+		-
+			message: '#^Variable \$UserPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/staff_details.php
+
+		-
+			message: '#^Variable \$mod_rewrite might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/staff_details.php
+
+		-
+			message: '#^Variable \$ok_names might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/staff_details.php
+
+		-
+			message: '#^Variable \$tel_prefix might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/staff_details.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_custom\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/video.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_custom\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/custom/video.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/themes/custom/video.php
+
+		-
+			message: '#^Variable \$all_vtags might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/video.php
+
+		-
+			message: '#^Variable \$location might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/themes/custom/video.php
+
+		-
+			message: '#^Variable \$pretty_tag in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: subjects/themes/custom/video.php
+
+		-
+			message: '#^Variable \$r might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/themes/custom/video.php
+
+		-
+			message: '#^Variable \$form_action might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/comment_form.php
+
+		-
+			message: '#^Variable \$tb_bonus_css might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/comment_form.php
+
+		-
+			message: '#^Variable \$this_comment might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/comment_form.php
+
+		-
+			message: '#^Variable \$this_name might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/comment_form.php
+
+		-
+			message: '#^Variable \$form_action might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/comment_form_recaptcha.php
+
+		-
+			message: '#^Variable \$talkback_recaptcha_site_key might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/comment_form_recaptcha.php
+
+		-
+			message: '#^Variable \$tb_bonus_css might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/comment_form_recaptcha.php
+
+		-
+			message: '#^Variable \$this_comment might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/comment_form_recaptcha.php
+
+		-
+			message: '#^Variable \$this_name might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/comment_form_recaptcha.php
+
+		-
+			message: '#^Variable \$datetime might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/html_msg.php
+
+		-
+			message: '#^Variable \$this_comment might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/html_msg.php
+
+		-
+			message: '#^Variable \$this_name might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/html_msg.php
+
+		-
+			message: '#^Variable \$comment_header might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/public.php
+
+		-
+			message: '#^Variable \$comments might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/public.php
+
+		-
+			message: '#^Variable \$current_comments_label might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/public.php
+
+		-
+			message: '#^Variable \$current_comments_link might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/public.php
+
+		-
+			message: '#^Variable \$form_action might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/public.php
+
+		-
+			message: '#^Variable \$talkback_show_headshot might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/talkback/public.php
+
+		-
+			message: '#^Variable \$form_action might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/usearch-problem-report/form.php
+
+		-
+			message: '#^Variable \$item_title might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/usearch-problem-report/form.php
+
+		-
+			message: '#^Variable \$form_action might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/usearch-problem-report/form_recaptcha.php
+
+		-
+			message: '#^Variable \$item_title might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/usearch-problem-report/form_recaptcha.php
+
+		-
+			message: '#^Variable \$problem_report_recaptcha_site_key might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/usearch-problem-report/form_recaptcha.php
+
+		-
+			message: '#^Variable \$msg might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/custom/views/usearch-problem-report/html_msg.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/blank-404.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/functions\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/blank-404.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/blank-404.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/blank-404.php
+
+		-
+			message: '#^Variable \$proxyURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/blank-404.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/collection.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/collection.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/collection.php
+
+		-
+			message: '#^Variable \$mod_rewrite might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/collection.php
+
+		-
+			message: '#^Variable \$proxyURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/collection.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/databases.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/databases.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/databases.php
+
+		-
+			message: '#^Variable \$db_results might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/databases.php
+
+		-
+			message: '#^Variable \$featured_list might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/databases.php
+
+		-
+			message: '#^Variable \$proxyURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/databases.php
+
+		-
+			message: '#^Variable \$trials in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.variable
+			count: 1
+			path: subjects/themes/splux/databases.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/faq.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/faq.php
+
+		-
+			message: '#^Variable \$full_query might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/faq.php
+
+		-
+			message: '#^Variable \$proxyURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/faq.php
+
+		-
+			message: '#^Path in include\(\) "\.\./assets/js/guides/ArticlesPlus\.js" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/guide.php
+
+		-
+			message: '#^Path in include\(\) "\.\./assets/js/guides/Catalog\.js" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/guide.php
+
+		-
+			message: '#^Path in include\(\) "\.\./assets/js/guides/PrimoSearchBox\.js" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/guide.php
+
+		-
+			message: '#^Path in include\(\) "\.\./assets/js/guides/SubjectSpecialist\.js" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/guide.php
+
+		-
+			message: '#^Path in include\(\) "\.\./assets/js/guides/bookList\.js" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/guide.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/autoloader\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/guide.php
+
+		-
+			message: '#^Path in include\(\) "\./includes/js/autoComplete\.js" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/guide.php
+
+		-
+			message: '#^Path in include\(\) "\./includes/js/cloneView\.js" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/guide.php
+
+		-
+			message: '#^Path in include\(\) "\./includes/js/hash\.js" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/guide.php
+
+		-
+			message: '#^Path in include\(\) "\./includes/js/jquery\.scrollTo\.js" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/guide.php
+
+		-
+			message: '#^Path in include\(\) "\./includes/js/tabDropdown\.js" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/guide.php
+
+		-
+			message: '#^Path in include\(\) "\./includes/js/track\.js" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/guide.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 2
+			path: subjects/themes/splux/guide.php
+
+		-
+			message: '#^Path in include\(\) "includes/header\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 2
+			path: subjects/themes/splux/guide.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/themes/splux/guide.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/themes/splux/guide.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/index.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/index.php
+
+		-
+			message: '#^Variable \$guide_types might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/themes/splux/index.php
+
+		-
+			message: '#^Variable \$mod_rewrite might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/index.php
+
+		-
+			message: '#^Variable \$proxyURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/index.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/noguide.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/noguide.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/themes/splux/noguide.php
+
+		-
+			message: '#^Variable \$proxyURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/noguide.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/site-header.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 7
+			path: subjects/themes/splux/site-header.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/site-scripts.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/staff.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/staff.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/staff_details.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/staff_details.php
+
+		-
+			message: '#^Variable \$PublicPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/themes/splux/staff_details.php
+
+		-
+			message: '#^Variable \$UserPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/staff_details.php
+
+		-
+			message: '#^Variable \$ok_names might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/staff_details.php
+
+		-
+			message: '#^Path in include\(\) "includes/footer_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/video.php
+
+		-
+			message: '#^Path in include\(\) "includes/header_splux\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/themes/splux/video.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/themes/splux/video.php
+
+		-
+			message: '#^Variable \$all_vtags might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/video.php
+
+		-
+			message: '#^Variable \$location might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/themes/splux/video.php
+
+		-
+			message: '#^Variable \$r might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/themes/splux/video.php
+
+		-
+			message: '#^Variable \$form_action might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/comment_form.php
+
+		-
+			message: '#^Variable \$tb_bonus_css might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/comment_form.php
+
+		-
+			message: '#^Variable \$this_comment might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/comment_form.php
+
+		-
+			message: '#^Variable \$this_name might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/comment_form.php
+
+		-
+			message: '#^Variable \$talkback_recaptcha_site_key might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/comment_form_recaptcha.php
+
+		-
+			message: '#^Variable \$tb_bonus_css might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/comment_form_recaptcha.php
+
+		-
+			message: '#^Variable \$this_comment might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/comment_form_recaptcha.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 4
+			path: subjects/themes/splux/views/talkback/html_msg.php
+
+		-
+			message: '#^Variable \$BaseURL might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/html_msg.php
+
+		-
+			message: '#^Variable \$datetime might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/html_msg.php
+
+		-
+			message: '#^Variable \$this_comment might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/html_msg.php
+
+		-
+			message: '#^Variable \$this_name might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/html_msg.php
+
+		-
+			message: '#^Variable \$asset_path might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/public.php
+
+		-
+			message: '#^Variable \$cat_filters might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/public.php
+
+		-
+			message: '#^Variable \$current_comments_label might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/public.php
+
+		-
+			message: '#^Variable \$current_comments_link might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/public.php
+
+		-
+			message: '#^Variable \$form_action might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/public.php
+
+		-
+			message: '#^Variable \$talkback_show_headshot might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/talkback/public.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/usearch-problem-report/email_msg.php
+
+		-
+			message: '#^Variable \$affiliation might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/usearch-problem-report/email_msg.php
+
+		-
+			message: '#^Variable \$box_file might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/themes/splux/views/usearch-problem-report/email_msg.php
+
+		-
+			message: '#^Variable \$date_submitted might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/usearch-problem-report/email_msg.php
+
+		-
+			message: '#^Variable \$description might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/usearch-problem-report/email_msg.php
+
+		-
+			message: '#^Variable \$item_permalink might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/themes/splux/views/usearch-problem-report/email_msg.php
+
+		-
+			message: '#^Variable \$item_title might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/usearch-problem-report/email_msg.php
+
+		-
+			message: '#^Variable \$primo_view might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/usearch-problem-report/email_msg.php
+
+		-
+			message: '#^Variable \$problem_type might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/usearch-problem-report/email_msg.php
+
+		-
+			message: '#^Variable \$user_email might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/usearch-problem-report/email_msg.php
+
+		-
+			message: '#^Variable \$user_name might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/usearch-problem-report/email_msg.php
+
+		-
+			message: '#^Variable \$form_action might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/usearch-problem-report/form.php
+
+		-
+			message: '#^Variable \$item_title might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/usearch-problem-report/form.php
+
+		-
+			message: '#^Variable \$form_action might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/usearch-problem-report/form_recaptcha.php
+
+		-
+			message: '#^Variable \$item_title might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/usearch-problem-report/form_recaptcha.php
+
+		-
+			message: '#^Variable \$problem_report_recaptcha_site_key might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/themes/splux/views/usearch-problem-report/form_recaptcha.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/track.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/usearch-problem-report.php
+
+		-
+			message: '#^Variable \$affiliation might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/usearch-problem-report.php
+
+		-
+			message: '#^Variable \$page_description might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/usearch-problem-report.php
+
+		-
+			message: '#^Variable \$page_keywords might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/usearch-problem-report.php
+
+		-
+			message: '#^Variable \$page_title might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/usearch-problem-report.php
+
+		-
+			message: '#^Variable \$problem_type might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/usearch-problem-report.php
+
+		-
+			message: '#^Variable \$subjects_theme might not be defined\.$#'
+			identifier: variable.undefined
+			count: 4
+			path: subjects/usearch-problem-report.php
+
+		-
+			message: '#^Path in include\(\) "\.\./control/includes/config\.php" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: subjects/video.php
+
+		-
+			message: '#^Variable \$AssetPath might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/video.php
+
+		-
+			message: '#^Variable \$all_vtags might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/video.php
+
+		-
+			message: '#^Variable \$location might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: subjects/video.php
+
+		-
+			message: '#^Variable \$pretty_tag in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: subjects/video.php
+
+		-
+			message: '#^Variable \$subjects_theme might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: subjects/video.php
+
+		-
+			message: '#^Variable \$form_action might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/comment_form.php
+
+		-
+			message: '#^Variable \$tb_bonus_css might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/comment_form.php
+
+		-
+			message: '#^Variable \$this_comment might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/comment_form.php
+
+		-
+			message: '#^Variable \$this_name might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/comment_form.php
+
+		-
+			message: '#^Variable \$form_action might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/comment_form_recaptcha.php
+
+		-
+			message: '#^Variable \$talkback_recaptcha_site_key might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/comment_form_recaptcha.php
+
+		-
+			message: '#^Variable \$tb_bonus_css might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/comment_form_recaptcha.php
+
+		-
+			message: '#^Variable \$this_comment might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/comment_form_recaptcha.php
+
+		-
+			message: '#^Variable \$this_name might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/comment_form_recaptcha.php
+
+		-
+			message: '#^Variable \$datetime might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/html_msg.php
+
+		-
+			message: '#^Variable \$this_comment might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/html_msg.php
+
+		-
+			message: '#^Variable \$this_name might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/html_msg.php
+
+		-
+			message: '#^Variable \$comment_header might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/public.php
+
+		-
+			message: '#^Variable \$comments might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/public.php
+
+		-
+			message: '#^Variable \$current_comments_label might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/public.php
+
+		-
+			message: '#^Variable \$current_comments_link might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/public.php
+
+		-
+			message: '#^Variable \$form_action might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/public.php
+
+		-
+			message: '#^Variable \$talkback_show_headshot might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: subjects/views/talkback/public.php
+
+		-
+			message: '#^Variable \$dbName_SPlus might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: tools/migrate.php
+
+		-
+			message: '#^Variable \$hname might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: tools/migrate.php
+
+		-
+			message: '#^Variable \$pword might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: tools/migrate.php
+
+		-
+			message: '#^Variable \$uname might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: tools/migrate.php

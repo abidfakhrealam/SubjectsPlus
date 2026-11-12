@@ -39,7 +39,8 @@ class Stats
 
 
     public function getTotalViewsPerGuide() {
-	$query = "SELECT page_title, count(*) as num, subject_short_form from stats WHERE event_type = 'view' and 
+	// ONLY_FULL_GROUP_BY-safe (subject_short_form was not aggregated)
+	$query = "SELECT page_title, count(*) as num, MAX(subject_short_form) as subject_short_form from stats WHERE event_type = 'view' and 
 FROM_UNIXTIME(stats.date) BETWEEN NOW() - INTERVAL 30 DAY AND NOW()
  group by page_title order by count(*) desc";
 	return $this->db->query($query);
@@ -77,7 +78,7 @@ and subject_short_form != '' GROUP BY tab_name, subject_short_form ORDER BY trim
     }
 
     public function getStaffShortForms($staffId) {
-	(int) $staffId = $staffId;
+	$staffId = (int) $staffId; // was "(int) $staffId = $staffId", which casts nothing
 	$query = "SELECT staff_subject.subject_id as subject_id, s.subject as subject, s.shortform as shortform FROM staff_subject INNER JOIN subject as s on s.subject_id = staff_subject.subject_id WHERE staff_subject.staff_id = $staffId AND s.active = 1";
 	return $this->db->query($query);
     }

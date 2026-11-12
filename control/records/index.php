@@ -30,7 +30,7 @@ $db = new Querier;
 // Where to start?
 // Choose initial letter to display
 
-$alpha_query = "SELECT  distinct left(title,1) as 'initial' FROM  title, restrictions, location, location_title, source where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions ORDER BY initial";
+$alpha_query = "SELECT  distinct left(title,1) as 'initial' FROM  title, restrictions, location, location_title where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions ORDER BY initial";
 
 $alpha_result = $db->query($alpha_query);
 
@@ -81,30 +81,30 @@ if (isset($_GET["letter"])) {
 
 if (isset($_GET["ctag"])) {
     $alpha_id = $_GET["ctag"];
-    $full_query = "select distinct title, description, location, restrictions_id, title.title_id as 'this_record', eres_display, ctags, record_status from title, restrictions, location, location_title, source where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions  and ctags like '%$alpha_id%' order by title.title";
+    $full_query = "select distinct title, description, location, restrictions_id, title.title_id as 'this_record', eres_display, ctags, record_status from title, restrictions, location, location_title where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions  and ctags like '%$alpha_id%' order by title.title";
 } elseif (!isset($_GET['letter'])) {
     $alpha_id = $firstletter;
-    $full_query = "select distinct title, description, location, restrictions_id, title.title_id as 'this_record', eres_display, ctags, record_status  from title, restrictions, location, location_title, source where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions  and title like '$firstletter%' order by title.title";
+    $full_query = "select distinct title, description, location, restrictions_id, title.title_id as 'this_record', eres_display, ctags, record_status  from title, restrictions, location, location_title where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions  and title like '$firstletter%' order by title.title";
     //$alpha_id = FALSE;
 } elseif ($_GET['letter'] == "Num") {
     $alpha_id = "Num";
-    $full_query = "select distinct title, description, location, restrictions_id, title.title_id as 'this_record', eres_display, ctags from title, restrictions, location, location_title, source where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions and title REGEXP '^[[:digit:]]'order by title.title";
+    $full_query = "select distinct title, description, location, restrictions_id, title.title_id as 'this_record', eres_display, ctags from title, restrictions, location, location_title where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions and title REGEXP '^[[:digit:]]'order by title.title";
 }elseif ($_GET['letter'] == "all") {
     $alpha_id = "All Records";
-    $full_query = "select distinct title, description, location, restrictions_id, title.title_id as 'this_record', eres_display, ctags, record_status from title, restrictions, location, location_title, source where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions order by title.title";
+    $full_query = "select distinct title, description, location, restrictions_id, title.title_id as 'this_record', eres_display, ctags, record_status from title, restrictions, location, location_title where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions order by title.title";
 } elseif ($_GET['letter'] == "restricted") {
     $alpha_id = _("Restricted Items");
-    $full_query = "select distinct title, description, location, restrictions_id, title.title_id as 'this_record', eres_display, ctags, record_status from title, restrictions, location, location_title, source where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions and restrictions_id != '1' order by title.title";
+    $full_query = "select distinct title, description, location, restrictions_id, title.title_id as 'this_record', eres_display, ctags, record_status from title, restrictions, location, location_title where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions and restrictions_id != '1' order by title.title";
 } elseif ($_GET['letter'] == "unrestricted") {
     $alpha_id = _("Unrestricted Items");
-    $full_query = "select distinct title, description, location, restrictions_id, title.title_id as 'this_record', eres_display, ctags, record_status from title, restrictions, location, location_title, source where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions and restrictions_id = '1' order by title.title";
+    $full_query = "select distinct title, description, location, restrictions_id, title.title_id as 'this_record', eres_display, ctags, record_status from title, restrictions, location, location_title where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions and restrictions_id = '1' order by title.title";
 } elseif ($_GET['letter'] == "az") {
     $alpha_id = _("A-Z List Items");
-    $full_query = "select distinct title, description, location, restrictions_id, title.title_id as 'this_record', eres_display, ctags, record_status from title, restrictions, location, location_title, source where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions and eres_display = 'Y' order by title.title";    
+    $full_query = "select distinct title, description, location, restrictions_id, title.title_id as 'this_record', eres_display, ctags, record_status from title, restrictions, location, location_title where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions and eres_display = 'Y' order by title.title";    
 } else {
     $alpha_id = $_GET['letter'];
     //$alpha_id = FALSE;
-    $full_query = "select distinct title, description, location, restrictions_id, title.title_id as 'this_record', eres_display, ctags, record_status from title, restrictions, location, location_title, source where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions  and title like '$alpha_id%' order by title.title";
+    $full_query = "select distinct title, description, location, restrictions_id, title.title_id as 'this_record', eres_display, ctags, record_status from title, restrictions, location, location_title where title.title_id = location_title.title_id and location.location_id = location_title.location_id and restrictions_id = access_restrictions  and title like '$alpha_id%' order by title.title";
 }
 
 // print $full_query;
@@ -214,7 +214,10 @@ $letter_header_body = "<div align=\"center\" style=\"font-size: 1.2em;\">$atoz</
 $results
 
 ";
- $new_record_body = " 
+ $new_record_body = "
+  <form method=\"get\" action=\"bulk.php\" class=\"pure-form\" role=\"search\"><label for=\"rq\">" . _("Search records (title, vendor, URL, ID)") . "</label><br>
+  <input type=\"search\" name=\"q\" id=\"rq\"> <button type=\"submit\" class=\"pure-button\">" . _("Search") . "</button></form>
+  <p><a href=\"bulk.php\">" . _("Find & bulk edit records") . "</a></p>
   <ol>
     <li>" . _("Make sure the item doesn't already exist!") . "</li>
     <li><a href=\"record.php\">" . _("Create new item") . "</a></li>

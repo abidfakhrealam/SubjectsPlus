@@ -61,6 +61,7 @@ class BuildNav {
          <ul>
             <li><a href=\"$CpanelPath" . "records/record.php\">" . _("New Record") . "</a></li>
             <li><a href=\"$CpanelPath" . "records/index.php\">" . _("Browse Items") . "</a></li>
+            <li><a href=\"$CpanelPath" . "records/bulk.php\">" . _("Find & Bulk Edit") . "</a></li>
             <li><a href=\"$CpanelPath" . "records/import_export.php\">" . _("Import & Export") . "</a></li>";
 
       if (isset($_SESSION["admin"]) || (isset($_SESSION["records"]))) {
@@ -191,7 +192,12 @@ if ($is_um == TRUE) {
           <li><a href=\"$CpanelPath" . "admin/record_settings.php\">" . _("Record Settings") . "</a></li>
           <li><a href=\"$CpanelPath" . "admin/workflow.php\">" . _("Workflow") . "</a></li>
           <li><a href=\"$CpanelPath" . "admin/access.php\">" . _("Off-campus Access") . "</a></li>
+          <li><a href=\"$CpanelPath" . "admin/stats.php\">" . _("Usage Statistics") . "</a></li>
+          <li><a href=\"$CpanelPath" . "admin/api_clients.php\">" . _("API Clients") . "</a></li>
+          <li><a href=\"$CpanelPath" . "admin/audit_log.php\">" . _("Audit Log") . "</a></li>
+          <li><a href=\"$CpanelPath" . "admin/health.php\">" . _("System Health") . "</a></li>
           <li><a href=\"$CpanelPath" . "admin/database_updates.php\">" . _("Database Updates") . "</a></li>
+          <li><a href=\"$CpanelPath" . "admin/upgrade.php\">" . _("Upgrade") . "</a></li>
     			<li><a href=\"$CpanelPath" . "edit-config.php\">" . _("Config Site") . "</a></li>    			
     		</ul>
       </div>

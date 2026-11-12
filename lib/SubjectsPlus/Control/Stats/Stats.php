@@ -132,7 +132,35 @@ class Stats implements OutputInterface {
 
 	}
 
+	/** Known crawlers / monitoring tools (their visits are not counted when $stats_skip_bots is on). */
+	public static function isBot( $userAgent ) {
+		$ua = strtolower( (string) $userAgent );
+
+		return $ua === '' || (bool) preg_match( '/bot|crawl|spider|slurp|bingpreview|facebookexternalhit|headless|python-requests|curl\/|wget|httpclient|monitor|uptime|pingdom|lighthouse|preview/', $ua );
+	}
+
+	/** 203.0.113.42 -> 203.0.113.0, 2001:db8:1:2:3:4:5:6 -> 2001:db8:1:: (no personal data kept). */
+	public static function anonymiseIp( $ip ) {
+		$ip = (string) $ip;
+		if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ) {
+			return preg_replace( '/\.\d+$/', '.0', $ip );
+		}
+		if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 ) ) {
+			$b = inet_pton( $ip );
+
+			return inet_ntop( substr( $b, 0, 6 ) . str_repeat( "\0", 10 ) );
+		}
+
+		return '';
+	}
+
 	public function saveStats() {
+		if ( ( $GLOBALS['stats_skip_bots'] ?? true ) && self::isBot( $this->user_agent ) ) {
+			return; // 4.7.1: crawlers and uptime monitors inflated every report
+		}
+		if ( $GLOBALS['stats_anonymise_ip'] ?? true ) {
+			$this->remote_address = self::anonymiseIp( $this->remote_address );
+		}
 
 		$connection = $this->db->getConnection();
 		// the columns are 200 characters; longer values (e.g. off-campus links) made the insert

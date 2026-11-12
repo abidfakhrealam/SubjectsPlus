@@ -246,6 +246,23 @@ class DbHandler {
 				}
 
 				break;
+			case "byvendor" :
+				$results = array();
+				$vendor  = isset( $_GET['vendor'] ) && is_string( $_GET['vendor'] ) ? trim( $_GET['vendor'] ) : '';
+				if ( $vendor !== '' && \SubjectsPlus\Control\RecordVendor::ready() ) {
+					$statement = $db->getConnection()->prepare( "
+        	SELECT DISTINCT LEFT(t.title,1) as initial, t.title as newtitle, t.description, location, access_restrictions, t.title_id as this_record,eres_display, display_note, pre, citation_guide, ctags, helpguide
+        	FROM title as t
+        	INNER JOIN location_title as lt ON t.title_id = lt.title_id
+        	INNER JOIN location as l ON lt.location_id = l.location_id
+        	INNER JOIN restrictions as r ON l.access_restrictions = r.restrictions_id
+        	WHERE t.vendor = :vendor
+        	AND eres_display = 'Y'
+        	ORDER BY newtitle" );
+					$statement->execute( array( ':vendor' => $vendor ) );
+					$results = $statement->fetchAll();
+				}
+				break;
 			case "search" :
 				// If you uncomment the next line, it will search description field
 				$connection = $db->getConnection ();
@@ -336,13 +353,16 @@ ORDER BY newtitle
         	ON rk.title_id = t.title_id
         	INNER JOIN source as s
         	ON rk.source_id = s.source_id
-        WHERE title LIKE :qualifer
+        WHERE (title LIKE :qualifer" . ( \SubjectsPlus\Control\RecordVendor::ready() ? " OR t.vendor LIKE :qualifer_v" : "" ) . ")
         	AND eres_display = 'Y'
         ORDER BY newtitle" );
 
 					$letter = "%" . $qualifier . "%";
 
 					$statement->bindParam ( ":qualifer", $letter );
+					if ( \SubjectsPlus\Control\RecordVendor::ready() ) {
+						$statement->bindValue( ":qualifer_v", $letter ); // a search also finds the vendor / publisher
+					}
 					$statement->execute ();
 					$results = $statement->fetchAll ();
 
@@ -382,6 +402,9 @@ ORDER BY newtitle
 		if ($num_rows == 0) {
 			return "<div class=\"no_results\">" . sp__( "Sorry, there are no results at this time." ) . "</div>";
 		}
+
+		// vendor / publisher of every listed record (one query)
+		$vendors = \SubjectsPlus\Control\RecordVendor::forTitles( array_map( function ( $r ) { return $r[5] ?? 0; }, $results ) );
 
 		// prepare header
 		$items = "<table width=\"98%\" class=\"item_listing trackContainer\">";
@@ -448,7 +471,8 @@ ORDER BY newtitle
 			}
 
 			// public custom fields (Admin > Record Settings > Custom fields, "Show to public")
-			$bonus = "$blurb<br />" . \SubjectsPlus\Control\RecordFields::publicHtml( $myrow['title_id'] ?? $bib_id );
+			$bonus = "$blurb<br />" . \SubjectsPlus\Control\RecordVendor::publicHtml( $vendors[ (int) $bib_id ] ?? '' )
+			         . \SubjectsPlus\Control\RecordFields::publicHtml( $myrow['title_id'] ?? $bib_id );
 			$favorite_link_rand_id = time() . rand();
 
 			if ($blurb != "") {
@@ -545,6 +569,21 @@ ORDER BY s.subject");
 		$items .= "</table>";
 		return $items;
 	}
+	/** "Databases by vendor / publisher" list. */
+	function displayVendors() {
+		$list = \SubjectsPlus\Control\RecordVendor::publicVendors();
+		if ( ! $list ) {
+			return "<div class=\"no_results\">" . sp__( "Sorry, there are no results at this time." ) . "</div>";
+		}
+		$items = "<table width=\"98%\" class=\"item_listing db-vendor-list\">";
+		foreach ( $list as $v ) {
+			$items .= "<tr class=\"zebra\" valign=\"top\"><td><a href=\"databases.php?letter=byvendor&amp;vendor=" . rawurlencode( $v['vendor'] ) . "\">"
+			          . htmlspecialchars( $v['vendor'], ENT_QUOTES, 'UTF-8' ) . "</a> <span class=\"db-vendor-count\">(" . (int) $v['n'] . ")</span></td></tr>";
+		}
+
+		return $items . "</table>";
+	}
+
 	function displayTypes() {
 		global $all_ctags;
 		sort ( $all_ctags );

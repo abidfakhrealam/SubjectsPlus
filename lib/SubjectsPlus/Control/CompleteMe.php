@@ -82,13 +82,18 @@ class CompleteMe {
     }
 
     
-    // HTML for the Search Form
+    // HTML for the Search Form. 4.7.1: every value is escaped for its attribute (the search term was echoed
+    // as cleaned by scrubData(), which turns &quot; back into ", so ?searchterm=x" onfocus="… broke out of value=).
+    $e = function ($v) { return htmlspecialchars(html_entity_decode((string) $v, ENT_QUOTES, 'UTF-8'), ENT_QUOTES, 'UTF-8'); };
+    $f_action = $e($this->action); $f_id = $e($this->input_id); $f_text = $e($this->default_text); $f_size = (int) $this->search_box_size ?: '';
+    $f_value = $e($this->value); $f_cat = $e($category); $f_sort = $e($this->sortby);
+    $f_label = $e($this->default_text !== '' ? $this->default_text : (function_exists('sp__') ? sp__('Search') : 'Search'));
     $search_form_html = "
     <div id=\"autoC\" class=\"autoC\">
-       <form action=\"$this->action\" method=\"get\" class=\"pure-form\" id=\"sp_admin_search\">
-        <input type=\"text\" id=\"$this->input_id\" title=\"$this->default_text\" size=\"$this->search_box_size\" name=\"searchterm\" autocomplete=\"on\" placeholder=\"" . $this->default_text . "\" value=\"" . $this->value . "\" />
-        <input type=\"hidden\" value=\"" . $category . "\" name=\"category\"/>
-        <input type=\"hidden\" value=\"" . $this->sortby . "\" name=\"sortby\"/>
+       <form action=\"$f_action\" method=\"get\" class=\"pure-form\" id=\"sp_admin_search\" role=\"search\">
+        <input type=\"text\" id=\"$f_id\" title=\"$f_text\" size=\"$f_size\" name=\"searchterm\" autocomplete=\"on\" placeholder=\"$f_text\" aria-label=\"$f_label\" value=\"$f_value\" />
+        <input type=\"hidden\" value=\"$f_cat\" name=\"category\"/>
+        <input type=\"hidden\" value=\"$f_sort\" name=\"sortby\"/>
         <input type=\"submit\" value=\"" . sp__("Go") . "\" class=\"pure-button pure-button-topsearch\" id=\"topsearch_button\" name=\"\" alt=\"" . sp__("Search") . "\" />
        </form>
    </div>";

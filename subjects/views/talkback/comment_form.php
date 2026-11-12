@@ -13,11 +13,10 @@
             <h2><?php echo sp__("Need help <strong>now</strong>? <br/><a href=''>Ask a Librarian</a>.</h2>"); ?>
                 <form id="tellus" action="<?php echo $form_action; ?>" method="post" class="pure-form">
                     <div class="talkback_form <?php echo $tb_bonus_css; ?>">
-                        <p><strong><?php echo sp__( "Your comment:" ); ?></strong><br/>
-                            <textarea name="the_suggestion" cols="26" rows="6" class="form-item"
-                                      value="<?php echo $this_comment; ?>"></textarea><br/><br/>
-                            <strong><?php echo sp__( "Your email (optional):" ); ?></strong><br/>
-                            <input type="text" name="name" size="20" value="<?php echo $this_name; ?>"
+                        <p><label for="tb_comment"><strong><?php echo sp__( "Your comment:" ); ?></strong></label><br/>
+                            <textarea name="the_suggestion" id="tb_comment" cols="26" rows="6" class="form-item"><?php echo htmlspecialchars( html_entity_decode( (string) $this_comment, ENT_QUOTES, 'UTF-8' ), ENT_QUOTES, 'UTF-8' ); // 4.7.1: was echoed raw (reflected XSS) ?></textarea><br/><br/>
+                            <label for="tb_email"><strong><?php echo sp__( "Your email (optional):" ); ?></strong></label><br/>
+                            <input type="text" name="name" id="tb_email" size="20" value="<?php echo htmlspecialchars( html_entity_decode( (string) $this_name, ENT_QUOTES, 'UTF-8' ), ENT_QUOTES, 'UTF-8' ); // 4.7.1: was echoed raw (reflected XSS) ?>"
                                    class="form-item"/>
                             <br/>
 						    <?php echo sp__( "(In case we need to contact you)" ); ?>

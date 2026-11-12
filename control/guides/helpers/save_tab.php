@@ -24,9 +24,14 @@ use SubjectsPlus\Control\Guide\TabData;
 $db      = new Querier;
 $tab = new TabData( $db );
 
-$subject_id   = scrubData( $_REQUEST['subject_id'], "integer" );
-$label        = scrubData( $_REQUEST['label'] );
-$tab_index    = scrubData( $_REQUEST['tab_index'], "integer" );
+$subject_id   = scrubData( $_REQUEST['subject_id'] ?? 0, "integer" );
+$label        = scrubData( $_REQUEST['label'] ?? '' );
+$tab_index    = scrubData( $_REQUEST['tab_index'] ?? 0, "integer" );
+if ( $subject_id <= 0 ) {
+	http_response_code( 400 );
+	echo json_encode( array( 'ok' => false, 'message' => 'subject_id missing' ) );
+	exit;
+}
 
 if ( isset($_REQUEST['external_url']) ) {
 	$external_url = scrubData( $_REQUEST['external_url'] );
@@ -35,8 +40,9 @@ if ( isset($_REQUEST['external_url']) ) {
 }
 
 
-$visibility   = scrubData( $_REQUEST['visibility'], "integer" );
+$visibility   = scrubData( $_REQUEST['visibility'] ?? 1, "integer" );
 
+\SubjectsPlus\Control\Guide\GuideAccess::requireGuide( $subject_id, true );
 $tab->create( $subject_id, $label, $tab_index, $external_url, $visibility);
 
 echo $tab->toJSON();

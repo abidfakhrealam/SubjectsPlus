@@ -89,6 +89,14 @@ if (isset($_POST["searchterm"])) {
   $description_search = 1; // if you want to search descriptions, too, set to 1; otherwise to 0
 }
 
+// Databases by vendor / publisher (4.7.1)
+$show_vendors = false;
+if ( $_GET["letter"] == "byvendor" ) {
+	$sp_vendor = isset( $_GET["vendor"] ) && is_string( $_GET["vendor"] ) ? trim( $_GET["vendor"] ) : "";
+	$page_title = sp__( "Database List By Vendor / Publisher" ) . ( $sp_vendor !== "" ? ": " . htmlspecialchars( $sp_vendor, ENT_QUOTES, "UTF-8" ) : "" );
+	$show_vendors = ( $sp_vendor === "" );
+}
+
 $alphabet = getLetters("databases", $_GET["letter"], 1, TRUE);
 
 // Get our newest databases
@@ -168,7 +176,9 @@ $out = "";
 
 // if we're showing the subject list, do so
 
-if ($show_subjects == TRUE) {
+if ( $show_vendors ) {
+	$out .= $our_items->displayVendors();
+} elseif ($show_subjects == TRUE) {
   $out .= $our_items->displaySubjects();
 
 } elseif ($show_types == TRUE) {

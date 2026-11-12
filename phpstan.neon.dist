@@ -1,0 +1,31 @@
+# Static analysis (PHPStan). Run:  php phpstan.phar analyse   (or vendor/bin/phpstan analyse)
+# Level 1 for all SubjectsPlus code; phpstan-baseline.neon lists what was already there in 4.7.1, so CI fails
+# only on new problems. Raise the level step by step as the baseline shrinks.
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 1
+    phpVersion:
+        min: 80100
+        max: 80499
+    paths:
+        - lib/SubjectsPlus
+        - control
+        - api
+        - subjects
+        - tools
+        - oai
+        - index.php
+    excludePaths:
+        analyseAndScan:
+            - lib/vendor
+            - ckeditor
+            - assets
+            - control/includes/config.php (?)
+    bootstrapFiles:
+        - tests/phpstan-bootstrap.php
+    scanDirectories:
+        - lib/vendor
+    reportUnmatchedIgnoredErrors: false
+    treatPhpDocTypesAsCertain: false

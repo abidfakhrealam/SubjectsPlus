@@ -6,8 +6,14 @@
  */
 ?>
 
-<script src="https://www.library.miami.edu/assets/js/modernizr.js"></script>
-<script src="https://www.library.miami.edu/assets/js/js-offcanvas.pkgd.js"></script>
+<?php
+// 4.7.1: the theme loaded modernizr.js and js-offcanvas from another library's web site (a third-party
+// script with full access to every page). Off-canvas now uses the plugin only if you add it locally,
+// e.g. assets/jquery/libs/js-offcanvas.pkgd.js, and falls back to a simple toggle otherwise.
+if ( is_file( dirname( __DIR__, 3 ) . '/assets/jquery/libs/js-offcanvas.pkgd.js' ) ) {
+	echo '<script src="' . htmlspecialchars( $AssetPath . 'jquery/libs/js-offcanvas.pkgd.js', ENT_QUOTES ) . '"></script>';
+}
+?>
 
 <script>
     // Append Around: https://github.com/filamentgroup/AppendAround
@@ -47,6 +53,17 @@
         $( document ).bind( "create.offcanvas", function( e ){
             $(e.target).removeClass('is-hidden');
         } );
+        if ( ! $.fn.offcanvas ) {
+            // no plugin: the menu button shows / hides the sidebar
+            $( '.js-sidebar-toggler' ).attr( 'aria-controls', 'left' ).attr( 'aria-expanded', 'false' ).on( 'click', function( e ){
+                e.preventDefault();
+                var open = $( '#left' ).toggleClass( 'is-hidden' ).hasClass( 'is-hidden' ) === false;
+                $( this ).attr( 'aria-expanded', open ? 'true' : 'false' );
+                $( '.nav-icon' ).toggleClass( 'open-nav-icon', open );
+            } );
+            $( ".js-append-around" ).appendAround();
+            return;
+        }
         $( '#left' ).offcanvas( {
             modifiers: 'left,overlay',
             triggerButton: '.js-sidebar-toggler',

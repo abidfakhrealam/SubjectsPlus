@@ -29,6 +29,21 @@ if ( ! empty( $sp_force_https ) && PHP_SAPI !== 'cli' && ! headers_sent()
 	header( 'Location: https://' . \SubjectsPlus\Control\Install\Environment::host() . ( $_SERVER['REQUEST_URI'] ?? '/' ), true, 301 );
 	exit;
 }
+/** The SubjectsPlus version of the files on the server (control/includes/version.php). */
+function sp_version() {
+	static $v = null;
+	if ( $v === null ) {
+		$sp_version = '';
+		include __DIR__ . '/version.php';
+		$v = (string) $sp_version;
+	}
+
+	return $v;
+}
+$GLOBALS['sp_version'] = sp_version(); // 4.7.1: was never set, so pages and the installer lock showed no version
+
+// Content-Security-Policy ($sp_csp in config.php; 4.7.1)
+sp_send_csp();
 // workflow permission for publishing records; added here so older config.php files get it too
 if ( isset( $all_ptags ) && is_array( $all_ptags ) && ! in_array( 'approver', $all_ptags, true ) ) {
 	$all_ptags[] = 'approver';
@@ -124,6 +139,8 @@ function sp_record_login_attempt( $email, $success ) {
 		$db   = new Querier;
 		$stmt = $db->getConnection()->prepare( "INSERT INTO login_attempt (email, ip, success, attempted_at) VALUES (:email, :ip, :ok, NOW())" );
 		$stmt->execute( array( ':email' => strtolower( substr( (string) $email, 0, 255 ) ), ':ip' => sp_client_ip(), ':ok' => $success ? 1 : 0 ) );
+		\SubjectsPlus\Control\AuditLog::add( $success ? 'auth.login' : 'auth.login_failed', 'staff', $success ? (string) ( $_SESSION['staff_id'] ?? '' ) : '',
+			( $success ? 'Signed in: ' : 'Failed sign-in: ' ) . substr( (string) $email, 0, 255 ), array( 'ip' => sp_client_ip() ) );
 	} catch ( \Throwable $e ) {
 		error_log( 'SubjectsPlus login attempt not recorded: ' . $e->getMessage() );
 	}
@@ -262,8 +279,18 @@ function sp_brand() {
 /** <style>/<link> tags for the public pages; empty when no branding is configured. */
 function sp_brand_head() {
 	$b   = sp_brand();
+	// accessibility baseline and behaviour helpers for every public header (4.7.1)
+	$ap  = isset( $GLOBALS['AssetPath'] ) ? (string) $GLOBALS['AssetPath'] : '';
+	$ver = rawurlencode( (string) ( $GLOBALS['sp_version'] ?? '' ) );
+	$pre = '<link rel="stylesheet" href="' . htmlspecialchars( $ap . 'css/public/sp-a11y.css?v=' . $ver, ENT_QUOTES ) . '">' . "\n"
+	       . '<script src="' . htmlspecialchars( $ap . 'js/public/sp-public.js?v=' . $ver, ENT_QUOTES ) . '" defer'
+	       . ' data-skip="' . htmlspecialchars( sp__( 'Skip to main content' ), ENT_QUOTES ) . '"'
+	       . ' data-newwin="' . htmlspecialchars( sp__( '(opens in a new window)' ), ENT_QUOTES ) . '"></script>' . "\n";
+	if ( ( $GLOBALS['subjects_theme'] ?? '' ) === 'splux' ) {
+		$pre .= '<link rel="stylesheet" href="' . htmlspecialchars( $ap . 'css/public/sp-a11y-splux.css?v=' . $ver, ENT_QUOTES ) . '">' . "\n";
+	}
 	// language switcher and "Last reviewed" line (all public headers)
-	$out = '<style id="sp-public-extra">.sp-lang{float:right;font-size:.95em;margin:.4em 0;padding:2px 10px;background:rgba(255,255,255,.92);border-radius:12px}'
+	$out = $pre . '<style id="sp-public-extra">.sp-lang{float:right;font-size:.95em;margin:.4em 0;padding:2px 10px;background:rgba(255,255,255,.92);border-radius:12px}'
 		. '.sp-lang a,.sp-lang strong{color:#1d1d1d!important;text-decoration:none;text-shadow:none}.sp-lang a{text-decoration:underline}'
 		. '.sp-lang [lang=hi],:lang(hi){font-family:"Noto Sans Devanagari","Mangal","Nirmala UI",Lato,sans-serif}'
 		. '.sp-reviewed{clear:both;color:#555;font-size:.9em;margin:1.5em 0 .5em;padding:.5em 16px 0;border-top:1px solid #ddd}</style>' . "\n";
@@ -707,7 +734,7 @@ ORDER BY s.subject";
 		}
 	}
 
-	$alphabet .= " <select name=\"browser\" id=\"select_subject\" onChange=\"window.location=this.options[selectedIndex].value\" title=\"" . sp__( "Databases by Subject" ) . "\">  
+	$alphabet .= " <select name=\"browser\" id=\"select_subject\" class=\"sp-nav-select\" title=\"" . sp__( "Databases by Subject" ) . "\" aria-label=\"" . sp__( "Databases by Subject" ) . "\">  
         $subs_option_boxes
         </select>";
 
@@ -715,77 +742,94 @@ ORDER BY s.subject";
 }
 
 function changeMe( $table, $flag, $item_id, $record_title, $staff_id ) {
-	$db = new Querier;
+	// 4.7.1: prepared statements (values were pasted between double quotes), the "same editor" check
+	// compared a whole row with the staff id, and every change is also written to the audit log.
+	$conn  = ( new Querier )->getConnection();
+	$title = (string) $record_title;
+	if ( strlen( $title ) > 1 && $title[0] === "'" && substr( $title, -1 ) === "'" ) {
+		$title = stripslashes( substr( $title, 1, -1 ) ); // some callers pass a value already quoted for SQL
+	}
+	$title    = TruncByWord( $title, 15 );
+	$staff_id = (int) $staff_id;
+	$item_id  = (int) $item_id;
+	$flag     = in_array( $flag, array( 'insert', 'update', 'delete' ), true ) ? $flag : 'update';
 
-	global $dbName_SPlus;
+	if ( class_exists( '\\SubjectsPlus\\Control\\AuditLog' ) ) {
+		\SubjectsPlus\Control\AuditLog::add( $table . '.' . $flag, (string) $table, (string) $item_id, ucfirst( (string) $table ) . ' ' . $flag . ': ' . html_entity_decode( $title, ENT_QUOTES ) );
+	}
 
-	$record_title = TruncByWord( $record_title, 15 );
+	$insert = $conn->prepare( "INSERT INTO chchchanges (staff_id, ourtable, record_id, record_title, message) VALUES (?, ?, ?, ?, ?)" );
+	if ( $flag !== 'update' ) {
+		return $insert && $insert->execute( array( $staff_id, $table, $item_id, $title, $flag ) );
+	}
+	// update: if the same person made the last change, only move its time forward
+	$last = $conn->prepare( "SELECT staff_id, chchchanges_id, message FROM chchchanges WHERE record_id = ? AND ourtable = ? ORDER BY date_added DESC, chchchanges_id DESC LIMIT 1" );
+	$last->execute( array( $item_id, $table ) );
+	$row = $last->fetch( PDO::FETCH_NUM );
+	if ( $row && (int) $row[0] === $staff_id && $row[2] !== 'insert' ) {
+		return $conn->prepare( "UPDATE chchchanges SET message = 'update', date_added = NOW() WHERE chchchanges_id = ?" )->execute( array( (int) $row[1] ) );
+	}
 
-// Can be insert, update, delete; only the first creates a new record, so...
-	if ( $flag == "insert" || $flag == "delete" ) {
-		$q = "insert into chchchanges (staff_id, ourtable, record_id, record_title, message)
-        values(" . $staff_id . ", \"$table\", " . $item_id . ", \"" . $record_title . "\", \"$flag\")";
+	return $insert && $insert->execute( array( $staff_id, $table, $item_id, $title, 'update' ) );
+}
 
-		$r = $db->exec( $q );
-		if ( $r ) {
-			return true;
-		} else {
-			return false;
-		}
-	} else {
-// find out person who made last change to this record
-		$qtest = "SELECT staff_id, chchchanges_id, message
-        FROM `chchchanges`
-        WHERE record_id = \"$item_id\" and ourtable = \"$table\" ORDER BY date_added DESC";
-
-		$result = $db->query( $qtest );
-
-
-// If there are no results, we need to insert a record
-		if ( ! $result ) {
-			$q = "insert into chchchanges (staff_id, ourtable, record_id, record_title, message)
-            values(" . $staff_id . ", \"$table\", " . $item_id . ", \"" . $record_title . "\", \"$flag\")";
-
-			$r = $db->exec( $q );
-			if ( $r ) {
-				return true;
+/**
+ * Send an HTML email with the mail settings from config.php. Returns true, or false (the reason goes to the
+ * PHP error log). 4.7.1: four staff actions built MailMessage / Mailer the wrong way and failed with a fatal
+ * error ("recommend delete" for records and FAQs, the guide link report, the TalkBack FAQ suggestion).
+ */
+function sp_send_mail( $from, $to, $subject, $html ) {
+	global $email_host, $email_port, $email_smtp_auth, $email_smtp_debug, $email_username, $email_password;
+	try {
+		$msg = new \SubjectsPlus\Control\MailMessage();
+		$msg->setFromAddress( (string) $from );
+		$msg->setFromLabel( (string) $from );
+		$first = true;
+		$cc    = array();
+		foreach ( array_filter( array_map( 'trim', explode( ',', (string) $to ) ) ) as $addr ) {
+			if ( $first ) {
+				$msg->setToAddress( $addr );
+				$msg->setToAddressLabel( $addr );
+				$first = false;
 			} else {
-				return false;
-			}
-		} else {
-// If the editor is the same as last time & it's not the first record,
-// just update the time; Otherwise, add a new entry to the table
-
-			if ( ( $result[0] == $staff_id ) && ( $result[2] != "insert" ) ) {
-// Editor is same as last guide updater, just update the time
-				$q = "UPDATE chchchanges SET message = 'update', date_added = NOW() WHERE chchchanges_id = " . $result[1];
-			} else {
-//Editor is different, add entry to table
-				$q = "insert into chchchanges (staff_id, ourtable, record_id, record_title, message)
-                    values(" . $staff_id . ", \"$table\", " . $item_id . ", \"" . $record_title . "\", \"update\")";
-			}
-//print $q;
-
-			$r = $db->exec( $q );
-			if ( $r ) {
-				return true;
-			} else {
-				return false;
+				$cc[] = $addr;
 			}
 		}
+		if ( $cc ) {
+			$msg->setToCcAddresses( $cc );
+		}
+		$msg->setSubject( (string) $subject );
+		$msg->setMsgHTML( (string) $html );
+		$mailer            = new \SubjectsPlus\Control\Mailer( $msg );
+		$mailer->Host      = $email_host;
+		$mailer->Port      = $email_port;
+		$mailer->SMTPAuth  = $email_smtp_auth;
+		$mailer->SMTPDebug = $email_smtp_debug;
+		$mailer->Username  = $email_username ?? '';
+		$mailer->Password  = $email_password ?? '';
+		ob_start(); // Mailer::send() echoes its error
+		$ok  = $mailer->send();
+		$err = ob_get_clean();
+		if ( ! $ok ) {
+			error_log( 'SubjectsPlus mail not sent: ' . strip_tags( (string) $err ) );
+		}
+
+		return (bool) $ok;
+	} catch ( \Throwable $e ) {
+		error_log( 'SubjectsPlus mail not sent: ' . $e->getMessage() );
+
+		return false;
 	}
 }
 
 function lastModded( $table, $record_id, $zero_message = 1, $show_email = 1 ) {
-	$q = "SELECT email, DATE_FORMAT(date_added, '%b %D %Y') as last_modified
+	$db = new Querier;
+	$r  = $db->queryWithPreparedStatement( "SELECT email, DATE_FORMAT(date_added, '%b %D %Y') as last_modified
         FROM chchchanges c, staff s
         WHERE c.staff_id = s.staff_id
-        AND ourtable = '$table'
-        AND record_id = '$record_id'
-        ORDER BY date_added DESC";
-//print $q;
-	$db     = new Querier;
-	$r      = $db->query( $q );
+        AND ourtable = :t
+        AND record_id = :r
+        ORDER BY date_added DESC LIMIT 1", NULL, array( ':t' => (string) $table, ':r' => (int) $record_id ) );
 	$my_mod = $r;
 
 
@@ -1349,13 +1393,32 @@ function getDBbyTypeBoxes( $selected_type = "", $show_formats = true ) {
 	}
 
 	if ( $show_formats == true ) {
-		$alphabet .= " <select name=\"browser\" id=\"select_format\" onChange=\"window.location=this.options[selectedIndex].value\" title=\"" . sp__( "Databases by Format" ) . "\">
+		$alphabet .= " <select name=\"browser\" id=\"select_format\" class=\"sp-nav-select\" title=\"" . sp__( "Databases by Format" ) . "\" aria-label=\"" . sp__( "Databases by Format" ) . "\">
       <option value=\"databases.php?letter=bytype\">" . sp__( "List All Format Types" ) . "</option>
       $types_option_boxes
       </select>";
 	}
 
 	return $alphabet;
+}
+
+/** "Databases by vendor / publisher" dropdown next to the format dropdown (4.7.1). */
+function getDBbyVendorBox() {
+	if ( ! class_exists( '\\SubjectsPlus\\Control\\RecordVendor' ) || ! \SubjectsPlus\Control\RecordVendor::ready() ) {
+		return '';
+	}
+	$list = \SubjectsPlus\Control\RecordVendor::publicVendors();
+	if ( ! $list ) {
+		return '';
+	}
+	$cur  = isset( $_GET['vendor'] ) && is_string( $_GET['vendor'] ) ? $_GET['vendor'] : '';
+	$opts = '<option value="databases.php?letter=byvendor">' . sp__( "All vendors / publishers" ) . '</option>';
+	foreach ( $list as $v ) {
+		$opts .= '<option value="databases.php?letter=byvendor&amp;vendor=' . rawurlencode( $v['vendor'] ) . '"' . ( $cur === $v['vendor'] ? ' selected' : '' ) . '>'
+		         . htmlspecialchars( $v['vendor'], ENT_QUOTES, 'UTF-8' ) . '</option>';
+	}
+
+	return ' <select name="vendor_browser" id="select_vendor" class="sp-nav-select" title="' . sp__( "Databases by Vendor / Publisher" ) . '" aria-label="' . sp__( "Databases by Vendor / Publisher" ) . '">' . $opts . '</select>';
 }
 
 function getLetters( $table, $selected = "A", $numbers = 1, $show_formats = true, $show_free = true ) {
@@ -1456,6 +1519,7 @@ function getLetters( $table, $selected = "A", $numbers = 1, $show_formats = true
 	*/
 	if ( $table == "databases" ) {
 		$alphabet .= getDBbyTypeBoxes( $selected_type, $show_formats );
+		$alphabet .= getDBbyVendorBox();
 		$alphabet .= getDBbySubBoxes( $selected_subject );
 	}
 
@@ -2646,11 +2710,5 @@ function sp_legacy_decrypt( $q ) {
  * upgrade instead of using their cached copy (the bundles are cached for 6 hours).
  */
 function sp_asset_v() {
-	static $v = null;
-	if ( $v === null ) {
-		$sp_version = '';
-		include __DIR__ . '/version.php';
-		$v = '?v=' . rawurlencode( (string) $sp_version );
-	}
-	return $v;
+	return '?v=' . rawurlencode( sp_version() );
 }

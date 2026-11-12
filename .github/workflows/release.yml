@@ -1,6 +1,9 @@
-# Release workflow: on a version tag (v4.6.0, v4.6.1 …) lint every PHP file on PHP 8.1–8.4, build and verify
-# the front-end bundles, package SubjectsPlus-<version>-stable.zip / .tar.gz with SHA256SUMS.txt and publish
-# them as a GitHub release.
+# Release workflow: on a version tag (v4.7.1 …) lint every PHP file on PHP 8.1–8.5, build and verify
+# the front-end bundles, package SubjectsPlus-<version>-stable.zip / .tar.gz with SHA256SUMS.txt, sign them
+# (GitHub build-provenance attestation, Sigstore) and publish them as a GitHub release.
+#
+# Verify a download:  gh attestation verify SubjectsPlus-4.7.1-stable.zip --repo <owner>/SubjectsPlus
+#                     sha256sum -c SHA256SUMS.txt
 name: release
 
 on:
@@ -22,7 +25,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: ['8.1', '8.2', '8.3', '8.4']
+        php: ['8.1', '8.2', '8.3', '8.4', '8.5']
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
@@ -43,6 +46,10 @@ jobs:
     name: build & package
     needs: lint
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write       # Sigstore signing of the attestation
+      attestations: write   # store the build-provenance attestation
     steps:
       - uses: actions/checkout@v4
         with:
@@ -66,6 +73,17 @@ jobs:
           [ "v$v" = "${GITHUB_REF_NAME}" ] || { echo "version.php says $v but the tag is ${GITHUB_REF_NAME}"; exit 1; }
       - name: Package release archives
         run: build/package-release.sh ${{ github.event.inputs.version }}
+      - name: Software bill of materials (PHP and JavaScript libraries)
+        run: |
+          php build/sbom.php > dist/SubjectsPlus-sbom.cdx.json
+          php -r 'json_decode(file_get_contents("dist/SubjectsPlus-sbom.cdx.json"), false, 512, JSON_THROW_ON_ERROR);'
+      - name: Sign the archives (build-provenance attestation)
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            dist/*.zip
+            dist/*.tar.gz
+            dist/SHA256SUMS.txt
       - uses: actions/upload-artifact@v4
         with:
           name: subjectsplus-release
@@ -73,6 +91,7 @@ jobs:
             dist/*.zip
             dist/*.tar.gz
             dist/SHA256SUMS.txt
+            dist/SubjectsPlus-sbom.cdx.json
           if-no-files-found: error
 
   publish:
@@ -97,5 +116,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" dist/*.zip dist/*.tar.gz dist/SHA256SUMS.txt \
+          {
+            echo
+            echo '### Verifying the download'
+            echo
+            echo '```sh'
+            echo 'sha256sum -c SHA256SUMS.txt'
+            echo "gh attestation verify SubjectsPlus-${GITHUB_REF_NAME#v}-stable.zip --repo ${GITHUB_REPOSITORY}"
+            echo '```'
+          } >> release-notes.md
+          gh release create "${GITHUB_REF_NAME}" dist/*.zip dist/*.tar.gz dist/SHA256SUMS.txt dist/SubjectsPlus-sbom.cdx.json \
             --title "SubjectsPlus ${GITHUB_REF_NAME#v}" --notes-file release-notes.md --verify-tag

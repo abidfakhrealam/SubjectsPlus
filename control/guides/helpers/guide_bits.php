@@ -145,13 +145,7 @@ switch ($_REQUEST["type"]) {
         print "Sending mail to: $mail_to";
         //print_r($_POST);
 
-        $messageParams = array('from' => $administrator_email,
-            'to' => $mail_to,
-            'subjectLine' => $subject_line,
-            'content' => $message_body);
-        $message = new MailMessage($messageParams);
-        $mailer = new Mailer();
-        $mailer->send($message);
+        $sp_mail_ok = sp_send_mail($administrator_email, $mail_to, $subject_line, $message_body);
         break;
     case "delete_file":
 

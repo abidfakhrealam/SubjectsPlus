@@ -30,7 +30,7 @@ $subfolder = "services";
 
 // Get array of acceptable users
 
-$q = "SELECT email FROM staff WHERE user_type_id = '1' and active = '1'";
+$q = "SELECT email FROM staff WHERE user_type_id IN (" . \SubjectsPlus\Control\UserTypes::publicSql() . ") and active = '1'";
 
 $statement = $connection->prepare($q);
 $statement->execute();

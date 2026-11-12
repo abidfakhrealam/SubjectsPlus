@@ -19,6 +19,9 @@ include("../../includes/header.php");
 use SubjectsPlus\Control\Guide\SaveGuide;
 use SubjectsPlus\Control\Querier;
 
+// only the guide's editors (4.7.1)
+\SubjectsPlus\Control\Guide\GuideAccess::requireGuide( (int) ( $_POST['this_subject_id'] ?? 0 ) );
+
 $db = new Querier;
 $saveGuide = new SaveGuide($_POST, $db);
 $saveGuide->save();

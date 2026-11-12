@@ -90,7 +90,7 @@ class Record
                                                   INNER JOIN staff_subject
                                                   ON staff_subject.staff_id = staff.staff_id
                                                   WHERE staff_subject.subject_id = :id
-                                                  AND staff.user_type_id = 1");
+                                                  AND staff.user_type_id IN (" . \SubjectsPlus\Control\UserTypes::publicSql() . ")");
         $statement->bindParam(':id', $subject_id);
         $statement->execute();
         $result = $statement->fetch();

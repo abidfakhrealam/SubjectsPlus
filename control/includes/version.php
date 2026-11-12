@@ -1,3 +1,3 @@
 <?php
 //The version of SubjectsPlus
-$sp_version = '4.7.0';
+$sp_version = '4.7.1';

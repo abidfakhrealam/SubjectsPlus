@@ -18,7 +18,22 @@ include("../../includes/header.php");
 
 //print_r($_REQUEST);
 
-switch ($_POST["action"]) {
+// list items (`rank`) belong to a guide: only its editors may change them (4.7.1)
+use SubjectsPlus\Control\Guide\GuideAccess;
+if ( ( $_POST['action'] ?? '' ) === 'delete_rank' ) {
+  GuideAccess::requireFound( GuideAccess::guidesForRank( (int) ( $_POST['delete_id'] ?? 0 ) ) );
+} elseif ( ( $_POST['action'] ?? '' ) === 'update_rank' ) {
+  $sp_guides = array();
+  foreach ( explode( '&', (string) ( $_POST['our_data'] ?? '' ) ) as $sp_pair ) {
+    $sp_parts = explode( '=', $sp_pair );
+    if ( isset( $sp_parts[1] ) ) {
+      $sp_guides = array_merge( $sp_guides, GuideAccess::guidesForRank( (int) $sp_parts[1] ) );
+    }
+  }
+  GuideAccess::requireFound( array_unique( $sp_guides ) );
+}
+
+switch ($_POST["action"] ?? '') {
   case "delete_rank":
     $q = "DELETE FROM `rank` WHERE rank_id = " . sp_int($_POST["delete_id"] ?? 0); // was pasted into SQL
 

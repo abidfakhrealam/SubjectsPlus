@@ -6,6 +6,8 @@
 
 use SubjectsPlus\Control\Querier;
 use SubjectsPlus\Control\RecordSettings;
+use SubjectsPlus\Control\UserTypes;
+use SubjectsPlus\Control\AuditLog;
 
 $subsubcat  = "";
 $subcat     = "admin";
@@ -25,7 +27,7 @@ if ( empty( $_SESSION['sp_rs_csrf'] ) ) {
 	$_SESSION['sp_rs_csrf'] = bin2hex( random_bytes( 32 ) );
 }
 $csrf     = $_SESSION['sp_rs_csrf'];
-$tabs     = array( 'formats' => _( "Formats" ), 'restrictions' => _( "Access restrictions" ), 'statuses' => _( "Statuses" ), 'fields' => _( "Custom fields" ) );
+$tabs     = array( 'formats' => _( "Formats" ), 'restrictions' => _( "Access restrictions" ), 'statuses' => _( "Statuses" ), 'fields' => _( "Custom fields" ), 'user_types' => _( "User types" ) );
 $tab      = isset( $_GET['tab'], $tabs[ $_GET['tab'] ] ) ? $_GET['tab'] : 'formats';
 $feedback = array();
 $errors   = array();
@@ -189,6 +191,53 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 				}
 			}
 
+			if ( $tab === 'user_types' ) {
+				$full   = UserTypes::ready();
+				$counts = UserTypes::staffCounts();
+				if ( $del ) {
+					if ( $del === UserTypes::BUILT_IN ) {
+						$errors[] = _( "The built-in “Staff” user type cannot be deleted (you can rename it)." );
+					} elseif ( ! empty( $counts[ $del ] ) ) {
+						$errors[] = sprintf( _( "%d user(s) have this type. Give them another type first (Admin → Manage Users)." ), (int) $counts[ $del ] );
+					} else {
+						$conn->prepare( "DELETE FROM user_type WHERE user_type_id = ?" )->execute( array( $del ) );
+						$feedback[] = _( "User type deleted." );
+					}
+				}
+				$names = array();
+				foreach ( $rows as $id => $r ) {
+					$name = mb_substr( trim( strip_tags( (string) ( $r['name'] ?? '' ) ) ), 0, 100 );
+					if ( $name === '' || (int) $id === $del ) {
+						continue;
+					}
+					if ( isset( $names[ mb_strtolower( $name ) ] ) ) {
+						$errors[] = sprintf( _( "There is already a user type called %s." ), rs_h( $name ) );
+						continue;
+					}
+					$names[ mb_strtolower( $name ) ] = true;
+					if ( $full ) {
+						$conn->prepare( "UPDATE user_type SET user_type = ?, description = ?, public_directory = ?, sort_order = ? WHERE user_type_id = ?" )
+						     ->execute( array( $name, mb_substr( trim( strip_tags( (string) ( $r['description'] ?? '' ) ) ), 0, 255 ), empty( $r['public'] ) ? 0 : 1, (int) ( $r['sort'] ?? 0 ), (int) $id ) );
+					} else {
+						$conn->prepare( "UPDATE user_type SET user_type = ? WHERE user_type_id = ?" )->execute( array( $name, (int) $id ) );
+					}
+				}
+				$nn = mb_substr( trim( strip_tags( (string) ( $new['name'] ?? '' ) ) ), 0, 100 );
+				if ( $nn !== '' ) {
+					if ( isset( $names[ mb_strtolower( $nn ) ] ) ) {
+						$errors[] = sprintf( _( "There is already a user type called %s." ), rs_h( $nn ) );
+					} elseif ( $full ) {
+						$conn->prepare( "INSERT INTO user_type (user_type, description, public_directory, sort_order) VALUES (?, ?, ?, ?)" )
+						     ->execute( array( $nn, mb_substr( trim( strip_tags( (string) ( $new['description'] ?? '' ) ) ), 0, 255 ), empty( $new['public'] ) ? 0 : 1, (int) ( $new['sort'] ?? 99 ) ) );
+						$feedback[] = _( "User type added." );
+					} else {
+						$conn->prepare( "INSERT INTO user_type (user_type) VALUES (?)" )->execute( array( $nn ) );
+						$feedback[] = _( "User type added." );
+					}
+				}
+				UserTypes::reset();
+			}
+
 			if ( $errors ) {
 				$conn->rollBack();
 			} else {
@@ -196,6 +245,8 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 				if ( ! $feedback ) {
 					$feedback[] = _( "Changes saved." );
 				}
+				AuditLog::add( 'settings.records.' . $tab, 'record_settings', $tab, sprintf( 'Record settings (%s) saved', $tab ),
+					array( 'deleted' => $del ?: null, 'added' => trim( (string) ( $new['name'] ?? $new['label'] ?? '' ) ) ?: null ) );
 			}
 		} catch ( \Throwable $e ) {
 			if ( $conn->inTransaction() ) {
@@ -294,6 +345,24 @@ if ( $tab === 'fields' ) {
 	}
 	$t .= '<h3>' . _( "Add a field" ) . '</h3>' . $fieldRow( 'new', array(), true ) . '</div>';
 	makePluslet( _( "Custom fields" ), $form . $t . '<p><button type="submit" class="pure-button pure-button-primary">' . _( "Save" ) . '</button></p></form>', "no_overflow" );
+}
+
+if ( $tab === 'user_types' ) {
+	$full   = UserTypes::ready();
+	$counts = UserTypes::staffCounts();
+	$t      = '<p>' . _( "Every user account has a user type (Admin → Manage Users). Types marked <strong>Public directory</strong> are listed on the public staff pages, in the staff API and in OAI; others (for example Machine accounts or Student workers) are not. “Staff” is built in and cannot be deleted." ) . '</p>'
+	          . ( $full ? '' : '<p class="rs-error">' . _( "Apply the database updates (Admin → Database Updates) to edit descriptions, order and the public directory setting." ) . '</p>' )
+	          . '<div style="overflow-x:auto"><table class="pure-table pure-table-horizontal rs-table"><thead><tr><th>' . _( "Name" ) . '</th><th>' . _( "Description" ) . '</th><th>' . _( "Public directory" ) . '</th><th>' . _( "Order" ) . '</th><th>' . _( "Users" ) . '</th><th></th></tr></thead><tbody>';
+	foreach ( UserTypes::all() as $r ) {
+		$id = (int) $r['user_type_id'];
+		$t .= '<tr><td><input type="text" name="rows[' . $id . '][name]" value="' . rs_h( $r['user_type'] ) . '" required maxlength="100" aria-label="' . rs_h( _( "Name" ) ) . '"></td>'
+		      . '<td><input type="text" name="rows[' . $id . '][description]" value="' . rs_h( $r['description'] ) . '" size="28" maxlength="255"' . ( $full ? '' : ' disabled' ) . ' aria-label="' . rs_h( _( "Description" ) ) . '"></td>'
+		      . '<td>' . ( $full ? $chk( 'rows[' . $id . '][public]', (int) $r['public_directory'] ) : ( (int) $r['public_directory'] ? _( "yes" ) : _( "no" ) ) ) . '</td>'
+		      . '<td><input type="number" name="rows[' . $id . '][sort]" value="' . (int) $r['sort_order'] . '" style="width:5em"' . ( $full ? '' : ' disabled' ) . ' aria-label="' . rs_h( _( "Order" ) ) . '"></td>'
+		      . '<td>' . (int) ( $counts[ $id ] ?? 0 ) . '</td><td>' . ( $id === UserTypes::BUILT_IN ? '<small>' . _( "built-in" ) . '</small>' : $delBtn( $id ) ) . '</td></tr>';
+	}
+	$t .= '<tr class="rs-new"><td><input type="text" name="new[name]" placeholder="' . _( "Add a user type…" ) . '" maxlength="100" aria-label="' . rs_h( _( "New user type" ) ) . '"></td><td><input type="text" name="new[description]" size="28" maxlength="255"' . ( $full ? '' : ' disabled' ) . ' aria-label="' . rs_h( _( "Description" ) ) . '"></td><td>' . ( $full ? $chk( 'new[public]', false ) : '' ) . '</td><td><input type="number" name="new[sort]" value="99" style="width:5em"' . ( $full ? '' : ' disabled' ) . '></td><td colspan="2"></td></tr></tbody></table></div>';
+	makePluslet( _( "User types" ), $form . $t . '<p><button type="submit" class="pure-button pure-button-primary">' . _( "Save" ) . '</button></p></form>', "no_overflow" );
 }
 
 print '</div></div>';

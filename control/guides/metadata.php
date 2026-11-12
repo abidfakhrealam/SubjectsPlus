@@ -47,6 +47,11 @@ if (isset($_GET["subject_id"])) {
   $ok_record_id = "";
 }
 
+// existing guide: only its editors (or admins / "allguides") may change its settings, owners or delete it (4.7.1)
+if ($ok_record_id != "" && ($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET["delete_record"]))) {
+  \SubjectsPlus\Control\Guide\GuideAccess::requireGuide((int) $ok_record_id);
+}
+
 if (isset($_POST["delete_record"]) || isset($_GET["delete_record"])) {
   // make sure there's a record_id
 

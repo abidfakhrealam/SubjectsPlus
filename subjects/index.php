@@ -10,7 +10,8 @@
 //added in order to hide errors if SP not yet installed.  
 if( !file_exists( "../control/includes/config.php" ) || filesize( "../control/includes/config.php" ) < 10 )
 {
-  header("Location: ../control/");
+  header("Location: ../control/installer/");
+  exit;
 }
 
 use SubjectsPlus\Control\CompleteMe;

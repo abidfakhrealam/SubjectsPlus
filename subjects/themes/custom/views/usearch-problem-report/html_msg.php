@@ -30,7 +30,7 @@
 				</tr>
 				<tr>
 					<td width="600" height="70" valign="middle" align="center" bgcolor="#FFFFFF">
-						<img src="https://sp.library.miami.edu/assets/images/email/subjectsplus-footer.jpg"
+						<img src="<?php echo htmlspecialchars( (string) ( $GLOBALS['BaseURL'] ?? '' ), ENT_QUOTES ); ?>assets/images/email/subjectsplus-footer.jpg"
                              width="276"
 						     height="40" border="0">
 

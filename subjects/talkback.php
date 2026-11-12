@@ -357,8 +357,11 @@ $recaptcha_response = "";
 if ( isset( $_POST['the_suggestion'] ) && $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
 	// clean up post variables
-	if ( isset( $_POST["email_suggestion"] ) ) {
-		$this_name = scrubData($_POST["email_suggestion"]);
+	// 4.7.1: the forms call this field "name" (default theme) or "suggestion_email" (other themes), so the
+	// address people typed was never used and every comment came from "Anonymous"
+	$sp_tb_email = $_POST["email_suggestion"] ?? $_POST["suggestion_email"] ?? $_POST["name"] ?? null;
+	if ( is_string( $sp_tb_email ) && trim( $sp_tb_email ) !== '' ) {
+		$this_name = scrubData( trim( $sp_tb_email ) );
 	} else {
 		$this_name = $administrator_email;
 	}

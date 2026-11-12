@@ -15,7 +15,7 @@ if ( $siteKey === '' ): ?>
         <div class="talkback_form <?php print $tb_bonus_css; ?>">
             <div class="form-group">
                 <label for="the_suggestion"><?php print _( "Your comment:" ); ?></label>
-                <textarea name="the_suggestion" id="the_suggestion" class="form-control" rows="3" value="<?php print $this_comment; ?>"></textarea>
+                <textarea name="the_suggestion" id="the_suggestion" class="form-control" rows="3"><?php echo htmlspecialchars( html_entity_decode( (string) $this_comment, ENT_QUOTES, 'UTF-8' ), ENT_QUOTES, 'UTF-8' ); // 4.7.1: was echoed raw (reflected XSS) ?></textarea>
             </div>
             <div class="form-group">
                 <label for="suggestion_email"><?php print _( "Your email (optional):" ); ?></label>
