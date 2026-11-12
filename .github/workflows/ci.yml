@@ -89,7 +89,7 @@ jobs:
           SP_DB_NAME: sp
         run: node tests/e2e/sp-e2e.cjs --install --label ci-apache-php8.3-mariadb10.11
       - if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: e2e-results
           path: tests/e2e/results/
@@ -145,7 +145,7 @@ jobs:
           SP_DB_ADMIN_PASS: spadmin-ci-pass
         run: node tests/e2e/sp-e2e.cjs --install --label ci-nginx-php8.4-mysql8.4
       - if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: e2e-results-nginx
           path: tests/e2e/results/
