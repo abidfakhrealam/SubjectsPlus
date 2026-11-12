@@ -23,6 +23,12 @@ if ( file_exists( "config.php" ) ) {
 if ( function_exists( 'sp_apply_error_policy' ) ) {
 	sp_apply_error_policy(); // re-apply now that $sp_debug from config.php is known
 }
+// "Always use HTTPS" (installer / config.php: $sp_force_https)
+if ( ! empty( $sp_force_https ) && PHP_SAPI !== 'cli' && ! headers_sent()
+     && ! \SubjectsPlus\Control\Install\Environment::isHttps() ) {
+	header( 'Location: https://' . \SubjectsPlus\Control\Install\Environment::host() . ( $_SERVER['REQUEST_URI'] ?? '/' ), true, 301 );
+	exit;
+}
 // workflow permission for publishing records; added here so older config.php files get it too
 if ( isset( $all_ptags ) && is_array( $all_ptags ) && ! in_array( 'approver', $all_ptags, true ) ) {
 	$all_ptags[] = 'approver';

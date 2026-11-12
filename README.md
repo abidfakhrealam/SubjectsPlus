@@ -1,11 +1,11 @@
-# SubjectsPlus 4.6.1
+# SubjectsPlus 4.7
 
 SubjectsPlus is an open-source web application for managing the research-help side of a library website:
 subject and course research guides, an A–Z list of databases and e-resources, a staff directory, FAQs, a
 suggestion box (TalkBack) and in-library videos. It was created at Ithaca College Library and developed for
 many years at the University of Miami Libraries; it is released under the GNU GPL.
 
-Version **4.6.1** is the maintained, security-hardened release of the 4.x line. It runs on current PHP
+Version **4.7** is the maintained, security-hardened release of the 4.x line, with a guided installer. It runs on current PHP
 (8.1 – 8.4), MySQL 8.0 / 8.4 and MariaDB 10.11+ in strict SQL mode, behind Apache 2.4 or Nginx.
 
 ## Features
@@ -51,31 +51,32 @@ Composer is not needed on the server: the PHP libraries are included in `lib/ven
 ## Quick start
 
 ```sh
-# 1. database
-mysql -u root -p -e "CREATE DATABASE subjectsplus CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-  CREATE USER 'sp'@'localhost' IDENTIFIED BY 'change-me'; GRANT ALL ON subjectsplus.* TO 'sp'@'localhost';"
+# 1. code
+unzip SubjectsPlus-4.7.0-stable.zip -d /var/www && mv /var/www/SubjectsPlus-4.7.0-stable /var/www/subjectsplus
+cd /var/www/subjectsplus
+chown -R www-data:www-data assets/cache assets/users assets/records assets/images/guide_thumbs
 
-# 2. code
-unzip SubjectsPlus-4.6.1-stable.zip -d /var/www && mv /var/www/SubjectsPlus-4.6.1-stable /var/www/subjectsplus
-chown -R www-data:www-data /var/www/subjectsplus      # or make control/includes/, assets/cache/,
-                                                     # assets/users/, assets/records/ writable
-# 3. web server: point it at /var/www/subjectsplus (see INSTALL.md for Apache and Nginx)
+# 2. web server: point Apache or Nginx at /var/www/subjectsplus (INSTALL.md §3–4)
 
-# 4. installer
-#    open https://your-server/control/setup-config.php, enter the database details,
-#    then the administrator email; note the generated admin password
+# 3. one-time install code
+sudo -u www-data php tools/install-code.php
 ```
 
-Then sign in at `/control/`, change the admin password, and add the daily task
-`php tools/workflow-daily.php`. Full instructions, upgrades and hardening: **[INSTALL.md](INSTALL.md)**.
+4. Open `https://your-server/control/` and follow the **installer wizard**: install code → requirements check →
+   database (use yours, or let the wizard create the database and its user) → site address and administrator
+   password → email test, off-campus access, sample content → install.
+5. Remove `control/installer/` and add the daily task `php tools/workflow-daily.php`.
+
+Full instructions, upgrades and hardening: **[INSTALL.md](INSTALL.md)**.
 
 ## Documentation
 
 - [INSTALL.md](INSTALL.md) — installation, Apache / Nginx, PHP settings, cron, upgrading, single sign-on,
   off-campus access, workflow, import / export, languages, branding
-- [CHANGELOG.md](CHANGELOG.md) — what changed in 4.6.0
+- [CHANGELOG.md](CHANGELOG.md) — what changed in 4.6.0 and 4.7.0
 - [SECURITY.md](SECURITY.md) — reporting vulnerabilities and the hardening checklist
-- [docs/AUDIT-REPORT.md](docs/AUDIT-REPORT.md) — security, bug and compatibility audit for 4.6.0
+- [docs/AUDIT-REPORT.md](docs/AUDIT-REPORT.md) — security, bug and compatibility audit (4.6.0)
+- [docs/RELEASING.md](docs/RELEASING.md) — publishing to GitHub and building release archives
 - [docs/history/CHANGELOG-upstream.md](docs/history/CHANGELOG-upstream.md) — history of SubjectsPlus up to 4.6
 
 ## Development

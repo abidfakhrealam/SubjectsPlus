@@ -627,8 +627,10 @@ class Installer
 			$lstrDefault  = $lstrRootPath . $lstrDir . DIRECTORY_SEPARATOR . '.htaccess-default';
 			$lstrHtaccess = $lstrRootPath . $lstrDir . DIRECTORY_SEPARATOR . '.htaccess';
 
-			if ( ! file_exists( $lstrHtaccess ) && file_exists( $lstrDefault ) ) {
-				copy( $lstrDefault, $lstrHtaccess );
+			// only when the folder is writable: a locked-down install (only data folders writable) simply
+			// keeps the shipped rules, and pretty URLs are set up by hand (INSTALL.md §3)
+			if ( ! file_exists( $lstrHtaccess ) && file_exists( $lstrDefault ) && is_writable( dirname( $lstrHtaccess ) ) ) {
+				@copy( $lstrDefault, $lstrHtaccess );
 			}
 
 			if ( is_file( $lstrHtaccess ) && is_writable( $lstrHtaccess ) ) {
