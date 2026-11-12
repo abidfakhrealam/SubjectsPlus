@@ -1,11 +1,11 @@
-# SubjectsPlus 4.6
+# SubjectsPlus 4.6.1
 
 SubjectsPlus is an open-source web application for managing the research-help side of a library website:
 subject and course research guides, an A–Z list of databases and e-resources, a staff directory, FAQs, a
 suggestion box (TalkBack) and in-library videos. It was created at Ithaca College Library and developed for
 many years at the University of Miami Libraries; it is released under the GNU GPL.
 
-Version **4.6.0** is the maintained, security-hardened release of the 4.x line. It runs on current PHP
+Version **4.6.1** is the maintained, security-hardened release of the 4.x line. It runs on current PHP
 (8.1 – 8.4), MySQL 8.0 / 8.4 and MariaDB 10.11+ in strict SQL mode, behind Apache 2.4 or Nginx.
 
 ## Features
@@ -56,7 +56,7 @@ mysql -u root -p -e "CREATE DATABASE subjectsplus CHARACTER SET utf8mb4 COLLATE 
   CREATE USER 'sp'@'localhost' IDENTIFIED BY 'change-me'; GRANT ALL ON subjectsplus.* TO 'sp'@'localhost';"
 
 # 2. code
-unzip SubjectsPlus-4.6.0-stable.zip -d /var/www && mv /var/www/SubjectsPlus-4.6.0-stable /var/www/subjectsplus
+unzip SubjectsPlus-4.6.1-stable.zip -d /var/www && mv /var/www/SubjectsPlus-4.6.1-stable /var/www/subjectsplus
 chown -R www-data:www-data /var/www/subjectsplus      # or make control/includes/, assets/cache/,
                                                      # assets/users/, assets/records/ writable
 # 3. web server: point it at /var/www/subjectsplus (see INSTALL.md for Apache and Nginx)
