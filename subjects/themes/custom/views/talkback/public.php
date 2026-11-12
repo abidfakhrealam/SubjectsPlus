@@ -6,7 +6,9 @@
 
         <div id="body_inner_wrap">
 
+            <?php if ( ! empty( $GLOBALS['talkback_use_recaptcha'] ) ) : // 4.7.1: Google's script was loaded on every visit, even with reCAPTCHA off ?>
             <script src="https://www.google.com/recaptcha/api.js" async="" defer=""></script>
+            <?php endif; ?>
             <script>
                 function onSubmit(token) {
                     document.getElementById("tellus").submit();

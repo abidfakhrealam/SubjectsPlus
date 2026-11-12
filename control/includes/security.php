@@ -340,3 +340,48 @@ if ( ! function_exists( 'sp_http_get' ) ) {
 		return false;
 	}
 }
+
+if ( ! function_exists( 'sp_csp_policy' ) ) {
+	/**
+	 * The stricter Content-Security-Policy ($sp_csp = "strict" or "report-only" in config.php, 4.7.1).
+	 * Scripts, styles, fonts, connections and plug-ins may only come from this site and the hosts in $sp_csp_allow
+	 * (plus Google Analytics / reCAPTCHA when they are configured). Inline scripts are still allowed because
+	 * SubjectsPlus 4.x pages contain them; what the policy stops is code loaded from, or data sent to, other sites.
+	 */
+	function sp_csp_policy() {
+		$allow = array();
+		foreach ( (array) ( $GLOBALS['sp_csp_allow'] ?? array() ) as $h ) {
+			$h = trim( (string) $h );
+			if ( preg_match( '#^https://[a-z0-9.*-]+(:\d+)?(/[^\s;,]*)?$#i', $h ) ) {
+				$allow[] = $h;
+			}
+		}
+		$scripts = $allow;
+		if ( ! empty( $GLOBALS['google_analytics_ua'] ) ) {
+			array_push( $scripts, 'https://www.googletagmanager.com', 'https://www.google-analytics.com' );
+		}
+		foreach ( array( 'talkback_use_recaptcha', 'problem_report_use_recaptcha' ) as $k ) {
+			if ( ! empty( $GLOBALS[ $k ] ) ) {
+				array_push( $scripts, 'https://www.google.com/recaptcha/', 'https://www.gstatic.com/recaptcha/' );
+			}
+		}
+		$scripts = implode( ' ', array_unique( $scripts ) );
+		$list    = implode( ' ', $allow );
+		$https   = class_exists( '\\SubjectsPlus\\Control\\Install\\Environment' ) && \SubjectsPlus\Control\Install\Environment::isHttps();
+
+		return "default-src 'self'; script-src 'self' 'unsafe-inline' $scripts; style-src 'self' 'unsafe-inline' $list; font-src 'self' data: $list; "
+		       . "img-src 'self' data: https:" . ( $https ? '' : ' http:' ) . "; media-src 'self' https:; frame-src 'self' https:" . ( $https ? '' : ' http:' ) . "; "
+		       . "connect-src 'self' " . ( strpos( $scripts, 'google-analytics' ) !== false ? 'https://www.google-analytics.com https://*.google-analytics.com ' : '' ) . "; "
+		       . "object-src 'none'; base-uri 'self'; form-action 'self' https:; frame-ancestors 'self'" . ( $https ? '; upgrade-insecure-requests' : '' );
+	}
+
+	/** Send the policy chosen in config.php ($sp_csp). "baseline" leaves it to the web server (.htaccess / Nginx). */
+	function sp_send_csp() {
+		$mode = strtolower( (string) ( $GLOBALS['sp_csp'] ?? 'baseline' ) );
+		if ( PHP_SAPI === 'cli' || headers_sent() || ! in_array( $mode, array( 'strict', 'report-only' ), true ) ) {
+			return;
+		}
+		header( ( $mode === 'strict' ? 'Content-Security-Policy: ' : 'Content-Security-Policy-Report-Only: ' ) . preg_replace( '/\s+/', ' ', sp_csp_policy() ) );
+	}
+}
+

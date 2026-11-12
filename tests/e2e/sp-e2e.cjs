@@ -100,6 +100,11 @@ async function install(browser) {
   const CREATE = !!process.env.SP_DB_ADMIN_USER;
   if (!ADMIN_PASS) ADMIN_PASS = 'E2e-Admin-Pass-2026!';
 
+  await step('installer: the site root sends a new site to the wizard', async () => {
+    await page.goto(BASE + '/', { waitUntil: 'networkidle' });
+    if (!/\/control\/installer\//.test(page.url())) throw new Error('landed on ' + page.url());
+    return page.url().replace(BASE, '');
+  });
   await step('installer: /control/ sends a new site to the wizard', async () => {
     await page.goto(BASE + '/control/', { waitUntil: 'networkidle' });
     if (!/\/control\/installer\//.test(page.url())) throw new Error('landed on ' + page.url());
@@ -204,6 +209,18 @@ async function install(browser) {
     if (r.status() !== 404) throw new Error('HTTP ' + r.status());
     const r2 = await page.request.get(BASE + '/control/installer/index.php?step=database');
     if (r2.status() !== 404) throw new Error('step page HTTP ' + r2.status());
+  });
+  await step('installer: the site root goes to the public pages once installed', async () => {
+    const c2 = await browser.newContext(); const p2 = await c2.newPage();
+    await p2.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
+    const u = p2.url(); await c2.close();
+    if (!/\/subjects\//.test(u)) throw new Error('landed on ' + u);
+  });
+  await step('installer: switched off for new visitors too (no cookie): 404, no form', async () => {
+    const c2 = await browser.newContext();
+    const r = await c2.request.get(BASE + '/control/installer/index.php?step=code');
+    const t = await r.text(); await c2.close();
+    if (r.status() !== 404 || /name="code"/.test(t)) throw new Error('HTTP ' + r.status());
   });
   await step('installer: sample guide and databases are public', async () => {
     await page.goto(BASE + '/subjects/guide.php?subject=getting-started', { waitUntil: 'networkidle' });
@@ -384,10 +401,14 @@ async function suite(browser, vp) {
       return (await page.locator('#check_options_content').innerText()).replace(/\s+/g, ' ').slice(0, 120);
     });
     // ------------------------------------------------------------ records, access rules, workflow, users
-    await step('admins are told to remove the installer files', async () => {
+    await step('no "remove the installer" warning: the wizard switches itself off', async () => {
       await page.goto(BASE + '/control/index.php', { waitUntil: 'networkidle' });
-      const w = await page.locator('.sp-installer-left').count();
-      if (!w) throw new Error('no warning shown');
+      const w = page.locator('.sp-installer-left');
+      if (!(await w.count())) return 'no warning';
+      const t = await w.innerText();
+      // read-only control/includes/: the installer cannot delete its code file, so that one reminder is expected
+      if (process.env.SP_UPLOAD_CONFIG_TO && /install code/.test(t) && !/installer\//.test(t)) return 'install-code reminder (read-only folder)';
+      throw new Error('warning still shown: ' + t);
     });
     await step('installer-configured EZproxy provider is listed under Off-campus Access', async () => {
       await page.goto(BASE + '/control/admin/access.php', { waitUntil: 'networkidle' });
@@ -532,6 +553,169 @@ async function suite(browser, vp) {
   await ctx.close();
 }
 
+/** 4.7.1 features: vendor field, bulk edit, user types, audit log, statistics, API clients, health, upgrade, link checker, guide permissions. */
+async function features471(browser) {
+  current.vp = '4.7.1';
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, acceptDownloads: true });
+  const page = await ctx.newPage();
+  const issues = watch(page);
+  page.removeAllListeners('dialog');
+  page.on('dialog', d => d.accept().catch(() => {})); // the confirm() questions of bulk edit / delete
+  await login(page, ADMIN_EMAIL, ADMIN_PASS);
+  const ok = (url, opts) => cleanLoad(page, issues, url, opts);
+  let doajId = 0;
+
+  await step('admin pages load cleanly: Usage Statistics, Audit Log, API Clients, System Health, Upgrade, Find & Bulk Edit', async () => {
+    for (const u of ['/control/admin/stats.php', '/control/admin/stats.php?range=365', '/control/admin/audit_log.php', '/control/admin/api_clients.php',
+      '/control/admin/health.php', '/control/admin/upgrade.php', '/control/records/bulk.php', '/control/admin/record_settings.php?tab=user_types',
+      '/control/guides/guide_health.php?tab=links']) await ok(u);
+    return '9 pages';
+  });
+  await step('System Health: database updates all applied, installer switched off', async () => {
+    await ok('/control/admin/health.php');
+    const rows = await page.$$eval('table tr', r => r.map(x => x.innerText.replace(/\s+/g, ' ')));
+    const db = rows.find(r => /Database updates/.test(r)) || '';
+    const inst = rows.find(r => /^Installer/.test(r)) || '';
+    if (!/all applied/.test(db)) throw new Error(db);
+    if (!/switched off/.test(inst)) throw new Error(inst);
+    await shot(page, 'health');
+    return rows.filter(r => /\bFix\b/.test(r)).map(r => r.slice(0, 60)).join(' | ') || 'no red items';
+  });
+  await step('record form: Vendor / Publisher saved and shown again', async () => {
+    await ok('/control/records/bulk.php?q=Directory+of+Open+Access');
+    const href = await page.getAttribute('table.bulk-table a[href*="record.php?record_id="]', 'href');
+    doajId = parseInt(href.split('=').pop(), 10);
+    await ok('/control/records/record.php?record_id=' + doajId);
+    await page.fill('#record_vendor', 'Open Access Publisher & Co');
+    await Promise.all([page.waitForLoadState('networkidle'), page.click('input[name=submit_record]')]);
+    await ok('/control/records/record.php?record_id=' + doajId);
+    const v = await page.inputValue('#record_vendor');
+    if (v !== 'Open Access Publisher & Co') throw new Error('vendor is ' + JSON.stringify(v));
+    return 'record ' + doajId;
+  });
+  await step('public A–Z: vendor shown, "by vendor" list and filter, search finds the vendor', async () => {
+    await ok('/subjects/databases.php?letter=D');
+    if (!/Vendor \/ Publisher:/.test(await page.textContent('body'))) throw new Error('vendor line missing');
+    await ok('/subjects/databases.php?letter=byvendor');
+    if (!(await page.locator('a[href*="vendor=Open%20Access%20Publisher"]').count())) throw new Error('vendor list missing');
+    await ok('/subjects/databases.php?letter=byvendor&vendor=' + encodeURIComponent('Open Access Publisher & Co'));
+    const t = await page.locator('table.item_listing').innerText();
+    if (!/Directory of Open Access Journals/.test(t) || /PubMed/.test(t)) throw new Error('filter wrong: ' + t.replace(/\s+/g, ' ').slice(0, 120));
+    if (!(await page.locator('#select_vendor').count())) throw new Error('vendor dropdown missing');
+    const sr = await page.request.post(BASE + '/subjects/databases.php', { form: { searchterm: 'Publisher & Co' }, headers: { Origin: BASE } });
+    if (!/Directory of Open Access Journals/.test(await sr.text())) throw new Error('search does not find the vendor');
+    await shot(page, 'az-vendor');
+    return 'ok';
+  });
+  await step('public A–Z: skip link, no zoom lock, labelled dropdowns (accessibility)', async () => {
+    await ok('/subjects/databases.php?letter=D');
+    await page.keyboard.press('Tab');
+    const first = await page.evaluate(() => document.activeElement && document.activeElement.className);
+    if (!/sp-skip-link/.test(first || '')) throw new Error('first Tab stop: ' + first);
+    const vp = await page.getAttribute('meta[name=viewport]', 'content');
+    if (/user-scalable=no/.test(vp || '')) throw new Error('zoom disabled');
+    const unl = await page.$$eval('select', s => s.filter(x => !x.getAttribute('aria-label') && !x.title && !(x.id && document.querySelector('label[for="' + x.id + '"]')) && !x.closest('label')).length);
+    if (unl) throw new Error(unl + ' unlabelled select(s)');
+  });
+  await step('Find & bulk edit: set vendor on a search result', async () => {
+    await ok('/control/records/bulk.php?q=PubMed');
+    await page.check('input.bulk-id');
+    await page.selectOption('#bulk_action', 'vendor');
+    await page.fill('input[name=vendor]', 'NLM');
+    issues.length = 0;
+    await Promise.all([page.waitForLoadState('networkidle'), page.click('#bulk-form button[type=submit]')]);
+    const t = await page.textContent('body');
+    if (!/1 record\(s\) changed/.test(t)) throw new Error('no confirmation');
+    if (!/NLM/.test(await page.locator('table.bulk-table').innerText())) throw new Error('vendor not shown');
+    return 'ok';
+  });
+  await step('Find & bulk edit: filter by vendor', async () => {
+    await ok('/control/records/bulk.php?vendor=NLM');
+    const n = await page.locator('input.bulk-id').count();
+    if (n !== 1) throw new Error(n + ' rows');
+  });
+  await step('Record Settings → User types: add, rename, delete', async () => {
+    await ok('/control/admin/record_settings.php?tab=user_types');
+    const before = await page.locator('table.rs-table tbody tr').count();
+    await page.fill('input[name="new[name]"]', 'E2E Volunteer');
+    await Promise.all([page.waitForLoadState('networkidle'), page.click('form.rs-form button[type=submit]:not([name=delete])')]);
+    if (!/User type added/.test(await page.textContent('body'))) throw new Error('not added');
+    const rows = await page.locator('table.rs-table tbody tr').count();
+    if (rows !== before + 1) throw new Error('rows ' + before + ' -> ' + rows);
+    const row = page.locator('table.rs-table tbody tr', { has: page.locator('input[value="E2E Volunteer"]') });
+    issues.length = 0;
+    await Promise.all([page.waitForLoadState('networkidle'), row.locator('button[name=delete]').click()]);
+    if (await page.locator('input[value="E2E Volunteer"]').count()) throw new Error('not deleted');
+    const staff = page.locator('table.rs-table tbody tr').first();
+    if (!/built-in/.test(await staff.innerText())) throw new Error('Staff type deletable');
+    return 'ok';
+  });
+  await step('Audit Log: sign-in, bulk edit and settings changes are recorded; CSV download', async () => {
+    await ok('/control/admin/audit_log.php');
+    const t = await page.locator('table.audit-table').innerText();
+    for (const a of ['auth.login', 'records.bulk.vendor', 'settings.records.user_types']) if (!t.includes(a)) throw new Error('missing ' + a);
+    const r = await page.request.get(BASE + '/control/admin/audit_log.php?export=1');
+    if (!/text\/csv/.test(r.headers()['content-type'] || '') || !/records\.bulk\.vendor/.test(await r.text())) throw new Error('CSV');
+    await shot(page, 'audit');
+    return 'ok';
+  });
+  await step('Usage Statistics: totals, vendor table and CSV export', async () => {
+    await ok('/subjects/guide.php?subject=getting-started');
+    await ok('/control/admin/stats.php');
+    if (!/guide views/.test(await page.textContent('body'))) throw new Error('no totals');
+    const r = await page.request.get(BASE + '/control/admin/stats.php?export=guides');
+    if (!/text\/csv/.test(r.headers()['content-type'] || '')) throw new Error('CSV ' + r.status());
+    await shot(page, 'stats');
+  });
+  await step('API Clients: key created once, shown masked afterwards; wrong key refused', async () => {
+    await ok('/control/admin/api_clients.php');
+    await page.fill('#api-name', 'E2E app');
+    await Promise.all([page.waitForLoadState('networkidle'), page.click('button[name=create]')]);
+    const key = (await page.locator('#api-key').innerText()).trim();
+    if (!/^sp_[0-9a-f]{48}$/.test(key)) throw new Error('key ' + key);
+    await ok('/control/admin/api_clients.php');
+    if ((await page.content()).includes(key)) throw new Error('key shown again');
+    const r = await page.request.get(BASE + '/api/database/letter/A/key/wrong-key-123');
+    if (r.status() === 200 && /"title"/.test(await r.text())) throw new Error('data with a wrong key');
+    return 'API answered ' + r.status() + ' to a wrong key';
+  });
+  await step('Upgrade: database backup downloads as gzip SQL', async () => {
+    await ok('/control/admin/upgrade.php');
+    const [dl] = await Promise.all([page.waitForEvent('download'), page.click('button[name=backup]')]);
+    const file = await dl.path();
+    const sql = require('zlib').gunzipSync(fs.readFileSync(file)).toString('utf8');
+    if (!/CREATE TABLE `title`/.test(sql) || !/INSERT INTO `title`/.test(sql) || !/end of backup/.test(sql)) throw new Error('backup incomplete (' + sql.length + ' bytes)');
+    return Math.round(sql.length / 1024) + ' KB SQL';
+  });
+  await step('Upgrade: "finish" records the version (nothing pending)', async () => {
+    await ok('/control/admin/upgrade.php');
+    await Promise.all([page.waitForLoadState('networkidle'), page.click('button[name=apply]')]);
+    const t = await page.textContent('body');
+    if (!/already up to date|update\(s\) applied/.test(t)) throw new Error(t.slice(0, 200));
+  });
+  await step('Guide Health → Broken links: link list refreshed', async () => {
+    await ok('/control/guides/guide_health.php?tab=links');
+    await Promise.all([page.waitForLoadState('networkidle'), page.click('button[name=link_collect]')]);
+    const t = await page.textContent('body');
+    if (!/links found in public guides and records/.test(t)) throw new Error('no result');
+    return (t.match(/\d+ links found/) || [''])[0];
+  });
+  await ctx.close();
+
+  current.vp = 'http';
+  await step('per-guide permissions: staff without "allguides" cannot change a guide they do not edit', async () => {
+    const c2 = await browser.newContext(); const p = await c2.newPage();
+    await login(p, STAFF_EMAIL, STAFF_PASS);
+    const r1 = await p.request.post(BASE + '/control/guides/helpers/save_tab.php', { form: { subject_id: '1', label: 'Hacked tab', tab_index: '9', visibility: '1' }, headers: { Origin: BASE } });
+    const r2 = await p.request.post(BASE + '/control/guides/helpers/save_tab_order.php', { form: { data: 'item[]=1' }, headers: { Origin: BASE } });
+    const r3 = await p.request.post(BASE + '/control/guides/helpers/guide_data.php', { form: { flag: 'delete', delete_id: '1', subject_id: '1' }, headers: { Origin: BASE } });
+    await c2.close();
+    const codes = [r1.status(), r2.status(), r3.status()];
+    if (codes.some(c => c !== 403)) throw new Error('HTTP ' + codes.join(','));
+    return 'HTTP ' + codes.join(',');
+  });
+}
+
 /** HTTP-level security regression checks (no browser needed). */
 async function securityChecks(browser) {
   current.vp = 'http';
@@ -650,9 +834,14 @@ async function securityChecks(browser) {
 (async () => {
   const browser = await chromium.launch();
   if (DO_INSTALL) await install(browser);
+  if (process.argv.includes('--install-only')) { await browser.close(); console.log(results.filter(r => r.ok).length + ' passed, ' + results.filter(r => !r.ok).length + ' failed'); return; }
   if (!ADMIN_PASS) { console.error('Set SP_ADMIN_PASS or use --install'); process.exit(2); }
-  for (const vp of VIEWPORTS) await suite(browser, vp);
-  await securityChecks(browser);
+  const only471 = process.argv.includes('--only-4.7.1'); // quick run of the 4.7.1 feature checks on an installed site
+  if (!only471) {
+    for (const vp of VIEWPORTS) await suite(browser, vp);
+    await securityChecks(browser);
+  }
+  await features471(browser);
   await browser.close();
 
   const pass = results.filter(r => r.ok).length, fail = results.length - pass;

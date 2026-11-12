@@ -156,7 +156,7 @@ FROM staff as a, user_type as user_type,
 WHERE active = 1
   AND department.department_id = a.department_id
   AND a.user_type_id = user_type.user_type_id
-AND a.user_type_id = 1
+AND a.user_type_id IN (' . \SubjectsPlus\Control\UserTypes::publicSql() . ')
 ORDER BY a.staff_id';
 
 					break;

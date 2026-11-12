@@ -1,0 +1,20 @@
+/* SubjectsPlus public pages: accessibility baseline (WCAG 2.2 AA) — loaded after the theme CSS. */
+.sp-skip-link{position:absolute;left:-9999px;top:0;z-index:100000;background:#fff;color:#000;padding:.6em 1em;border:2px solid #000;font-weight:700;text-decoration:underline}
+.sp-skip-link:focus{left:.5em;top:.5em}
+.sp-sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* visible keyboard focus everywhere (2.4.7, 2.4.11) */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible,summary:focus-visible{outline:3px solid #1a5fb4;outline-offset:2px;box-shadow:0 0 0 5px #fff}
+/* links in text are distinguishable without colour (1.4.1) */
+#content_roof ~ * p a,.list_bonus a,.db-note a,.db-vendor a,.faq_answer a{text-decoration:underline}
+/* placeholder and inactive letters keep 4.5:1 contrast on white (1.4.3) */
+::placeholder{color:#595959;opacity:1}
+#letterhead .inactive{color:#6b6b6b}
+/* minimum target size for the A-Z letters and small buttons (2.5.8) */
+#letterhead a,#letterhead span{display:inline-block;min-width:24px;min-height:24px;line-height:24px;text-align:center}
+.toggleLink{cursor:pointer}
+.db-vendor{margin:.25em 0;font-size:.95em}.db-vendor-label{font-weight:600}.db-vendor-count{color:#555}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+/* text contrast fixes found with axe-core on the bundled themes (1.4.3) */
+#footer,#footer a,#footer p,.pills-label{color:#4d4d4d}
+body #footer a,body #footer a:link,body #footer a:visited{color:#4d4d4d;text-decoration:underline}
+#selected_letter{background-color:#2b5a8f!important;color:#fff!important}

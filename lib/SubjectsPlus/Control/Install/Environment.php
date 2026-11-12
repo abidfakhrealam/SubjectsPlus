@@ -27,6 +27,18 @@ class Environment {
 		return is_file( self::lockPath() ) || ( is_file( $c ) && filesize( $c ) > 10 );
 	}
 
+	/** The wizard after installation: a plain 404 that runs nothing else, then exit. */
+	public static function sendDisabled() {
+		http_response_code( 404 );
+		header( 'Cache-Control: no-store' );
+		header( 'X-Robots-Tag: noindex' );
+		echo '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+		     . '<title>Not found</title><body style="font:16px/1.5 system-ui,sans-serif;max-width:40em;margin:3em auto;padding:0 1em">'
+		     . '<h1>Not found</h1><p>SubjectsPlus is already installed, so the installer is switched off.</p>'
+		     . '<p><a href="../../subjects/">Public site</a> · <a href="../login.php">Staff sign-in</a></p></body></html>';
+		exit;
+	}
+
 	public static function writeLock( array $info ) {
 		$info['installed_at'] = gmdate( 'c' );
 

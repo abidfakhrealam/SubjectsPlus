@@ -20,5 +20,6 @@ $section = new SectionService( $db );
 $section_id = scrubData( $_REQUEST['section_id'], "integer" );
 $layout     = scrubData( $_REQUEST['layout'] );
 
+\SubjectsPlus\Control\Guide\GuideAccess::requireFound( \SubjectsPlus\Control\Guide\GuideAccess::guidesForSection( $section_id ), true );
 $result = $section->updateSectionLayout($section_id, $layout);
 var_dump($result);

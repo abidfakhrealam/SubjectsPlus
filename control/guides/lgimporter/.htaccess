@@ -1,0 +1,4 @@
+# LibGuides exports contain staff names and emails: never serve them (4.7.1)
+<FilesMatch "\.(xml|json|log)$">
+    Require all denied
+</FilesMatch>

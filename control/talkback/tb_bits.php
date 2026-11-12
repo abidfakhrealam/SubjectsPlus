@@ -73,14 +73,8 @@ switch ($_POST["filter"]) {
     $del_record = $CpanelPath . "faq/faq.php?faq_id=" . $_POST["our_id"];
     $message_body = "<p>" . _("The following record is recommended for delete") . ":</p>
             <p><a href=\"$del_record\">$del_record</a></p>";
-    $messageParams = array('from' => $_SESSION['email'],
-        'to' => $administrator_email,
-        'subjectLine' => _("SubjectsPlus: FAQ Delete Recommendation"),
-        'content' => $message_body);
-    $message = new MailMessage($messageParams);
-    $mailer = new Mailer();
-    $mailer->send($message);
-    echo "<div class=\"rec_delete_confirm\">" . _("Delete request sent to ") . "$administrator_email</div>";
+    $sp_mail_ok = sp_send_mail($_SESSION['email'], $administrator_email, _("SubjectsPlus: FAQ Delete Recommendation"), $message_body);
+    echo $sp_mail_ok ? "<div class=\"rec_delete_confirm\">" . _("Delete request sent to ") . htmlspecialchars($administrator_email) . "</div>" : "<div class=\"rec_delete_confirm\">" . _("The email could not be sent. Please tell an administrator.") . "</div>";
     break;
 }
 

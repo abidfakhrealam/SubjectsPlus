@@ -1174,6 +1174,8 @@ if ( ! is_writable( $lstrConfigFilePath ) ) {
 					$_SESSION['checkit'] = md5( $_SESSION['email'] ) . $lobjReturn[1];
 				}
 
+				\SubjectsPlus\Control\AuditLog::add( 'settings.config', 'config', 'config.php', 'Site configuration saved (Admin → Config Site)',
+					array( 'changed' => array_values( array_filter( array_keys( $_POST ), function ( $k ) { return is_string( $k ) && $k !== 'submit_edit_config'; } ) ) ) );
 				//display message
 				$lobjConfig->displayMessage( _( "Thy will be done." ) );
 

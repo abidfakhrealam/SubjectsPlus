@@ -40,3 +40,22 @@ echo '[' . date( 'Y-m-d H:i' ) . '] ' . ( $log ? count( $log ) . " action(s):\n 
 // guide review reminders (weekly email to owners of public guides that are overdue)
 $rlog = \SubjectsPlus\Control\Guide\GuideReviews::sendReminders( $date );
 echo '[' . date( 'Y-m-d H:i' ) . '] guide reviews: ' . ( $rlog ? implode( "\n  ", $rlog ) : 'no reminders due' ) . "\n";
+
+// 4.7.1: scheduled link check (a batch per day), audit-log retention, rate-limit clean-up, heartbeat for System Health
+if ( \SubjectsPlus\Control\ScheduledLinkCheck::ready() ) {
+	try {
+		\SubjectsPlus\Control\ScheduledLinkCheck::collect();
+		$ls = \SubjectsPlus\Control\ScheduledLinkCheck::run( (int) ( $link_check_batch ?? 300 ), (int) ( $link_check_interval_days ?? 7 ), (int) ( $link_check_timeout ?? 10 ) );
+		echo '[' . date( 'Y-m-d H:i' ) . "] link check: {$ls['checked']} checked, {$ls['broken']} failed\n";
+	} catch ( \Throwable $e ) {
+		echo '[' . date( 'Y-m-d H:i' ) . '] link check failed: ' . $e->getMessage() . "\n";
+	}
+}
+$pruned = \SubjectsPlus\Control\AuditLog::prune( (int) ( $sp_audit_retention_days ?? 730 ) );
+if ( $pruned ) {
+	echo '[' . date( 'Y-m-d H:i' ) . "] audit log: $pruned old entries removed\n";
+}
+if ( \SubjectsPlus\Control\RateLimiter::ready() ) {
+	\SubjectsPlus\Control\Schema::conn()->exec( 'DELETE FROM rate_limit WHERE window_start < ' . ( time() - 86400 ) );
+}
+\SubjectsPlus\Control\SystemState::set( 'cron.daily', array( 'at' => date( 'c' ), 'php' => PHP_VERSION ) );

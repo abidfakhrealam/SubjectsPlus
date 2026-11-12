@@ -34,7 +34,7 @@
 			<div class="col-md-4 col-lg-4 offset-lg-2">
 				<div class="feature popular-list">
 					<h4>- Need help now? -</h4>
-					<a href="https://library.miami.edu/research/ask-a-librarian.html" class="btn btn-default">Ask a Librarian</a>
+					<a href="<?php echo htmlspecialchars( (string) ( $GLOBALS['PublicPath'] ?? '' ), ENT_QUOTES ); ?>talkback.php" class="btn btn-default">Ask a Librarian</a>
 				</div>
 			</div>
 		</div>

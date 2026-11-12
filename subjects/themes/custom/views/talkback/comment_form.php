@@ -14,10 +14,9 @@
                 <form id="tellus" action="<?php echo $form_action; ?>" method="post" class="pure-form">
                     <div class="talkback_form <?php echo $tb_bonus_css; ?>">
                         <p><strong><?php echo _( "Your comment:" ); ?></strong><br/>
-                            <textarea name="the_suggestion" cols="26" rows="6" class="form-item"
-                                      value="<?php echo $this_comment; ?>"></textarea><br/><br/>
+                            <textarea name="the_suggestion" cols="26" rows="6" class="form-item"><?php echo htmlspecialchars( html_entity_decode( (string) $this_comment, ENT_QUOTES, 'UTF-8' ), ENT_QUOTES, 'UTF-8' ); // 4.7.1: was echoed raw (reflected XSS) ?></textarea><br/><br/>
                             <strong><?php echo _( "Your email (optional):" ); ?></strong><br/>
-                            <input type="text" id="suggestion_email" name="suggestion_email" size="20" value="<?php echo $this_name; ?>"
+                            <input type="text" id="suggestion_email" name="suggestion_email" size="20" value="<?php echo htmlspecialchars( html_entity_decode( (string) $this_name, ENT_QUOTES, 'UTF-8' ), ENT_QUOTES, 'UTF-8' ); // 4.7.1: was echoed raw (reflected XSS) ?>"
                                    class="form-item"/>
                             <br/>
 						    <?php echo _( "(In case we need to contact you)" ); ?>

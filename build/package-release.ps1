@@ -56,7 +56,8 @@ Remove-Item $TarTmp
 
 # 3. strip development files
 $remove = @('.git', '.github', 'node_modules', 'tests', 'build', 'dist', '.gitignore', '.gitattributes', '.gitmodules',
-            '.editorconfig', '.snyk', '.env', 'package.json', 'package-lock.json', 'control\includes\config.php')
+            '.editorconfig', '.snyk', '.env', 'package.json', 'package-lock.json', 'phpstan.neon.dist', 'phpstan-baseline.neon',
+            'control\includes\config.php')
 foreach ($r in $remove) {
   $p = Join-Path $Tree $r
   if (Test-Path $p) { Remove-Item -Recurse -Force $p }

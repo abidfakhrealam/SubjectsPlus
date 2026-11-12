@@ -159,7 +159,7 @@ if ( isset( $_GET["searchterm"] ) && trim($_GET["searchterm"]) != "") {
 	//**************************************
 	$guide_type_btns = "<ul class=\"nav nav-pills justify-content-around justify-content-md-start\" id=\"pills-tab-guides\" role=\"tablist\">";
 
-	$guide_type_btns .= "<li class=\"nav-item\"><a class=\"nav-link no-decoration default active\" id=\"show-Collection\" name=\"showCollection\" data-toggle=\"pill\" href=\"#section-Collection\" role=\"tab\" aria-controls=\"section-Collection\" aria-selected=\"true\">Guide Collections</a></li>";
+	$guide_type_btns .= "<li class=\"nav-item\" role=\"presentation\"><a class=\"nav-link no-decoration default active\" id=\"show-Collection\" name=\"showCollection\" data-toggle=\"pill\" href=\"#section-Collection\" role=\"tab\" aria-controls=\"section-Collection\" aria-selected=\"true\">Guide Collections</a></li>";
 
 	// We don't want our placeholder
 	if ( in_array( 'Placeholder', $guide_types ) ) {
@@ -170,7 +170,7 @@ if ( isset( $_GET["searchterm"] ) && trim($_GET["searchterm"]) != "") {
 	foreach ( $guide_types as $key ) {
 		$trimmed_guide_type = str_replace(' ', '-', $key);
 
-		$guide_type_btns .= "<li class=\"nav-item\"><a class=\"nav-link no-decoration default\" id=\"show-" . $trimmed_guide_type . "\" name=\"show$trimmed_guide_type\" data-toggle=\"pill\" href=\"#section-" . $trimmed_guide_type . "\" role=\"tab\" aria-controls=\"section-" . $trimmed_guide_type . "\" aria-selected=\"true\">";
+		$guide_type_btns .= "<li class=\"nav-item\" role=\"presentation\"><a class=\"nav-link no-decoration default\" aria-selected=\"false\" id=\"show-" . $trimmed_guide_type . "\" name=\"show$trimmed_guide_type\" data-toggle=\"pill\" href=\"#section-" . $trimmed_guide_type . "\" role=\"tab\" aria-controls=\"section-" . $trimmed_guide_type . "\">";
 
 		$guide_type_btns .= ucfirst( $key ) . " Guides</a></li>\n";
 	}

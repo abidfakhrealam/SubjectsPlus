@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'subjectsplus/subjectsplus',
-        'pretty_version' => '4.7.0',
-        'version' => '4.7.0.0',
+        'pretty_version' => '4.7.1',
+        'version' => '4.7.1.0',
         'reference' => NULL,
         'type' => 'project',
         'install_path' => __DIR__ . '/../../../',
@@ -20,8 +20,8 @@
             'dev_requirement' => false,
         ),
         'subjectsplus/subjectsplus' => array(
-            'pretty_version' => '4.7.0',
-            'version' => '4.7.0.0',
+            'pretty_version' => '4.7.1',
+            'version' => '4.7.1.0',
             'reference' => NULL,
             'type' => 'project',
             'install_path' => __DIR__ . '/../../../',

@@ -161,6 +161,14 @@ if( !isset($sessionCheck) || $sessionCheck != 'no' )
 	// refuse cross-site form posts to staff pages (CSRF); same-origin pages are unaffected
 	sp_require_same_origin();
 
+	// audit trail: every form sent to an Admin page (field names only, never values) (4.7.1)
+	if ( $subcat == "admin" && ( $_SERVER['REQUEST_METHOD'] ?? '' ) === 'POST' ) {
+		\SubjectsPlus\Control\AuditLog::add( 'admin.form', 'page', basename( (string) ( $_SERVER['SCRIPT_NAME'] ?? '' ) ),
+			'Form sent to ' . basename( (string) ( $_SERVER['SCRIPT_NAME'] ?? '' ) ) . ( isset( $_REQUEST['action'] ) && is_string( $_REQUEST['action'] ) ? ' (' . substr( $_REQUEST['action'], 0, 40 ) . ')' : '' ),
+			array( 'tab' => isset( $_GET['tab'] ) && is_string( $_GET['tab'] ) ? substr( $_GET['tab'], 0, 40 ) : null,
+			       'fields' => array_slice( array_keys( $_POST ), 0, 40 ) ) );
+	}
+
 	if (isset($header) && $header == "noshow") {
 		// used when we want authentication, but don't need to show the header stuff
 		return;
@@ -231,20 +239,25 @@ mb_internal_encoding('UTF-8');
 	// but are best removed)
 	if ( ! empty( $_SESSION['admin'] ) ) {
 		$sp_left = array();
-		foreach ( array( 'control/installer/', 'control/setup-config.php', 'control/install.php', 'control/includes/install-code.php' ) as $sp_f ) {
+		// the wizard switches itself off after installation, so only files from older versions and a
+		// leftover install code are reported
+		foreach ( array( 'control/setup-config.php', 'control/install.php', 'control/includes/install-code.php' ) as $sp_f ) {
 			if ( file_exists( dirname( __DIR__, 2 ) . '/' . $sp_f ) ) {
 				$sp_left[] = $sp_f;
 			}
 		}
 		if ( $sp_left ) {
 			print '<div role="alert" class="sp-installer-left" style="background:#fff4e5;border-left:5px solid #e07b00;margin:8px 16px;padding:10px 14px;font-size:15px">'
-				. _( 'Installation files are still on the server. They no longer run, but remove them:' ) . ' <code>rm -r ' . sp_h( implode( ' ', $sp_left ) ) . '</code></div>';
+				. ( $sp_left === array( 'control/includes/install-code.php' )
+					? _( 'The one-time install code is still on the server (the installer could not delete it because the folder is read-only). Remove it:' )
+					: _( 'Files from an earlier installation are still on the server. Remove them:' ) )
+				. ' <code>rm ' . sp_h( implode( ' ', $sp_left ) ) . '</code></div>';
 		}
 	}
 
 	// tell admins when database updates for this version have not been applied yet
 	// (the new admin pages and record boxes stay hidden or incomplete until they are).
-	if ( ! empty( $_SESSION['admin'] ) && ( ! isset( $page_title ) || $page_title !== 'Database Updates' ) ) {
+	if ( ! empty( $_SESSION['admin'] ) && ( ! isset( $page_title ) || ! in_array( $page_title, array( 'Database Updates', 'Upgrade' ), true ) ) ) {
 		if ( ! isset( $_SESSION['sp_dbu_pending'] ) || $_SESSION['sp_dbu_checked'] < time() - 600 ) {
 			require_once __DIR__ . '/../../tools/migrations.php';
 			$sp_dbu_conn = ( new Querier )->getConnection();
@@ -256,7 +269,7 @@ mb_internal_encoding('UTF-8');
 		if ( $_SESSION['sp_dbu_pending'] > 0 ) {
 			print '<div role="alert" style="background:#fff4e5;border-left:5px solid #e07b00;margin:8px 16px;padding:10px 14px;font-size:15px">'
 				. sprintf( _( '%d database update(s) for this version of SubjectsPlus have not been applied, so some features (Record Settings, Workflow, Off-campus Access) are missing or incomplete.' ), (int) $_SESSION['sp_dbu_pending'] )
-				. ' <a href="' . $CpanelPath . 'admin/database_updates.php"><strong>' . _( 'Apply them now' ) . '</strong></a></div>';
+				. ' <a href="' . $CpanelPath . 'admin/upgrade.php"><strong>' . _( 'Finish the upgrade now' ) . '</strong></a></div>';
 		}
 	}
 	?>

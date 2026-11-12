@@ -6,6 +6,107 @@ History up to the original 4.6.0 code base (July 2021) is in [docs/history/CHANG
 
 ## [Unreleased]
 
+## [4.7.1] - 2026-11-12
+
+Installer, records, administration and security improvements. Upgrading from 4.7.0 (or any 4.x): copy the new
+files over the old ones, sign in as an administrator and follow **Admin → Upgrade** (backup, then 6 database
+updates). Add `php tools/workflow-daily.php` to cron if it is not there yet: it now also runs the link checker.
+
+### Security
+- **High — reflected XSS on the public search page** (`subjects/search.php?searchterm=…`, also the staff search):
+  the search box echoed the term into its `value` attribute after `scrubData()`, which turns `&quot;` back into
+  `"`, so `x" autofocus onfocus="…` ran script. All search-box attributes are now escaped.
+- **High — reflected XSS in the TalkBack form** (all themes): the comment and email were echoed raw into the form
+  after a failed submission; a cross-site POST could run script. Values are escaped (and the comment is now put
+  inside the textarea).
+- **High — SQL injection in the REST API** `database/letter/…` parameter (needed a valid key): pasted between
+  quotes. Now quoted; the `ONLY_FULL_GROUP_BY` error in the same query (subjects list) is fixed too.
+- **Per-guide permissions enforced in every guide-editor helper** (`save_guide`, `save_tab`, `save_tab_order`,
+  `save_section`, `update_section_layout`, `section_data`, `guide_data`, `ajax_mod`, `metadata`): staff without
+  *admin* or *allguides* can only change guides they are an editor of (4.7.0 only checked the guide page itself).
+- Box type names posted to the editor are reduced to letters and digits before a class is loaded (could name a
+  path for the autoloader); guide and box ids are always integers; tab order ids are cast.
+- **Third-party scripts removed** from the SP-Lux theme (modernizr and js-offcanvas were loaded from another
+  library's web site) and Google's reCAPTCHA script is only loaded on TalkBack when reCAPTCHA is switched on.
+- `changeMe()` / `lastModded()` (change history) use prepared statements.
+- LibGuides exports are no longer served from `control/guides/lgimporter/` (`.htaccess` and Nginx rule).
+
+### Added
+- **Installer starts from the site root**: opening `https://your-site/` on a new installation goes straight to the
+  wizard. If no install code exists yet, the wizard **creates one** in `control/includes/install-code.php` and
+  says where to read it (no command line needed).
+- **Installer switches itself off for good** after a successful installation: it answers 404 and runs no code,
+  whether or not `control/installer/` is deleted; the "remove the installer" warning is gone.
+- **Vendor / Publisher** on every record (record form, with suggestions), in the public A–Z list (shown under each
+  database, *By vendor* list and dropdown, found by the A–Z search), the REST API (`vendor` field and
+  `…/database/vendor/NAME`), Excel / CSV import-export (`Vendor / Publisher`, KBART `publisher_name`) and the staff
+  search.
+- **Records → Find & Bulk Edit**: search title, alternate title, vendor, URL or ID; filter by vendor, status, format,
+  access, A–Z display and subject; change the ticked records at once (status through the workflow rules, vendor,
+  format, access restriction, show / hide in the A–Z list, add to a subject, delete for e-resource managers).
+- **Admin → Record Settings → User types**: add, rename, describe, order and delete user types (Staff, Machine,
+  Student …); choose which types appear in the public staff directory, the staff API and OAI (was type 1 only).
+- **Admin → Audit Log**: sign-ins (and failures), sign-outs, permission changes, user / record / guide / FAQ /
+  TalkBack / video changes, settings saved on any Admin page (field names only, never values), bulk edits, API
+  keys, backups and upgrades. Filters, CSV download, retention `$sp_audit_retention_days` (default 730 days).
+- **Admin → API Clients**: one key per application (only a hash is stored; the key is shown once), its own
+  rate limit and allowed services, enable / disable / delete, usage for the last 30 days.
+- **REST API**: keys accepted in the `X-API-Key` or `Authorization: Bearer` header (URLs end up in logs); rate
+  limits (`$api_rate_limit` per key, default 120/min; `$api_rate_limit_failed` per IP for wrong keys, default
+  20/min) with `X-RateLimit-*` headers and 429 + `Retry-After`; JSON errors with proper status codes (401, 403, 404,
+  405, 429, 503); CORS for the sites in `$api_cors_origins`; usage counts.
+- **Admin → Usage Statistics** (replaces the old page, which failed): any date range or 7 / 30 / 90 / 365 days;
+  guide views, tab, link and database clicks; daily chart; top guides, databases (with vendor), vendors, other
+  links and tabs; REST API requests; CSV downloads.
+- **Admin → System Health**: versions (with PHP security-support dates), database updates, size and time zone,
+  PHP settings and folders, web-server protection, installer state, leftover files, default salt, daily task and
+  link-checker heartbeats, email (with a test message), API and Content-Security-Policy settings, number of admins.
+- **Admin → Upgrade** (web upgrade wizard): what changed (from CHANGELOG.md), server check, **database backup
+  download** (gzip SQL, pure PHP, optional without statistics rows), apply the database updates and record the
+  version; the admin banner now links here.
+- **Scheduled link checker** (`tools/link-check.php`, also run by the daily task): checks the links of public
+  guides and A–Z records in batches about once a week, politely (one request per second per site, private
+  addresses never requested); **Guides → Guide Health → Broken links** lists links that failed twice in a row, per
+  guide or record, with *Check again* and *Ignore*.
+- **Stricter Content-Security-Policy** (`$sp_csp = "strict"`, or `"report-only"` to try it first): scripts, styles,
+  fonts, connections and plug-ins only from the site and `$sp_csp_allow` (Google Analytics / reCAPTCHA added
+  automatically when configured). Inline scripts are still allowed (SubjectsPlus 4 needs them). Tested with no
+  violations on the public pages and the main staff pages.
+- **Signed releases**: the release workflow adds a GitHub build-provenance attestation (Sigstore) for the zip,
+  tar.gz and SHA256SUMS.txt (`gh attestation verify …`) and a CycloneDX software bill of materials
+  (`build/sbom.php`).
+- **Static analysis**: PHPStan level 1 (`phpstan.neon.dist`) with a baseline of the problems already present, run
+  in CI so new code is checked; Dependabot for Composer, npm and GitHub Actions; PHP 8.5 in the lint matrices; a
+  second browser-test job (Nginx + PHP 8.4-FPM + MySQL 8.4, database created by the wizard).
+
+### Changed
+- **Accessibility of the public pages (WCAG 2.2 AA)**: skip link, visible keyboard focus, zoom no longer blocked
+  (SP-Lux), accessible names for every dropdown and the search box, labelled TalkBack fields, links that open a new
+  window say so, icon-only "more information" toggles are keyboard buttons, decorative icons hidden from screen
+  readers, footer / letter / button contrast fixed (SP-Lux turquoise darkened), reduced motion respected. The
+  default theme has **no axe-core violations** on the home, A–Z, guide, staff, FAQ, TalkBack and search pages.
+- The A–Z dropdowns use a script file instead of inline `onChange` handlers.
+- Usage statistics: known crawlers are not counted and visitor IP addresses are shortened before they are stored
+  (`$stats_skip_bots`, `$stats_anonymise_ip`).
+- Installer: when the wizard creates the database user, it also allows the address the database server actually
+  sees (Docker, port forwarding), so the new user can connect.
+- `$sp_version` is now set for every page (the installer lock and some pages had no version).
+
+### Fixed
+- Staff email that failed with a fatal error: "recommend delete" for records and FAQs, the guide link report, the
+  TalkBack FAQ suggestion (new `sp_send_mail()` helper, uses the SMTP user and password too).
+- TalkBack ignored the email address people typed (field name mismatch), so every comment was "Anonymous".
+- Record form: with the plain-text editor, *Internal notes* overwrote the description; title fields are escaped.
+- Deleting a box in the guide editor: PHP 8 `count()` TypeError and a wrong table alias.
+- Old usage-statistics class: a no-op `(int)` cast and an `ONLY_FULL_GROUP_BY` error.
+- LibGuides importer: a clear message instead of HTTP 500 when no export has been uploaded; `$libguides_xml_path`
+  and `$libguides_url` settings (links pointed at one university's LibGuides site).
+- Upstream e-mail templates and an "Ask a Librarian" link pointed at another university's servers.
+- Staff records list joined the `source` table without a condition (slow, and empty when `source` was empty).
+
+### Removed
+- Unused, broken classes `Databases\AzList*` and `AllHandler`.
+
 ## [4.7.0] - 2026-11-12
 
 A guided, safer installation. Existing sites upgrade as usual (INSTALL.md §7); no database update. Includes the 4.6.1 `.htaccess` fix.
@@ -163,7 +264,8 @@ tabs, Excel / CSV / KBART import & export with usage reports, box show/hide date
 analytics, review reminders, the editor accessibility check and public-interface translations. Those
 releases are folded into 4.6.0.
 
-[Unreleased]: https://github.com/abidfakhrealam/SubjectsPlus/compare/v4.7.0...HEAD
+[Unreleased]: https://github.com/abidfakhrealam/SubjectsPlus/compare/v4.7.1...HEAD
+[4.7.1]: https://github.com/abidfakhrealam/SubjectsPlus/releases/tag/v4.7.1
 [4.7.0]: https://github.com/abidfakhrealam/SubjectsPlus/releases/tag/v4.7.0
 [4.6.1]: https://github.com/abidfakhrealam/SubjectsPlus/releases/tag/v4.6.1
 [4.6.0]: https://github.com/abidfakhrealam/SubjectsPlus/releases/tag/v4.6.0

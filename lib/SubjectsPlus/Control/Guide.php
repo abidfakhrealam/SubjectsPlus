@@ -17,6 +17,12 @@ use SubjectsPlus\Control\Guide\SubjectBBCourse;
 class Guide
 {
 
+    /** Guide ids are integers; "" means "new guide" (4.7.1: ids were pasted into SQL between quotes). */
+    private static function idOrBlank($v) {
+        return ($v === "" || $v === null) ? "" : (int) $v;
+    }
+
+
     private $_subject_id;
     private $_subject;
     private $_shortform;
@@ -64,7 +70,7 @@ class Guide
             case "post":
                 // prepare record for insertion or update
                 // data stored in subject table
-                $this->_subject_id = $_POST["subject_id"];
+                $this->_subject_id = self::idOrBlank($_POST["subject_id"] ?? "");
                 $this->_subject = $_POST["subject"];
                 $this->_shortform = $_POST["shortform"];
                 $this->_description = $_POST["description"];
@@ -112,7 +118,7 @@ class Guide
             case "delete":
                 // kind of redundant, but just set up to delete appropriate tables?
                 // $this->_staffers needed to see if they have permission to delete this record
-                $this->_subject_id = $subject_id;
+                $this->_subject_id = self::idOrBlank($subject_id); // always an integer: it is used in SQL below
 
                 self::getAssociatedStaff();
 
@@ -121,7 +127,7 @@ class Guide
                 break;
             default:
 
-                $this->_subject_id = $subject_id;
+                $this->_subject_id = self::idOrBlank($subject_id); // always an integer: it is used in SQL below
 
                 /////////////
                 // Get subject table info

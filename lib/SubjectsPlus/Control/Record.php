@@ -29,6 +29,7 @@ class Record {
 	private $_eres_display;
 	private $_ctags;
   private $_record_status; /* added v 4.1 */
+	private $_vendor = null; /* added v 4.7.1: Vendor / Publisher (null = not posted, leave unchanged) */
 	private $_subject;
 	private $_rank;
 	private $_source;
@@ -63,6 +64,7 @@ class Record {
   			$this->_alternate_title = $_POST["alternate_title"];
   			$this->_description = $_POST["description"];
         $this->_internal_notes = $_POST["internal_notes"];
+        $this->_vendor = isset($_POST["vendor"]) && is_string($_POST["vendor"]) ? $_POST["vendor"] : null;
 
         // data stored in location table
         $this->_location_id = $_POST["location_id"]; // array
@@ -111,6 +113,7 @@ class Record {
         	$this->_alternate_title = $titleArray[0]["alternate_title"];
         	$this->_description = $titleArray[0]["description"];
           $this->_internal_notes = $titleArray[0]["internal_notes"];
+          $this->_vendor = RecordVendor::get($this->_record_id);
         }
 
         ///////////////////
@@ -162,6 +165,25 @@ class Record {
      }
   }
 
+    /** Stored values are HTML-cleaned (entities encoded): decode once, then escape for an attribute. */
+    private static function attr($v) {
+        return sp_h(html_entity_decode((string) $v, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+    }
+
+    /** Vendor / Publisher input (with the names already in use as suggestions). */
+    private function vendorField() {
+        if (!RecordVendor::ready()) {
+            return '';
+        }
+        $opts = '';
+        foreach (RecordVendor::allVendors() as $v) {
+            $opts .= '<option value="' . sp_h($v) . '">';
+        }
+        return '<label for="record_vendor">' . _("Vendor / Publisher") . '</label>
+  	<input type="text" name="vendor" id="record_vendor" class="pure-input-1" maxlength="255" list="record_vendor_list" value="' . self::attr($this->_vendor) . '" />
+  	<datalist id="record_vendor_list">' . $opts . '</datalist>';
+    }
+
     public function outputForm($wintype="") {
 
   	global $wysiwyg_desc;
@@ -189,13 +211,14 @@ class Record {
     </div>
     <div class=\"pluslet_body\">
         <label for=\"prefix\">" . _("Prefix") . "</label>
-      	<input type=\"text\" name=\"prefix\" id=\"prefix\" class=\"pure-input-1-4\" value=\"" . $this->_prefix . "\" />
+      	<input type=\"text\" name=\"prefix\" id=\"prefix\" class=\"pure-input-1-4\" value=\"" . self::attr($this->_prefix) . "\" />
 
         <label for=\"record_title\">" . _("Record Title") . "</label>
-        <input type=\"text\" name=\"title\" id=\"record_title\" class=\"pure-input-1 required_field\" value=\"" . $this->_title . "\" />
+        <input type=\"text\" name=\"title\" id=\"record_title\" class=\"pure-input-1 required_field\" value=\"" . self::attr($this->_title) . "\" />
 
   	<label for=\"alternate_record_title\">" . _("Alternate Title") . "</label>
-  	<input type=\"text\" name=\"alternate_title\" id=\"alternate_record_title\" class=\"pure-input-1\" value=\"" . $this->_alternate_title . "\" />
+  	<input type=\"text\" name=\"alternate_title\" id=\"alternate_record_title\" class=\"pure-input-1\" value=\"" . self::attr($this->_alternate_title) . "\" />
+" . $this->vendorField() . "
 
   	<label for=\"description\">" . _("Description") . "</label>
 
@@ -234,7 +257,8 @@ class Record {
        $oCKeditor->editor('internal_notes', $this->_internal_notes, $config);
       echo "<br />";
   } else {
-    echo "<textarea name=\"description\" id=\"description\" rows=\"4\" cols=\"70\">" . stripslashes((string) $this->_description) . "</textarea>";
+    // was a second "description" textarea, so internal notes were lost and the description overwritten
+    echo "<textarea name=\"internal_notes\" id=\"internal_notes\" rows=\"4\" cols=\"70\">" . sp_h(stripslashes((string) $this->_internal_notes)) . "</textarea>";
   }
 
 	echo "</div></div>"; // end pluslet_body, end pluslet
@@ -893,6 +917,9 @@ if (!$rInsertTitle) {
 
 $this->_record_id = $db->last_id();
 $this->_title_id = $this->_record_id;
+if ($this->_vendor !== null) {
+	RecordVendor::save($this->_record_id, $this->_vendor);
+}
 
     /////////////////////
     // insert into rank
@@ -947,6 +974,9 @@ public function updateRecord($notrack = 0) {
 	$qUpTitle = "UPDATE title SET title = " . $our_title . ", alternate_title = " . $our_alternate_title . ", description = " . $db->quote( scrubData( $this->_description, "richtext" ) ) . ", internal_notes = " . $db->quote( scrubData( $this->_internal_notes, "richtext" ) ) . ", pre = " . $our_prefix . " WHERE title_id = " . scrubData( $this->_title_id, "integer" );
 
 	$rUpTitle = $db->exec( $qUpTitle );
+	if ( $this->_vendor !== null ) {
+		RecordVendor::save( (int) $this->_title_id, $this->_vendor );
+	}
 
 	/////////////////////
 	// clear rank

@@ -9,6 +9,11 @@ global $shibboleth_logout;
 // Initialize the session.
 if ( session_status() !== PHP_SESSION_ACTIVE ) { session_start(); }
 
+if ( ! empty( $_SESSION['staff_id'] ) ) {
+	include_once( "includes/autoloader.php" );
+	\SubjectsPlus\Control\AuditLog::add( 'auth.logout', 'staff', (string) (int) $_SESSION['staff_id'], 'Signed out: ' . ( $_SESSION['email'] ?? '' ) );
+}
+
 // Unset all of the session variables.
 $_SESSION = array();
 
@@ -26,5 +31,6 @@ if ($use_shibboleth == TRUE) {
 } else {
 	header("Location:login.php");	
 }
+exit;
 
 ?> 

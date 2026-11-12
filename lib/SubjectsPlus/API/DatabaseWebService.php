@@ -84,6 +84,12 @@ class DatabaseWebService extends WebService implements InterfaceWebService
 
 					$lobjFinalParams['type'] = $lobjSplit;
 					break;
+				case 'vendor':
+					// Vendor / Publisher (4.7.1); several separated by commas
+					$lobjFinalParams['vendor'] = array_values(array_filter(array_map(function ($v) {
+						return \SubjectsPlus\Control\RecordVendor::clean(rawurldecode($v));
+					}, explode(',', (string) $lstrValue)), 'strlen'));
+					break;
 				case 'max':
 					$lstrValue = scrubData($lstrValue, 'integer');
 
@@ -105,9 +111,10 @@ class DatabaseWebService extends WebService implements InterfaceWebService
 	function generateQuery(Array $lobjParams)
 	{
 		$lstrQuery = 'SELECT distinct left(title,1) as initial, title, alternate_title, description, location, access_restrictions, title.title_id,
-					eres_display, display_note, pre, citation_guide, ctags, helpguide, 
+					eres_display, display_note, pre, citation_guide, ctags, helpguide, '
+					. (\SubjectsPlus\Control\RecordVendor::ready() ? 'title.vendor, ' : '') . '
 					IFNULL(
-                        (SELECT GROUP_CONCAT(TRIM(subject) SEPARATOR \';\')
+                        (SELECT GROUP_CONCAT(TRIM(subject) ORDER BY subject SEPARATOR \';\')
                          FROM `rank`,
                               subject,
                               source so
@@ -115,8 +122,7 @@ class DatabaseWebService extends WebService implements InterfaceWebService
                            AND `rank`.source_id = so.source_id                           
                            AND active = 1
                            AND (subject.type = \'Subject\' || subject.type = \'Placeholder\')
-                           AND title_id = title.title_id
-                         ORDER BY subject)
+                           AND title_id = title.title_id)
                     , "") as subjects
 					FROM title, restrictions, location, location_title, source, `rank`';
 
@@ -155,13 +161,14 @@ FROM `rank` r, location_title lt, location l, title t
     AND l.location_id = lt.location_id
     AND t.title_id = lt.title_id
     AND l.eres_display = 'Y'
-    AND l.record_status = 'Active'
+    AND l.record_status IN (" . (\SubjectsPlus\Control\RecordSettings::ready() ? \SubjectsPlus\Control\RecordSettings::publicStatusSql() : "'Active'") . ")
     AND r.dbbysub_active = 1)
 AND s.active = 1
 ORDER BY s.subject";
 								break;
 							default:
-								array_push($lobjCondition, "title LIKE '$lstrQualifier%'\n");
+								// was pasted between quotes (scrubData() does not escape quotes)
+								array_push($lobjCondition, "title LIKE " . self::sqlStr(addcslashes((string) $lstrQualifier, '%_\\') . '%') . "\n");
 								break;
 						}
 					}
@@ -194,12 +201,24 @@ ORDER BY s.subject";
 
 					array_push($lobjConditions, $lstrCombine);
 					break;
+				case 'vendor':
+					if (!\SubjectsPlus\Control\RecordVendor::ready() || !$lobjValues) {
+						array_push($lobjConditions, "1 = 0");
+						break;
+					}
+					$lobjCondition = array();
+					foreach ($lobjValues as $lstrVendor)
+					{
+						array_push($lobjCondition, "title.vendor = " . self::sqlStr($lstrVendor) . "\n");
+					}
+					array_push($lobjConditions, implode(' OR ', $lobjCondition));
+					break;
 				case 'subject_id':
 					$lobjCondition = array();
 
 					foreach ($lobjValues as $lintSubjectID)
 					{
-						array_push($lobjCondition, "subject_id = $lintSubjectID\n");
+						array_push($lobjCondition, "subject_id = " . (int) $lintSubjectID . "\n");
 					}
 
 					$lstrCombine = implode(' OR ', $lobjCondition);

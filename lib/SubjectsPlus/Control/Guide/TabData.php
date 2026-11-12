@@ -88,7 +88,7 @@ class TabData implements OutputInterface
 
             $tabs = $str['item'];
             foreach($tabs as $key => $value) {
-                $q = "UPDATE tab SET tab_index =" . $this->_db->quote(scrubData($key) ). " WHERE tab_id = " . $value;
+                $q = "UPDATE tab SET tab_index =" . $this->_db->quote(scrubData($key) ). " WHERE tab_id = " . (int) $value; // was pasted into SQL
 	            $this->_db->exec($q);
             }
         }

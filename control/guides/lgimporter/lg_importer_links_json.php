@@ -23,6 +23,10 @@ $db = new Querier;
 $log = new Logger;
 $cm = new CatalogMigrator;
 
+if ( ( $sp_lg_missing = LGImport::missingMessage() ) !== '' ) { // 4.7.1: friendly answer instead of HTTP 500
+	echo json_encode( array( 'error' => $sp_lg_missing ) );
+	exit;
+}
 $libguides_importer = new LGImport('libguides.xml',$log,$db,$cm);
 
 

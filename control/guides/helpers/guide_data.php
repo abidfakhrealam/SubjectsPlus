@@ -49,6 +49,24 @@ if ($is_sidebar !== false) {
 
 
 /////////////////////////
+// Per-guide permissions (4.7.1): the guide being edited, and every guide the box is placed on
+/////////////////////////
+use SubjectsPlus\Control\Guide\GuideAccess;
+if ($our_subject_id !== "") {
+    GuideAccess::requireGuide((int) $our_subject_id);
+}
+switch ($_POST["flag"] ?? "") {
+    case "update":
+    case "settings":
+        GuideAccess::requireAll(GuideAccess::guidesForPluslet((int) ($_POST["update_id"] ?? 0)));
+        break;
+    case "delete":
+        GuideAccess::requireGuide((int) ($_POST["subject_id"] ?? 0));
+        GuideAccess::requireAll(GuideAccess::guidesForPluslet((int) ($_POST["delete_id"] ?? 0)));
+        break;
+}
+
+/////////////////////////
 // Route Request
 /////////////////////////
 
@@ -71,7 +89,7 @@ switch ($_POST["flag"]) {
             $our_id = "";
         }
 
-        $obj = "SubjectsPlus\Control\Pluslet_" . $our_type;
+        $obj = "SubjectsPlus\Control\Pluslet_" . preg_replace("/[^A-Za-z0-9]/", "", (string) $our_type); // a class name, never a path
         //global $obj;
         $record = new $obj($our_id, "", $our_subject_id, $isclone);
         print $record->output("edit", "admin");
@@ -80,7 +98,7 @@ switch ($_POST["flag"]) {
         break;
     case "modify":
 
-        $obj = "SubjectsPlus\Control\Pluslet_" . $_POST["type"];
+        $obj = "SubjectsPlus\Control\Pluslet_" . preg_replace("/[^A-Za-z0-9]/", "", (string) ($_POST["type"] ?? ""));
         //global $obj;
         $record = new $obj($_POST["edit"], "", $our_subject_id);
         print $record->output("edit", "admin");
@@ -95,7 +113,7 @@ switch ($_POST["flag"]) {
 
 
         if ($this_id) {
-            $obj = "SubjectsPlus\Control\Pluslet_" . $_POST["item_type"];
+            $obj = "SubjectsPlus\Control\Pluslet_" . preg_replace("/[^A-Za-z0-9]/", "", (string) ($_POST["item_type"] ?? ""));
             //print "obj = $obj<p>";
             //global $obj;
             $record = new $obj($this_id, "", $our_subject_id);
@@ -113,7 +131,7 @@ switch ($_POST["flag"]) {
 
         $this_id = modifyDB($_POST["update_id"], "update");
 
-        $obj = "SubjectsPlus\Control\Pluslet_" . $_POST["item_type"];
+        $obj = "SubjectsPlus\Control\Pluslet_" . preg_replace("/[^A-Za-z0-9]/", "", (string) ($_POST["item_type"] ?? ""));
         //global $obj;
         $record = new $obj($_POST["update_id"], "", $our_subject_id);
         print $record->output("view", "admin");
@@ -123,7 +141,7 @@ switch ($_POST["flag"]) {
     case "settings":
     	$this_id = modifyDB($_POST["update_id"], "settings");
 
-    	$obj = "SubjectsPlus\Control\Pluslet_" . $_POST["item_type"];
+    	$obj = "SubjectsPlus\Control\Pluslet_" . preg_replace("/[^A-Za-z0-9]/", "", (string) ($_POST["item_type"] ?? ""));
     	//global $obj;
     	$record = new $obj($_POST["update_id"], "", $our_subject_id);
     	print $record->output("view", "admin");
@@ -140,7 +158,7 @@ switch ($_POST["flag"]) {
         $r = $db->exec($q);
 
     	//added by dgonzalez because if pluslet is special, no deletetion so need to manually delete relationship
-    	if( count($r) == 0 )
+    	if( $r === 0 ) // exec() returns a row count (count() of an int is a TypeError on PHP 8)
     	{
     		$q2 = "DELETE ps FROM `pluslet_section` ps
     				INNER JOIN section sec
@@ -149,9 +167,9 @@ switch ($_POST["flag"]) {
     				ON sec.tab_id = t.tab_id
     				INNER JOIN subject s
     				ON t.subject_id = s.subject_id
-    				WHERE pt.pluslet_id = '$delete_id' AND s.subject_id = '$subject_id'";
+    				WHERE ps.pluslet_id = " . (int) $delete_id . " AND s.subject_id = " . (int) $subject_id;
 
-    		$r2 = $db->query($q2);
+    		$r2 = $db->exec($q2);
     	}
 
     	//removed by david because new db referential integrity does this automatically

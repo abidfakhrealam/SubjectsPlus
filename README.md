@@ -18,9 +18,13 @@ Version **4.7** is the maintained, security-hardened release of the 4.x line, wi
   database clicks) with Excel export
 - Review reminders (default every 6 months) and an accessibility check (alt text, link text, headings,
   tables, colour contrast) in the editor and across all guides
+- Scheduled link checker for guides and A–Z records (broken links listed per guide in *Guide Health*)
+- Per-guide editors: only admins, staff with *allguides* and a guide's own editors can change it
 
 **E-resources (A–Z list)**
-- Records with formats, access restrictions, statuses and custom fields managed by administrators
+- Records with formats, access restrictions, statuses, custom fields and a **Vendor / Publisher** (browse and
+  filter the A–Z list by vendor) managed by administrators
+- **Find & Bulk Edit**: search records and change status, vendor, format, access, A–Z display or subject at once
 - Off-campus access through any number of providers — EZproxy, OpenAthens, RemoteXs/RemoteLog,
   app-based services or a custom link template — chosen per domain
 - Optional workflow: approval, e-resource lifecycle (trial → active → renewal → cancelled) and patron
@@ -31,17 +35,22 @@ Version **4.7** is the maintained, security-hardened release of the 4.x line, wi
 - bcrypt passwords (legacy MD5 hashes upgraded at next sign-in), login throttling
 - Optional single sign-on: OpenID Connect (Microsoft Entra ID, Google Workspace), SAML / Shibboleth, SIP2
   (Koha or any ILS); only existing, active staff accounts can sign in
-- Role-based permissions (admin, records, e-resource manager, approver, FAQ, TalkBack, videos …)
+- Role-based permissions (admin, records, e-resource manager, approver, FAQ, TalkBack, videos …) and
+  administrator-managed user types
+- **Audit log** of sign-ins and changes; **System Health** page; **web upgrade wizard** with database backup
+- Optional strict Content-Security-Policy; signed release archives (build-provenance attestation + SBOM)
 
 **Public site**
-- Responsive themes, configurable branding (logo, colours), optional public-interface translations
-  (a Hindi translation is included as an example), REST API (JSON / XML)
+- Responsive themes checked against WCAG 2.2 AA (axe-core), configurable branding (logo, colours), optional
+  public-interface translations (a Hindi translation is included as an example)
+- REST API (JSON / XML) with per-application keys, rate limits and usage statistics; usage statistics for guides,
+  databases and vendors
 
 ## Requirements
 
 | Component | Supported |
 |---|---|
-| PHP | **8.1, 8.2, 8.3, 8.4** with `pdo_mysql`, `mbstring`, `openssl`, `curl`, `gd`, `xml`/`simplexml`, `json` (`intl` and `gettext` optional) |
+| PHP | **8.1, 8.2, 8.3, 8.4** (8.5: syntax-checked in CI) with `pdo_mysql`, `mbstring`, `openssl`, `curl`, `gd`, `xml`/`simplexml`, `json` (`intl` and `gettext` optional) |
 | Database | **MariaDB 10.11 / 11.x** or **MySQL 8.0 / 8.4**, strict SQL modes supported (`ONLY_FULL_GROUP_BY`, `STRICT_TRANS_TABLES`, `NO_ZERO_DATE`, `NO_ZERO_IN_DATE`) |
 | Web server | **Apache 2.4** (`mod_rewrite`, `mod_headers`; `.htaccess` files included) or **Nginx** (hardened server block in [`docs/server/nginx-subjectsplus.conf`](docs/server/nginx-subjectsplus.conf)) with PHP-FPM |
 | Browser (staff) | Current Chrome, Edge, Firefox or Safari |
@@ -52,20 +61,20 @@ Composer is not needed on the server: the PHP libraries are included in `lib/ven
 
 ```sh
 # 1. code
-unzip SubjectsPlus-4.7.0-stable.zip -d /var/www && mv /var/www/SubjectsPlus-4.7.0-stable /var/www/subjectsplus
+unzip SubjectsPlus-4.7.1-stable.zip -d /var/www && mv /var/www/SubjectsPlus-4.7.1-stable /var/www/subjectsplus
 cd /var/www/subjectsplus
 chown -R www-data:www-data assets/cache assets/users assets/records assets/images/guide_thumbs
 
 # 2. web server: point Apache or Nginx at /var/www/subjectsplus (INSTALL.md §3–4)
-
-# 3. one-time install code
-sudo -u www-data php tools/install-code.php
 ```
 
-4. Open `https://your-server/control/` and follow the **installer wizard**: install code → requirements check →
-   database (use yours, or let the wizard create the database and its user) → site address and administrator
-   password → email test, off-campus access, sample content → install.
-5. Remove `control/installer/` and add the daily task `php tools/workflow-daily.php`.
+3. Open `https://your-server/` and follow the **installer wizard**: install code (the wizard tells you which file
+   on the server holds it) → requirements check → database (use yours, or let the wizard create the database and
+   its user) → site address and administrator password → email test, off-campus access, sample content → install.
+   The wizard then switches itself off.
+4. Add the daily task `php tools/workflow-daily.php` and check *Admin → System Health*.
+
+Upgrading from 4.7.0: copy the new files over the old ones and open *Admin → Upgrade*.
 
 Full instructions, upgrades and hardening: **[INSTALL.md](INSTALL.md)**.
 
@@ -73,9 +82,9 @@ Full instructions, upgrades and hardening: **[INSTALL.md](INSTALL.md)**.
 
 - [INSTALL.md](INSTALL.md) — installation, Apache / Nginx, PHP settings, cron, upgrading, single sign-on,
   off-campus access, workflow, import / export, languages, branding
-- [CHANGELOG.md](CHANGELOG.md) — what changed in 4.6.0 and 4.7.0
+- [CHANGELOG.md](CHANGELOG.md) — what changed in 4.6.0, 4.7.0 and 4.7.1
 - [SECURITY.md](SECURITY.md) — reporting vulnerabilities and the hardening checklist
-- [docs/AUDIT-REPORT.md](docs/AUDIT-REPORT.md) — security, bug and compatibility audit (4.6.0)
+- [docs/AUDIT-REPORT.md](docs/AUDIT-REPORT.md) — security, bug and compatibility audit (4.6.0, with the 4.7.0 and 4.7.1 re-tests)
 - [docs/RELEASING.md](docs/RELEASING.md) — publishing to GitHub and building release archives
 - [docs/history/CHANGELOG-upstream.md](docs/history/CHANGELOG-upstream.md) — history of SubjectsPlus up to 4.6
 
@@ -85,8 +94,12 @@ Full instructions, upgrades and hardening: **[INSTALL.md](INSTALL.md)**.
 npm ci && npx playwright install chromium
 npm run build                      # verify the CSS/JS bundles compile
 SP_BASE=http://localhost:8080 SP_ADMIN_EMAIL=admin@library.edu SP_ADMIN_PASS=… npm run test:e2e
+php phpstan.phar analyse           # static analysis (level 1 + baseline; CI runs it on every push)
 bash build/package-release.sh      # dist/SubjectsPlus-<version>-stable.{zip,tar.gz} + SHA256SUMS.txt
 ```
+
+Verify a downloaded release: `sha256sum -c SHA256SUMS.txt` and
+`gh attestation verify SubjectsPlus-4.7.1-stable.zip --repo abidfakhrealam/SubjectsPlus`.
 
 ## License
 

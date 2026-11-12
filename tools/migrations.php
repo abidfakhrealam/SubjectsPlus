@@ -226,6 +226,121 @@ function sp_migrations() {
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8",
 			),
 		),
+
+		'2026_11_13_record_vendor' => array(
+			'Records: Vendor / Publisher field',
+			array(
+				"ALTER TABLE `title` ADD COLUMN `vendor` VARCHAR(255) NULL DEFAULT NULL",
+				"ALTER TABLE `title` ADD INDEX `idx_title_vendor` (`vendor`(191))",
+			),
+		),
+
+		'2026_11_13_user_type_settings' => array(
+			'User types managed in Record Settings: description, order, shown in the public staff directory',
+			array(
+				"ALTER TABLE `user_type` ADD COLUMN `description` VARCHAR(255) NOT NULL DEFAULT '', ADD COLUMN `public_directory` TINYINT(1) NOT NULL DEFAULT 0, ADD COLUMN `sort_order` INT NOT NULL DEFAULT 0",
+				// SubjectsPlus always listed only user type 1 (Staff) in the public directory
+				"UPDATE `user_type` SET public_directory = 1 WHERE user_type_id = 1",
+				"UPDATE `user_type` SET sort_order = user_type_id * 10",
+			),
+		),
+
+		'2026_11_13_audit_log' => array(
+			'Admin audit log (who changed what, when)',
+			array(
+				"CREATE TABLE IF NOT EXISTS `audit_log` (
+					`audit_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+					`created_at` DATETIME NOT NULL,
+					`staff_id` INT NULL DEFAULT NULL,
+					`staff_email` VARCHAR(255) NOT NULL DEFAULT '',
+					`ip` VARCHAR(45) NOT NULL DEFAULT '',
+					`action` VARCHAR(60) NOT NULL,
+					`object_type` VARCHAR(40) NOT NULL DEFAULT '',
+					`object_id` VARCHAR(64) NOT NULL DEFAULT '',
+					`summary` VARCHAR(500) NOT NULL DEFAULT '',
+					`details` TEXT NULL,
+					PRIMARY KEY (`audit_id`),
+					KEY `idx_audit_time` (`created_at`),
+					KEY `idx_audit_staff` (`staff_id`, `created_at`),
+					KEY `idx_audit_object` (`object_type`, `object_id`),
+					KEY `idx_audit_action` (`action`, `created_at`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+			),
+		),
+
+		'2026_11_13_api_clients' => array(
+			'REST API: per-client keys, rate limits and usage counts',
+			array(
+				"CREATE TABLE IF NOT EXISTS `api_client` (
+					`client_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+					`name` VARCHAR(150) NOT NULL,
+					`key_prefix` VARCHAR(12) NOT NULL,
+					`key_hash` CHAR(64) NOT NULL,
+					`rate_limit` INT NOT NULL DEFAULT 0,
+					`services` VARCHAR(255) NOT NULL DEFAULT '',
+					`active` TINYINT(1) NOT NULL DEFAULT 1,
+					`created_by` INT NULL DEFAULT NULL,
+					`created_at` DATETIME NOT NULL,
+					`last_used_at` DATETIME NULL DEFAULT NULL,
+					PRIMARY KEY (`client_id`),
+					UNIQUE KEY `uq_api_key_hash` (`key_hash`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+				"CREATE TABLE IF NOT EXISTS `rate_limit` (
+					`bucket` VARCHAR(120) NOT NULL,
+					`window_start` INT UNSIGNED NOT NULL,
+					`hits` INT UNSIGNED NOT NULL DEFAULT 0,
+					PRIMARY KEY (`bucket`, `window_start`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+				"CREATE TABLE IF NOT EXISTS `api_usage` (
+					`day` DATE NOT NULL,
+					`client_id` INT UNSIGNED NOT NULL DEFAULT 0,
+					`service` VARCHAR(30) NOT NULL,
+					`status` SMALLINT NOT NULL DEFAULT 200,
+					`hits` INT UNSIGNED NOT NULL DEFAULT 0,
+					PRIMARY KEY (`day`, `client_id`, `service`, `status`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+			),
+		),
+
+		'2026_11_13_link_check' => array(
+			'Scheduled link checker results (guides and A-Z records)',
+			array(
+				"CREATE TABLE IF NOT EXISTS `link_check` (
+					`url_hash` CHAR(40) NOT NULL,
+					`url` TEXT NOT NULL,
+					`status` SMALLINT NOT NULL DEFAULT 0,
+					`result` VARCHAR(20) NOT NULL DEFAULT 'pending',
+					`message` VARCHAR(255) NOT NULL DEFAULT '',
+					`final_url` TEXT NULL,
+					`fail_count` INT NOT NULL DEFAULT 0,
+					`first_failed_at` DATETIME NULL DEFAULT NULL,
+					`checked_at` DATETIME NULL DEFAULT NULL,
+					`ignored` TINYINT(1) NOT NULL DEFAULT 0,
+					PRIMARY KEY (`url_hash`),
+					KEY `idx_lc_result` (`result`, `checked_at`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+				"CREATE TABLE IF NOT EXISTS `link_check_source` (
+					`url_hash` CHAR(40) NOT NULL,
+					`source_type` VARCHAR(10) NOT NULL,
+					`source_id` BIGINT NOT NULL,
+					`detail` VARCHAR(255) NOT NULL DEFAULT '',
+					PRIMARY KEY (`url_hash`, `source_type`, `source_id`),
+					KEY `idx_lcs_source` (`source_type`, `source_id`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+			),
+		),
+
+		'2026_11_13_system_state' => array(
+			'Key/value store for scheduled-task heartbeats and upgrade state',
+			array(
+				"CREATE TABLE IF NOT EXISTS `sp_state` (
+					`name` VARCHAR(100) NOT NULL,
+					`value` TEXT NULL,
+					`updated_at` DATETIME NOT NULL,
+					PRIMARY KEY (`name`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+			),
+		),
 	);
 	return $migrations;
 }

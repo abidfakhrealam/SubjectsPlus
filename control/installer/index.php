@@ -15,6 +15,15 @@
 
 // ---------------------------------------------------------------- bootstrap
 chdir( __DIR__ );
+
+// Once SubjectsPlus is installed the wizard is switched off for good: nothing below runs (no session,
+// no database code), whether or not this folder is deleted. Only the last page of the run that just
+// finished is still shown. To install again you would have to delete both control/includes/config.php
+// and control/includes/.installed on the server.
+require_once dirname( __DIR__, 2 ) . '/lib/SubjectsPlus/Control/Install/Environment.php';
+if ( \SubjectsPlus\Control\Install\Environment::isInstalled() && empty( $_COOKIE['SPINSTALL'] ) ) {
+	\SubjectsPlus\Control\Install\Environment::sendDisabled();
+}
 require_once dirname( __DIR__ ) . '/includes/functions.php'; // autoloader, security helpers, cookie settings
 require_once dirname( __DIR__, 2 ) . '/tools/migrations.php';
 
@@ -43,9 +52,7 @@ $step = isset( $_GET['step'] ) ? preg_replace( '/[^a-z]/', '', (string) $_GET['s
 
 // Installed: nothing to do here — except the final page of the run that just finished.
 if ( Environment::isInstalled() && ! ( $step === 'done' && ! empty( $S['finished'] ) ) && ! ( $step === 'config' && ! empty( $S['config_src'] ) ) ) {
-	http_response_code( 404 );
-	echo '<!doctype html><meta charset="utf-8"><title>Not found</title><p>SubjectsPlus is already installed.</p>';
-	exit;
+	Environment::sendDisabled();
 }
 
 if ( empty( $S['csrf'] ) ) {
@@ -92,6 +99,12 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && ! spi_post_ok() ) {
 }
 
 // ---------------------------------------------------------------- 1. install code
+// No code yet: create one in a file that only someone with access to the server's files can read
+// (it is a PHP file that returns the code, so requesting it through the web shows nothing).
+$codeCreated = false;
+if ( $step === 'code' && Environment::expectedCode() === '' && is_writable( dirname( Environment::codePath() ) ) ) {
+	$codeCreated = Environment::writeCode( Environment::newCode() );
+}
 if ( $step === 'code' && isset( $_POST['code'] ) ) {
 	if ( Environment::codeMatches( (string) $_POST['code'] ) ) {
 		session_regenerate_id( true );
@@ -455,6 +468,13 @@ foreach ( $order as $k => $label ) {
 <button type="submit">Continue</button>
 </form>
 <h2>Where do I get the code?</h2>
+<?php if ( is_file( Environment::codePath() ) ) : ?>
+<div class="msg ok"><?php echo $codeCreated ? 'A new install code has been created.' : 'An install code is waiting on the server.'; ?>
+Open this file on the server (file manager, FTP, editor or <code>cat</code>) and copy the code between the quotes:<br>
+<code><?php echo sp_h( Environment::codePath() ); ?></code></div>
+<p class="help">Only someone who can read the server's files can see the code; opening the file in a browser shows nothing.</p>
+<h2>Other ways</h2>
+<?php endif; ?>
 <p>On the server, in the SubjectsPlus folder, run as the web-server user:</p>
 <pre>sudo -u www-data php tools/install-code.php</pre>
 <p class="help">Windows / WampServer: <code>C:\wamp64\bin\php\php8.x\php.exe tools\install-code.php</code>. No shell access? Create the file
@@ -638,7 +658,7 @@ k.addEventListener('change',function(){if(d[k.value]&&(!t.value||/library\.edu|^
 <a class="btn secondary" href="<?php echo sp_h( ( $r['base_url'] ?? '../../' ) . 'subjects/' ); ?>">View the public site</a>
 <h2>Next steps</h2>
 <ol>
-<li>Remove the installer: <code>rm -r control/installer</code> (it no longer runs, but less code is less risk).</li>
+<li>The installer is now <strong>switched off permanently</strong>: it answers “not found” and runs no code, so you do not need to delete it.</li>
 <?php if ( is_file( Environment::codePath() ) ) : ?><li><strong>Delete the install code</strong> (the folder was read-only, so the installer could not): <code>rm control/includes/install-code.php</code></li><?php endif; ?>
 <li>Make <code>control/includes/</code> read-only: <code>chown -R root:root control/includes &amp;&amp; chown root:www-data control/includes/config.php &amp;&amp; chmod 640 control/includes/config.php</code></li>
 <li>Add the daily task: <code>15 6 * * * www-data php <?php echo sp_h( Environment::root() ); ?>/tools/workflow-daily.php</code></li>

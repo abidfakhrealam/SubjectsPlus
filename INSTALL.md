@@ -29,15 +29,15 @@ Composer is not needed on the server — PHP libraries are shipped in `lib/vendo
 
 ## 2. New installation
 
-Installation runs in the browser through the **installer wizard** (`/control/installer/`). It checks the server,
-can create the database for you, lets you choose the administrator password, and switches itself off when it
-has finished.
+Installation runs in the browser through the **installer wizard**: on a new site, opening the site address
+(`https://library.edu/`, `/control/` or `/subjects/`) starts it. It checks the server, can create the database
+for you, lets you choose the administrator password, and switches itself off for good when it has finished.
 
 1. **Files** — unpack the release (verify it first with `sha256sum -c SHA256SUMS.txt`):
 
    ```sh
-   unzip SubjectsPlus-4.7.0-stable.zip -d /var/www
-   mv /var/www/SubjectsPlus-4.7.0-stable /var/www/subjectsplus
+   unzip SubjectsPlus-4.7.1-stable.zip -d /var/www
+   mv /var/www/SubjectsPlus-4.7.1-stable /var/www/subjectsplus
    cd /var/www/subjectsplus
    chown -R root:root .
    chown -R www-data:www-data assets/cache assets/users assets/records assets/images/guide_thumbs
@@ -49,19 +49,19 @@ has finished.
 
 2. **Web server** — configure Apache ([§3](#3-apache-24)) or Nginx ([§4](#4-nginx)).
 
-3. **Install code** — on the server, in the SubjectsPlus folder:
+3. **Wizard** — open `https://library.edu/` (you are sent to `/control/installer/`).
 
-   ```sh
-   sudo -u www-data php tools/install-code.php      # prints e.g. K7QM-2HXP-9WRT-4CNA
-   ```
+4. **Install code** — the first page asks for a one-time code, so a stranger who finds the site before you
+   cannot point it at their own database. Only someone who can read the server's files can get it:
+   - if `control/includes/` is writable, the wizard **creates the code itself** in
+     `control/includes/install-code.php` and shows that path: open the file on the server (file manager, FTP,
+     editor, `cat`) and copy the code between the quotes (the file shows nothing in a browser);
+   - or run, in the SubjectsPlus folder, `sudo -u www-data php tools/install-code.php` (prints e.g.
+     `K7QM-2HXP-9WRT-4CNA`; Windows / WampServer: `C:\wamp64\bin\php\php8.x\php.exe tools\install-code.php`);
+   - or create `control/includes/install-code.php` containing `<?php return 'a-phrase-of-at-least-12-characters';`;
+   - containers: set the `SP_INSTALL_CODE` environment variable.
 
-   Only someone who can run this (or write files on the server) can install the site, so a stranger who
-   finds the site before you cannot point it at their own database. Without shell access, create
-   `control/includes/install-code.php` containing `<?php return 'a-phrase-of-at-least-12-characters';`
-   (Windows / WampServer: `C:\wamp64\bin\php\php8.x\php.exe tools\install-code.php`; containers: set
-   the `SP_INSTALL_CODE` environment variable). The code is deleted when the installation finishes.
-
-4. **Wizard** — open `https://library.edu/control/` (you are sent to `/control/installer/`) and follow the steps:
+   The code is deleted when the installation finishes. Then follow the steps:
 
    | Step | What happens |
    |---|---|
@@ -70,7 +70,7 @@ has finished.
    | Database | Either use a database and user you created, or tick **Create the database and user for me** and give a database administrator account (used once, never stored): the wizard creates the `utf8mb4` database, a user with rights on that database only, and a strong generated password. *Test connection* checks the account first |
    | Site & administrator | Site address (detected, also behind a reverse proxy via `X-Forwarded-Proto`/`X-Forwarded-Host`; editable), **Always use HTTPS**, site and library name, and the administrator's name, email and **password of your choice** (12+ characters, strength meter) |
    | Options | SMTP server with a **Send a test message** button, off-campus access (EZproxy / OpenAthens / other link template), and **sample content** |
-   | Install | Creates the tables, applies all database updates, writes `config.php` (or offers it for download), deletes the install code and locks the installer |
+   | Install | Creates the tables, applies all database updates, writes `config.php` (or offers it for download), deletes the install code and switches the installer off (`control/includes/.installed`) |
 
    To create the database by hand instead:
 
@@ -85,7 +85,9 @@ has finished.
    `CREATE USER 'spsetup'@'localhost' IDENTIFIED BY '…'; GRANT ALL ON *.* TO 'spsetup'@'localhost' WITH GRANT OPTION;`
 
 5. **After installing**
-   - remove the installer: `rm -r control/installer` (it already refuses to run; admins see a reminder until it is gone);
+   - nothing to remove: the installer answers 404 and runs no code from now on (deleting `control/installer/`
+     is optional). To reinstall you would have to delete both `control/includes/config.php` and
+     `control/includes/.installed` on the server;
    - keep `control/includes/` read-only: `chown -R root:root control/includes && chown root:www-data control/includes/config.php && chmod 640 control/includes/config.php`;
    - add the [daily task](#6-daily-task-cron);
    - add staff in *Admin → Users*, the domains for your off-campus access provider, and single sign-on if you use it;
@@ -161,8 +163,10 @@ SubjectsPlus itself hides PHP messages from visitors unless `$sp_debug = TRUE;` 
 
 ## 6. Daily task (cron)
 
-`tools/workflow-daily.php` applies the workflow date rules (trial ends, renewals, reminders) and sends the
-weekly guide-review reminders. Run it once a day as the web-server user:
+`tools/workflow-daily.php` applies the workflow date rules (trial ends, renewals, reminders), sends the
+weekly guide-review reminders, checks a batch of links in public guides and records (see §13), removes old
+audit-log entries and records a heartbeat shown in *Admin → System Health*. Run it once a day as the
+web-server user:
 
 ```cron
 # /etc/cron.d/subjectsplus
@@ -173,9 +177,25 @@ Windows: Task Scheduler → daily → `C:\php\php.exe C:\inetpub\subjectsplus\to
 Try a date: `php tools/workflow-daily.php --date=2027-01-01`. Emails use the SMTP settings in `config.php`
 (`$email_host`, `$email_port`, `$email_smtp_auth`, `$email_username`, `$email_password`).
 
+The link checker can also run on its own, e.g. at night: `php tools/link-check.php --batch=1000 -v`
+(settings: `$link_check_batch` = links per run, default 300; `$link_check_interval_days`, default 7;
+`$link_check_timeout`, default 10 seconds).
+
 The scripts in `tools/` refuse to run from a browser.
 
 ## 7. Upgrading an existing 4.x site
+
+**From 4.7.0 or later** (the short way):
+
+1. Copy the files of the new release over the old ones (keep `control/includes/config.php`,
+   `control/includes/.installed` and the `assets/users`, `assets/records`, `assets/images/guide_thumbs` folders).
+2. Sign in as an administrator and open **Admin → Upgrade** (a notice on every admin page links to it while
+   database updates are waiting). It shows what is new, checks the server, lets you **download a database
+   backup** (compressed SQL; restore with `gunzip < file.sql.gz | mysql -u USER -p DATABASE`), applies the
+   database updates and records the new version.
+3. Check *Admin → System Health* and add the [daily task](#6-daily-task-cron) if it is not there yet.
+
+**From any older 4.x** (or if you prefer a new folder):
 
 1. **Back up** the database (`mysqldump --single-transaction subjectsplus > sp-backup.sql`) and the whole folder.
 2. Unpack the new release into a **new folder** (do not unpack over the old one).
@@ -198,8 +218,8 @@ The scripts in `tools/` refuse to run from a browser.
    If `$api_key` is still the old shared default (`a5h&vv5$#45`), replace it with a random value.
 5. Empty `assets/cache/` (old JavaScript/CSS bundles), make the writable folders writable (§2) and delete
    `control/installer/` (an upgraded site never needs it).
-6. Apply the database updates — **Admin → Database Updates** in the browser (a notice appears on every admin
-   page while any are pending), or on the command line:
+6. Apply the database updates — **Admin → Upgrade** (or *Admin → Database Updates*) in the browser (a notice
+   appears on every admin page while any are pending), or on the command line:
 
    ```sh
    php tools/migrate.php            # apply pending updates
@@ -213,6 +233,9 @@ The scripts in `tools/` refuse to run from a browser.
 Staff keep their passwords: old MD5 hashes still work and are converted to bcrypt at the next sign-in.
 
 ## 8. Checks after installing or upgrading
+
+*Admin → System Health* runs most of these checks for you (versions, database updates, folders, web-server
+protection, daily task, email test, security settings).
 
 - [ ] Sign in as an existing staff member; sign out.
 - [ ] Open a guide in the editor: drag a box in, type in CKEditor, *Save changes*, reload.
@@ -312,6 +335,17 @@ money, link, file — required / public). Values in use are retired rather than 
 records are stored in `assets/records/` (closed to browsers) and downloaded through
 `control/records/field_file.php` — staff only, unless the field is public **and** the record is in a public status.
 
+*User types* (same page): Staff, Machine, Student and any you add. Each user account has one (*Admin → Users*);
+types marked *Public directory* are listed on the public staff pages, in the staff API and OAI. "Staff" is built
+in; a type cannot be deleted while users have it.
+
+**Vendor / Publisher**: a field on every record, shown on the public A–Z list (with a *By vendor* list and
+dropdown), in the API and in Excel / CSV import-export (column `Vendor / Publisher`; KBART `publisher_name`).
+
+**Records → Find & Bulk Edit**: search by title, alternate title, vendor, URL or record ID, filter, tick records
+and change them together — status (following the workflow permissions), vendor, format, access restriction,
+A–Z display, add to a subject, delete (e-resource managers).
+
 *Admin → Workflow*: presets (*Approval*, *E-resource lifecycle*, *Request & acquisition*), transitions (buttons
 on the record page, per role: any records editor, e-resource manager, approver, admin), date rules (e.g.
 "60 days before subscription end → Renewal due") run by the [daily task](#6-daily-task-cron). Give reviewers
@@ -332,7 +366,10 @@ needs the e-resource manager or admin permission. Raise `upload_max_filesize` / 
 - **Show/hide dates** per box (box ⚙ → *Show on the public page: From / Until*).
 - **Templates**: guide settings → *Template*; *Start from a template, or copy an existing guide* lists them first.
 - **Analytics** and **Check** (accessibility + *Mark as reviewed today*) in the editor; *Guides → Guide Health*
-  lists review state and accessibility problems for all guides. Review interval: `$sp_guide_review_months`
+  lists review state, accessibility problems and **broken links** (from the scheduled link checker, §6) for all
+  guides — editors see their own guides, admins everything; *Check again* / *Ignore* per link.
+- **Who can edit a guide**: administrators, staff with the *allguides* permission, and the guide's editors
+  (guide settings → staff). Everyone else is refused, in the editor and in every save request. Review interval: `$sp_guide_review_months`
   (default 6, 0 = off); `$sp_guide_show_reviewed` shows "Last reviewed" on public guides.
 
 ## 14. Public interface languages
@@ -357,16 +394,43 @@ the code. The switcher is built into the default and SP-Lux themes; other themes
 
 ## 16. REST API
 
-Off by default. Enable with `$api_enabled = TRUE;` — the installer generates `$api_key`; the API refuses every
-request while the key is empty. Examples: `/api/staff/email/someone@library.edu/key/<key>`,
-`/api/database/letter/A/output/xml/key/<key>`, `/api/guides/subject_id/22/key/<key>`.
+Off by default. Enable with `$api_enabled = TRUE;` (Admin → Config Site). Create **one key per application** in
+*Admin → API Clients* (each with its own rate limit and allowed services; the key is shown once, only a hash is
+stored). The site key `$api_key` generated by the installer keeps working. Send the key in a header:
+
+```sh
+curl -H "X-API-Key: sp_…" https://library.edu/api/database/letter/A
+curl -H "Authorization: Bearer sp_…" https://library.edu/api/database/vendor/EBSCO/output/xml
+```
+
+(or at the end of the URL, `…/key/<key>` — but URLs end up in web-server logs). Other examples:
+`/api/staff/email/someone@library.edu`, `/api/guides/subject_id/22`.
+
+Limits: `$api_rate_limit` requests per minute per key (default 120; 0 = none) and `$api_rate_limit_failed` per
+IP address for missing or wrong keys (default 20). Answers carry `X-RateLimit-Limit / -Remaining / -Reset`; over
+the limit the API answers **429** with `Retry-After`. Errors are JSON (`{"error":{"status":403,"message":…}}`).
+Browser access from other sites (CORS): `$api_cors_origins = array("https://www.library.edu");`. Requests per
+key and service: *Admin → API Clients* and *Admin → Usage Statistics*.
+
+## 16a. Usage statistics and audit log
+
+*Admin → Usage Statistics*: guide views, tab / link / database clicks for any period, with vendor totals, the
+REST API and CSV downloads. Crawlers are not counted and IP addresses are shortened before they are stored
+(`$stats_skip_bots`, `$stats_anonymise_ip`, both on).
+
+*Admin → Audit Log*: who changed what and when — sign-ins, permissions, users, records, guides, settings (field
+names only), bulk edits, API keys, backups, upgrades. Filter and download as CSV. Kept `$sp_audit_retention_days`
+days (default 730; 0 = forever).
 
 ## 17. Hardening checklist
 
 - [ ] HTTPS only; HSTS on (`Strict-Transport-Security`), `$enforce_https_upload_url = TRUE;`.
 - [ ] `.htaccess` active (Apache: `AllowOverride All`) or the Nginx server block in use — verify with the URLs in §8.
 - [ ] `control/includes/config.php` not writable by the web server after installation.
-- [ ] Remove `control/installer/` once installed (it refuses to run on an installed site, but less code is less risk).
+- [ ] *Admin → System Health* shows no red items.
+- [ ] Content-Security-Policy: set `$sp_csp = "report-only";`, browse the public and staff pages with the browser
+      console open, add any site you really need to `$sp_csp_allow`, then `$sp_csp = "strict";`.
+- [ ] One API key per application (*Admin → API Clients*), with a rate limit.
 - [ ] Optional: restrict `/control/` to campus / VPN addresses (example in `docs/server/apache-subjectsplus.conf`).
 - [ ] Single sign-on with `$sp_auth_allowed_domains` set; `$sp_auth_local = FALSE;` once it works.
 - [ ] Collect less staff personal data: hide home address / emergency contact columns with `$omit_user_columns`.

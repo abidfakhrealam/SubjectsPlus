@@ -22,9 +22,9 @@
         <div class="row">
             <div class="col-lg-8">
                 <div class="pills-container">
-                    <ul class="list-unstyled d-flex flex-row flex-wrap justify-content-around justify-content-md-start">
+                    <div class="list-unstyled d-flex flex-row flex-wrap justify-content-around justify-content-md-start">
                         <?php print $cat_filters; ?>
-                    </ul>
+                    </div>
                 </div>
 
 

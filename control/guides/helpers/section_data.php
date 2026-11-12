@@ -20,5 +20,8 @@ $header = "noshow";
 
 include("../../includes/header.php");
 
+if ( ( $_POST['action'] ?? '' ) === 'delete' ) {
+	\SubjectsPlus\Control\Guide\GuideAccess::requireFound( \SubjectsPlus\Control\Guide\GuideAccess::guidesForSection( (int) ( $_POST['section_id'] ?? 0 ) ) );
+}
 $sectionData = new SectionData($_POST);
 $sectionData->processSection();

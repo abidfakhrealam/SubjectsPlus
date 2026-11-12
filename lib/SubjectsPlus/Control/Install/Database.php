@@ -87,7 +87,14 @@ class Database {
 		try {
 			$pdo->exec( 'CREATE DATABASE IF NOT EXISTS `' . $dbname . '` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci' );
 			$log[] = "Database `$dbname` is ready (utf8mb4).";
-			foreach ( self::userHostsFor( $host ) as $uh ) {
+			// the address the database server sees this web server as (Docker, port forwarding and proxies make
+			// 127.0.0.1 arrive as e.g. 172.17.0.1): the new user must be allowed to connect from there too (4.7.1)
+			$hosts = self::userHostsFor( $host );
+			$seen  = strtolower( (string) $pdo->query( "SELECT SUBSTRING_INDEX(USER(), '@', -1)" )->fetchColumn() );
+			if ( $hosts !== array( '%' ) && $seen !== '' && ! in_array( $seen, $hosts, true ) && preg_match( '/^[a-z0-9.:_-]+$/', $seen ) ) {
+				$hosts[] = $seen;
+			}
+			foreach ( $hosts as $uh ) {
 				$account = $pdo->quote( $user ) . '@' . $pdo->quote( $uh );
 				$exists  = $pdo->prepare( 'SELECT COUNT(*) FROM mysql.user WHERE User = ? AND Host = ?' );
 				$known   = false;

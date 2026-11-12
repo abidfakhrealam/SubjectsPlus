@@ -160,6 +160,10 @@ switch ($_REQUEST["action"] ?? '') {
     break;
   case "update_permissions":
     // Update ptags for users.  Called by user.php?browse
+    $sp_uid = sp_int($_POST["update_id"] ?? 0);
+    $sp_old = $db->getConnection()->prepare("SELECT email, ptags FROM staff WHERE staff_id = ?");
+    $sp_old->execute(array($sp_uid));
+    $sp_old = $sp_old->fetch(PDO::FETCH_ASSOC) ?: array('email' => '', 'ptags' => '');
     $qPtagger = "UPDATE staff set ptags = " . $db->quote(scrubData($_POST["ptags"] ?? '')) . " WHERE staff_id = " . sp_int($_POST["update_id"] ?? 0);
     $rPtagger = $db->exec($qPtagger);
 
@@ -169,6 +173,8 @@ switch ($_REQUEST["action"] ?? '') {
       print _("Error");
     } else {
       print _("Permissions Updated.");
+      \SubjectsPlus\Control\AuditLog::add('user.permissions', 'staff', (string) $sp_uid, 'Permissions changed for ' . $sp_old['email'],
+        array('from' => (string) $sp_old['ptags'], 'to' => (string) scrubData($_POST["ptags"] ?? '')));
     }
     return; // return early so we don't show the stuff that follows
     break;

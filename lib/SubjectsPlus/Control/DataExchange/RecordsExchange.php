@@ -23,6 +23,7 @@ class RecordsExchange {
 			'title'          => array( 'Title', 'Database', 'Name', 'publication_title' ),
 			'alternate'      => array( 'Alternate title', 'Also known as', 'Alt title' ),
 			'prefix'         => array( 'Prefix', 'pre' ),
+			'vendor'         => array( 'Vendor / Publisher', 'Vendor', 'Publisher', 'publisher_name', 'Provider' ),
 			'url'            => array( 'URL', 'Link', 'Web address', 'title_url', 'location' ),
 			'format'         => array( 'Format' ),
 			'access'         => array( 'Access', 'Access restrictions', 'Restriction' ),
@@ -40,6 +41,9 @@ class RecordsExchange {
 			'internal_notes' => array( 'Internal notes', 'Staff notes' ),
 			'last_modified'  => array( 'Last modified' ),
 		);
+		if ( ! \SubjectsPlus\Control\RecordVendor::ready() ) {
+			unset( $cols['vendor'] ); // database update not applied yet
+		}
 		$labels = array();
 		foreach ( RecordSettings::fields( true ) as $f ) {
 			$labels[ mb_strtolower( trim( $f['label'] ) ) ][] = (int) $f['field_id'];
@@ -106,7 +110,8 @@ class RecordsExchange {
 			$where[]  = 'l.format = ?';
 			$params[] = (int) $filter['format_id'];
 		}
-		$st = $c->prepare( "SELECT t.title_id, t.title, t.alternate_title, t.pre, t.description, t.internal_notes, t.last_modified,
+		$hasVendor = \SubjectsPlus\Control\RecordVendor::ready();
+		$st = $c->prepare( "SELECT t.title_id, t.title, t.alternate_title, t.pre, " . ( $hasVendor ? "t.vendor, " : "" ) . "t.description, t.internal_notes, t.last_modified,
 				l.location_id, l.location, l.format, l.access_restrictions, l.record_status, l.eres_display, l.eres_display_saved, l.display_note,
 				l.helpguide, l.call_number, l.ctags, l.trial_start, l.trial_end
 			FROM title t
@@ -160,6 +165,11 @@ class RecordsExchange {
 				self::txt( $r['title'] ),
 				self::txt( $r['alternate_title'] ),
 				self::txt( $r['pre'] ),
+			);
+			if ( $hasVendor ) {
+				$row[] = (string) $r['vendor'];
+			}
+			array_push( $row,
 				self::txt( $r['location'] ),
 				$formats[ (int) $r['format'] ] ?? '',
 				$restr[ (int) $r['access_restrictions'] ] ?? '',
@@ -175,7 +185,7 @@ class RecordsExchange {
 				self::dateOut( $r['trial_start'] ),
 				self::dateOut( $r['trial_end'] ),
 				(string) $r['internal_notes'],
-				(string) $r['last_modified'],
+				(string) $r['last_modified']
 			);
 			foreach ( $fields as $fid => $f ) {
 				$v = $values[ $id ][ $fid ] ?? '';
@@ -583,7 +593,8 @@ class RecordsExchange {
 
 	/** The record's current values, in the same form as the export (so unchanged cells can be recognised). */
 	private static function current( \PDO $c, $id, $loc ) {
-		$st = self::x( $c, "SELECT t.title, t.alternate_title, t.pre, t.description, t.internal_notes, l.location, l.format, l.access_restrictions,
+		$hasVendor = \SubjectsPlus\Control\RecordVendor::ready();
+		$st = self::x( $c, "SELECT t.title, t.alternate_title, t.pre, " . ( $hasVendor ? "t.vendor, " : "" ) . "t.description, t.internal_notes, l.location, l.format, l.access_restrictions,
 				l.record_status, l.eres_display, l.eres_display_saved, l.display_note, l.helpguide, l.call_number, l.ctags, l.trial_start, l.trial_end
 			FROM title t LEFT JOIN location l ON l.location_id = ? WHERE t.title_id = ?", array( (int) $loc, (int) $id ) );
 		$r = $st->fetch( \PDO::FETCH_ASSOC );
@@ -597,6 +608,9 @@ class RecordsExchange {
 			'title' => self::txt( $r['title'] ), 'alternate' => self::txt( $r['alternate_title'] ), 'prefix' => self::txt( $r['pre'] ),
 			'description' => (string) $r['description'], 'internal_notes' => (string) $r['internal_notes'],
 		);
+		if ( $hasVendor ) {
+			$cur['vendor'] = (string) $r['vendor'];
+		}
 		if ( $loc ) {
 			$cur += array(
 				'url' => self::txt( $r['location'] ), 'format' => (int) $r['format'], 'access' => (int) $r['access_restrictions'],
@@ -651,6 +665,10 @@ class RecordsExchange {
 			if ( array_key_exists( $k, $d ) ) {
 				$t[ array( 'title' => 'title', 'alternate' => 'alternate_title', 'prefix' => 'pre', 'description' => 'description', 'internal_notes' => 'internal_notes' )[ $k ] ] = $fn( $d[ $k ] );
 			}
+		}
+		if ( array_key_exists( 'vendor', $d ) && \SubjectsPlus\Control\RecordVendor::ready() ) {
+			$t['vendor'] = \SubjectsPlus\Control\RecordVendor::clean( self::bmp( $d['vendor'] ) );
+			$t['vendor'] = $t['vendor'] === '' ? null : $t['vendor'];
 		}
 		if ( $p['action'] === 'add' ) {
 			$t += array( 'alternate_title' => '', 'description' => '', 'internal_notes' => '', 'pre' => '' );

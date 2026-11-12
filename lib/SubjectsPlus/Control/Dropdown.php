@@ -30,6 +30,16 @@ class Dropdown {
         $this->required=$required;
     }
 
+    /** Accessible name (4.7.1): set ->label, or one is made from the field name ("subject_id" -> "Subject"). */
+    public $label = '';
+
+    private function ariaLabel() {
+        $l = $this->label !== '' ? $this->label : ucfirst(trim(str_replace(array('_id', '_dropdown', '_'), array('', '', ' '), (string) $this->_dd_name)));
+        $known = array('Subject' => 'Subject', 'Sortby' => 'Sort by');
+        $l = $known[$l] ?? $l;
+        return ' aria-label="' . htmlspecialchars(function_exists('sp__') ? sp__($l) : $l, ENT_QUOTES, 'UTF-8') . '"';
+    }
+
     public function display() {
         $array_type = "";
 
@@ -46,9 +56,9 @@ class Dropdown {
         }
 
         if ($this->_dropdown_type == "multi") {
-            $dd_text = "<select multiple $required name= \"" .  $this->_dd_name ."\">";  // added benton
+            $dd_text = "<select multiple $required name= \"" .  $this->_dd_name ."\"" . $this->ariaLabel() . ">";  // added benton
         } else {
-            $dd_text = "<select $required name=\"" . $this->_dd_name . "\">";
+            $dd_text = "<select $required name=\"" . $this->_dd_name . "\"" . $this->ariaLabel() . ">";
         }
         
         

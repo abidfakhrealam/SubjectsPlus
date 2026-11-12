@@ -51,7 +51,7 @@ fi
 cd "$STAGE/$NAME"
 rm -rf .git .github node_modules tests build dist \
        .gitignore .gitattributes .gitmodules .editorconfig .snyk .env .env.* \
-       package.json package-lock.json phpunit.xml* phpstan.neon* psalm.xml* .php-cs-fixer* \
+       package.json package-lock.json phpunit.xml* phpstan.neon* phpstan-baseline.neon psalm.xml* .php-cs-fixer* \
        control/includes/config.php
 find assets/cache -type f ! -name '.htaccess' ! -name '.cache' ! -name '.gitkeep' -delete 2>/dev/null || true
 find . -name '.DS_Store' -delete

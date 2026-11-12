@@ -1,5 +1,7 @@
-# Continuous integration: syntax on PHP 8.1–8.4, then the real-browser suite (Playwright) against
-# Apache 2.4 + PHP 8.3 + MariaDB 10.11 in strict SQL mode, desktop and mobile viewports.
+# Continuous integration: syntax on PHP 8.1–8.5, then the real-browser suite (Playwright) on two stacks,
+# desktop and mobile viewports, strict SQL mode:
+#   - Apache 2.4 + PHP 8.3 (mod_php) + MariaDB 10.11, existing database
+#   - Nginx (docs/server/nginx-subjectsplus.conf) + PHP 8.4-FPM + MySQL 8.4, database created by the wizard
 name: ci
 
 on:
@@ -15,7 +17,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        php: ['8.1', '8.2', '8.3', '8.4']
+        php: ['8.1', '8.2', '8.3', '8.4', '8.5']
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
@@ -25,6 +27,18 @@ jobs:
       - run: |
           out=$(find . -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n 50 -P 4 php -d error_reporting=E_ALL -l 2>&1 | grep -v '^No syntax errors detected' || true)
           if [ -n "$out" ]; then echo "$out"; exit 1; fi
+
+  static-analysis:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: phpstan:2.1
+      - name: PHPStan (level 1; phpstan-baseline.neon holds the problems known in 4.7.1 — new code must be clean)
+        run: phpstan analyse --no-progress --memory-limit=2G -c phpstan.neon.dist
 
   e2e:
     needs: lint
@@ -78,4 +92,57 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: e2e-results
+          path: tests/e2e/results/
+
+  e2e-nginx:
+    needs: lint
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root-ci-pass
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot-ci-pass" --health-interval=5s --health-retries=30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Nginx + PHP 8.4-FPM
+        run: |
+          sudo add-apt-repository -y ppa:ondrej/php
+          sudo apt-get update -q
+          sudo apt-get install -y -q nginx php8.4-fpm php8.4-mysql php8.4-mbstring php8.4-curl php8.4-gd php8.4-xml php8.4-intl php8.4-zip mysql-client
+          sudo rm -rf /var/www/html && sudo cp -a "$GITHUB_WORKSPACE" /var/www/html
+          sudo sed -i "s/^\$sp_db_sql_mode = .*/\$sp_db_sql_mode = 'server';/" /var/www/html/control/includes/config-default.php
+          sudo rm -f /var/www/html/control/includes/config.php /etc/nginx/sites-enabled/default
+          tests/ci/nginx-ci-conf.sh /var/www/html /run/php/php8.4-fpm.sock 80 | sudo tee /etc/nginx/sites-enabled/subjectsplus > /dev/null
+          sudo nginx -t
+          sudo chown -R www-data:www-data /var/www/html
+          sudo systemctl restart php8.4-fpm nginx
+      - name: Strict SQL mode and a database administrator for the wizard
+        run: |
+          mysql -h127.0.0.1 -uroot -proot-ci-pass -e "SET GLOBAL sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+            CREATE USER 'spadmin'@'%' IDENTIFIED BY 'spadmin-ci-pass'; GRANT ALL PRIVILEGES ON *.* TO 'spadmin'@'%' WITH GRANT OPTION;"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Playwright
+        run: |
+          npm ci --ignore-scripts
+          npx playwright install --with-deps chromium
+      - name: Install code for the installer wizard
+        run: |
+          code=$(sudo -u www-data php /var/www/html/tools/install-code.php | grep -oE '[A-Z0-9]{4}(-[A-Z0-9]{4}){3}')
+          echo "SP_INSTALL_CODE=$code" >> "$GITHUB_ENV"
+      - name: Wizard creates the database and its user, then the browser suite
+        env:
+          SP_BASE: http://localhost
+          SP_DB_HOST: 127.0.0.1
+          SP_DB_ADMIN_USER: spadmin
+          SP_DB_ADMIN_PASS: spadmin-ci-pass
+        run: node tests/e2e/sp-e2e.cjs --install --label ci-nginx-php8.4-mysql8.4
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results-nginx
           path: tests/e2e/results/

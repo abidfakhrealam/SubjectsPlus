@@ -1,0 +1,22 @@
+# Weekly pull requests for library updates (security fixes arrive as soon as they are published).
+# lib/vendor is committed so servers need no Composer: after merging a Composer update, run
+# `composer install --no-dev` locally and commit lib/vendor too (see docs/RELEASING.md).
+version: 2
+updates:
+  - package-ecosystem: composer
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    labels: [dependencies, php]
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    labels: [dependencies, javascript]
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+    labels: [dependencies, ci]

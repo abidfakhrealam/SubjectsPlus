@@ -47,7 +47,7 @@ FROM staff s,
      department d
 WHERE s.staff_id = sd.staff_id
   AND sd.department_id = d.department_id
-  AND s.user_type_id = '1'
+  AND s.user_type_id IN (" . \SubjectsPlus\Control\UserTypes::publicSql() . ")
   AND s.active = 1
   AND (lname LIKE :search_term OR fname LIKE :search_term OR title LIKE :search_term OR name LIKE :search_term OR
        CONCAT(fname, ' ', lname) LIKE :search_term OR (SELECT GROUP_CONCAT(subject)
@@ -158,7 +158,7 @@ ORDER BY department_sort, d.name, staff_sort DESC, lname";
                 AND staff.active = 1
                 AND type = 'Subject'
                 AND su.active = '1'
-                AND user_type_id = '1'
+                AND user_type_id IN (" . \SubjectsPlus\Control\UserTypes::publicSql() . ")
                 AND su.type != 'Placeholder'
                 AND ptags like '%librarian%'
                 order by lname, fname";
@@ -219,7 +219,7 @@ ORDER BY department_sort, d.name, staff_sort DESC, lname";
             FROM staff
             WHERE active = 1
             AND ptags like '%librarian%'
-            AND user_type_id = '1'
+            AND user_type_id IN (" . \SubjectsPlus\Control\UserTypes::publicSql() . ")
             order by lname, fname";
 
         $db = new Querier;
@@ -290,7 +290,7 @@ ORDER BY department_sort, d.name, staff_sort DESC, lname";
         FROM staff s, staff_department sd, department d
         WHERE s.staff_id = sd.staff_id
         AND sd.department_id = d.department_id
-        AND user_type_id = '1'
+        AND user_type_id IN (" . \SubjectsPlus\Control\UserTypes::publicSql() . ")
         AND active =1
         ORDER BY department_sort, d.name, staff_sort DESC, lname";
 
@@ -378,7 +378,7 @@ ORDER BY department_sort, d.name, staff_sort DESC, lname";
                 AND staff.active = 1
                 AND type = 'Subject'
                 AND su.active = '1'
-                AND user_type_id = '1'
+                AND user_type_id IN (" . \SubjectsPlus\Control\UserTypes::publicSql() . ")
                 AND su.type != 'Placeholder'
                 order by lname, fname";
         $db = new Querier;
@@ -451,7 +451,7 @@ ORDER BY department_sort, d.name, staff_sort DESC, lname";
             AND type = 'Subject'
         AND staff.active = 1
         AND subject.active = 1
-        AND staff.user_type_id = 1
+        AND staff.user_type_id IN (" . \SubjectsPlus\Control\UserTypes::publicSql() . ")
         AND type != 'Placeholder'
             order by subject, lname, fname";
 
@@ -533,7 +533,7 @@ ORDER BY department_sort, d.name, staff_sort DESC, lname";
         $q = "SELECT s.staff_id, lname, fname, title, tel, s.email, name, ptags
             FROM staff s
             LEFT JOIN department d on s.department_id = d.department_id
-            WHERE user_type_id = '1'
+            WHERE user_type_id IN (" . \SubjectsPlus\Control\UserTypes::publicSql() . ")
         AND active = 1
             ORDER BY s.lname, s.fname";
 

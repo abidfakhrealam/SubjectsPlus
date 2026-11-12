@@ -45,7 +45,7 @@ class Pluslet {
 
         $this->_pluslet_id_field = "pluslet-" . $this->_pluslet_id; // default css id of item
 
-        $this->_subject_id = $subject_id;
+        $this->_subject_id = ($subject_id === "" || $subject_id === null) ? "" : (int) $subject_id; // used in SQL by box types
         $this->_isclone = $isclone;
 
         // By default we make pluslets editable (in admin), this is overriden in some pluslet types

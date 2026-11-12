@@ -25,10 +25,11 @@ $db      = new Querier;
 $section = new SectionService( $db );
 
 
-$section_index = scrubData( $_REQUEST['section_index'], "integer" );
-$layout        = scrubData( $_REQUEST['layout'] );
-$tab_id        = scrubData( $_REQUEST['tab_id'], "integer" );
+$section_index = scrubData( $_REQUEST['section_index'] ?? 0, "integer" );
+$layout        = scrubData( $_REQUEST['layout'] ?? '' );
+$tab_id        = scrubData( $_REQUEST['tab_id'] ?? 0, "integer" );
 
+\SubjectsPlus\Control\Guide\GuideAccess::requireFound( \SubjectsPlus\Control\Guide\GuideAccess::guidesForTab( $tab_id ), true );
 $section->create( $section_index, $layout, $tab_id );
 
 echo $section->toJSON();

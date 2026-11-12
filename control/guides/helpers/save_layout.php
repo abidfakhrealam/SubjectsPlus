@@ -18,7 +18,8 @@ $header = "noshow";
 
 include("../../includes/header.php");
 
-$oSaveLayout = new Guide($_POST["subject_id"]);
+\SubjectsPlus\Control\Guide\GuideAccess::requireGuide( (int) ( $_POST['subject_id'] ?? 0 ) );
+$oSaveLayout = new Guide((int) ($_POST["subject_id"] ?? 0));
 
 
 ?>

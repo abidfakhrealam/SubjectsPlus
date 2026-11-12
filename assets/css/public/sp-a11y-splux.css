@@ -1,0 +1,3 @@
+/* SP-Lux theme: the turquoise accent (#07adc7) has 2.7:1 contrast with white text; use a darker shade (5.9:1). */
+.pure-button-topsearch,.btn-default,a.btn-default,#pills-tab-guides .nav-link.active,.nav-pills .nav-link.active{background-color:#0a6f80!important;border-color:#0a6f80!important;color:#fff!important}
+.pure-button-topsearch:hover,.btn-default:hover,a.btn-default:hover{background-color:#085866!important}

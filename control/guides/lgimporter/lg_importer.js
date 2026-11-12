@@ -141,7 +141,7 @@ function importGuides(selected_guide_id, selected_guide_name, url) {
 												+ "</a></h1>");
 						$('.import-message')
 								.append(
-										"<p class='import-feedback'>You can compare your guide with its <a target=\"_blank\" href='http://libguides.miami.edu/content.php?pid="
+										"<p class='import-feedback'>You can compare your guide with its <a target=\"_blank\" href='" + (window.spLibGuidesUrl || 'https://libguides.example.edu') + "/content.php?pid="
 												+ data.imported_guide[0]
 												+ "'>original LibGuide</a>.</p>");
 

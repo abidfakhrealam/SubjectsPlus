@@ -25,9 +25,30 @@ class LGImport
     private $dupes = array();
     private $urls = array();
 
+    /** Path of the LibGuides XML export ($libguides_xml_path in config.php; default: next to the importer). */
+    public static function xmlPath($given = 'libguides.xml')
+    {
+        $p = (string) ($GLOBALS['libguides_xml_path'] ?? '');
+        return $p !== '' ? $p : $given;
+    }
+
+    /** '' when the export can be read, otherwise what the person should do (4.7.1: the importer answered HTTP 500). */
+    public static function missingMessage($given = 'libguides.xml')
+    {
+        $p = self::xmlPath($given);
+        if (!is_file($p) || !is_readable($p)) {
+            return _("No LibGuides export found. Export your guides from LibGuides (XML), save the file outside the web folder and set \$libguides_xml_path in config.php to its full path (or place it as control/guides/lgimporter/libguides.xml).");
+        }
+        return '';
+    }
+
     public function __construct($lib_guides_xml_path, Logger $log, Querier $db, CatalogMigrator $cm)
     {
-        $libguides_xml = new \SimpleXMLElement (file_get_contents($lib_guides_xml_path, 'r'));
+        $msg = self::missingMessage($lib_guides_xml_path);
+        if ($msg !== '') {
+            throw new \RuntimeException($msg);
+        }
+        $libguides_xml = new \SimpleXMLElement (file_get_contents(self::xmlPath($lib_guides_xml_path)));
         $this->libguidesxml = $libguides_xml;
         $this->log = $log;
         $this->db = $db;
@@ -385,7 +406,7 @@ WHERE location.location_id = " . $record[0]['location_id']);
 
                         $description .= "<div class=\"file\">" .
                             "<div class=\"file-title\"><i class=\"fa fa-file\" aria-hidden=\"true\"></i>
-<a href=\"http://libguides.miami.edu/loader.php?type=d&id=$file->FILE_ID\">$file->NAME</a></div>"
+<a href=\"" . htmlspecialchars(rtrim((string) ($GLOBALS['libguides_url'] ?? 'https://libguides.example.edu'), '/') . '/loader.php?type=d&id=' . $file->FILE_ID, ENT_QUOTES) . "\">" . htmlspecialchars((string) $file->NAME, ENT_QUOTES) . "</a></div>"
                             . "<div class=\"file-description\">" . $file->DESCRIPTION . "</div>"
 
                             . "</div>";

@@ -41,6 +41,11 @@ $log = new Logger;
 $cm = new CatalogMigrator;
 
 
+if ( ( $sp_lg_missing = LGImport::missingMessage() ) !== '' ) { // 4.7.1: friendly message instead of HTTP 500
+	echo '<div class="pure-g"><div class="pure-u-1"><div class="feedback" role="alert">' . htmlspecialchars( $sp_lg_missing ) . '</div></div></div>';
+	include( "../../includes/footer.php" );
+	exit;
+}
 $libguides_importer = new LGImport('libguides.xml',$log,$db, $cm);
 $libguides_importer->OutputOwners();
 

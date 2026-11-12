@@ -52,10 +52,15 @@ Under *Settings → Actions → General* allow GitHub Actions and give workflows
 git tag -a v4.7.0 -m "SubjectsPlus 4.7.0"
 git push origin v4.7.0
 gh run watch                                  # follow the "release" workflow
-gh release view v4.7.0                        # zip, tar.gz and SHA256SUMS.txt attached
+gh release view v4.7.0                        # zip, tar.gz, SHA256SUMS.txt and the SBOM attached
+gh attestation verify SubjectsPlus-4.7.0-stable.zip --repo <owner>/SubjectsPlus   # signed by the workflow
 ```
 
-The `release` workflow (`.github/workflows/release.yml`) runs `php -l` on PHP 8.1–8.4, checks that the tag
+Signing needs no keys: the workflow's `attest-build-provenance` step records a Sigstore-signed statement that the
+archives were built by this repository's release workflow from the tagged commit (public repositories; private
+ones need GitHub Enterprise Cloud). The release notes get the verification commands appended.
+
+The `release` workflow (`.github/workflows/release.yml`) runs `php -l` on PHP 8.1–8.5, checks that the tag
 matches `control/includes/version.php`, builds and verifies the CSS/JS bundles, packages
 `SubjectsPlus-4.7.0-stable.zip` / `.tar.gz` with `SHA256SUMS.txt`, and publishes them with the 4.7.0 section of
 `CHANGELOG.md` as release notes. `ci.yml` runs the PHP lint matrix and the browser suite (Apache + PHP 8.3 +
@@ -75,8 +80,9 @@ Windows: `powershell -ExecutionPolicy Bypass -File build\package-release.ps1`, t
 
 ## C. Every later release
 
-1. Update the version in `control/includes/version.php`, `composer.json`, `package.json`,
-   `lib/vendor/composer/installed.php`; run `composer update --lock` (lock hash); add a `CHANGELOG.md` section.
+1. Update the version in `control/includes/version.php`, `composer.json`, `package.json`, `package-lock.json`,
+   `lib/vendor/composer/installed.php`; run `composer update --lock` (lock hash); add a `CHANGELOG.md` section;
+   new database changes go into `tools/migrations.php` (they appear in *Admin → Upgrade*).
 2. Test locally:
 
    ```sh
@@ -84,6 +90,7 @@ Windows: `powershell -ExecutionPolicy Bypass -File build\package-release.ps1`, t
    npm run build
    sudo -u www-data php tools/install-code.php        # on a test site without config.php
    SP_BASE=http://localhost:8080 SP_INSTALL_CODE=… SP_DB_USER=… SP_DB_PASS=… SP_DB_NAME=… npm run test:e2e -- --install
+   php phpstan.phar analyse            # no new problems (php phpstan.phar analyse --generate-baseline only after fixing old ones)
    ```
 
 3. `git commit -am "Release X.Y.Z" && git tag -a vX.Y.Z -m "SubjectsPlus X.Y.Z" && git push origin main --follow-tags`
