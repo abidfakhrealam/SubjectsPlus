@@ -6,6 +6,12 @@ History up to the original 4.6.0 code base (July 2021) is in [docs/history/CHANG
 
 ## [Unreleased]
 
+## [4.6.1] - 2026-11-12
+
+### Fixed
+- **Apache 2.4 `.htaccess` compatibility (`assets/users/.htaccess`, `assets/cache/.htaccess`):** Replaced `php_admin_flag engine off` with `php_flag engine off` inside `<IfModule mod_php.c>`, resolving Apache HTTP 500 Internal Server Errors when serving uploaded headshots and cached assets under `mod_php`.
+- **Release packaging permissions (`build/package-release.sh`):** Set executable (`100755`) file mode in Git so Linux CI runners execute the release packaging script directly without permission errors.
+
 ## [4.6.0] - 2026-11-12
 
 Maintained, institution-neutral release of SubjectsPlus 4.6. Runs on PHP 8.1 – 8.4, MariaDB 10.11 and
