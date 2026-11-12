@@ -78,7 +78,7 @@ jobs:
           php build/sbom.php > dist/SubjectsPlus-sbom.cdx.json
           php -r 'json_decode(file_get_contents("dist/SubjectsPlus-sbom.cdx.json"), false, 512, JSON_THROW_ON_ERROR);'
       - name: Sign the archives (build-provenance attestation)
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: |
             dist/*.zip
