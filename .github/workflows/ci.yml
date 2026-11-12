@@ -69,7 +69,7 @@ jobs:
           sudo systemctl restart apache2
       - name: Strict SQL mode on the server
         run: mysql -h127.0.0.1 -uroot -proot -e "SET GLOBAL sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'"
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
       - name: Playwright
@@ -126,7 +126,7 @@ jobs:
         run: |
           mysql -h127.0.0.1 -uroot -proot-ci-pass -e "SET GLOBAL sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
             CREATE USER 'spadmin'@'%' IDENTIFIED BY 'spadmin-ci-pass'; GRANT ALL PRIVILEGES ON *.* TO 'spadmin'@'%' WITH GRANT OPTION;"
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
       - name: Playwright

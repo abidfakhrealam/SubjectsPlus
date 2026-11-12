@@ -59,7 +59,7 @@ jobs:
           php-version: '8.3'
           extensions: mbstring, pdo_mysql, curl, gd, xml, intl
           coverage: none
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
       - name: Build / verify front-end assets
