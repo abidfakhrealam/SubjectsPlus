@@ -84,7 +84,7 @@ jobs:
             dist/*.zip
             dist/*.tar.gz
             dist/SHA256SUMS.txt
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: subjectsplus-release
           path: |
