@@ -58,7 +58,7 @@ if( isset($_GET['error'] ) )
 		case 'nofile':
 			$lstrTitle = _( "Configuration File Missing!" );
 			$lstrMessage = _( "The SubjectsPlus Configurations file does not exist. Before we continue we need to setup a connection to your database." )
-				. "<br /><a href=\"../setup-config.php?steps\">" . _( "Let's make it!" ) . "</a>";
+				. "<br /><a href=\"../installer/\">" . _( "Let's make it!" ) . "</a>";
 
 			$lobjConfig->displayErrorPage( $lstrTitle, $lstrMessage, FALSE );
 			break;

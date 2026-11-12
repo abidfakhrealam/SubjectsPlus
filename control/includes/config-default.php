@@ -692,4 +692,42 @@ $chat_width = "";
 ////////////////////////////////////////////
 $exlibris_api_key = "";
 
+
+////////////////////////////////////////////
+// HTTPS: send every visitor to https:// (set by the installer when "Always use HTTPS" is ticked).
+// Behind a TLS-terminating proxy on a private address, X-Forwarded-Proto is honoured.
+////////////////////////////////////////////
+$sp_force_https = FALSE;
+
+////////////////////////////////////////////
+// Secrets from the environment (optional).
+// Any of these environment variables, or the same KEY=value lines in a .env file OUTSIDE the web
+// root (path in SP_ENV_FILE, default: the folder above SubjectsPlus), override the values above,
+// so the database password and keys need not be stored in this file:
+//   SP_DB_HOST SP_DB_PORT SP_DB_NAME SP_DB_USER SP_DB_PASSWORD
+//   SP_SALT SP_ENCRYPTION_KEY SP_API_KEY SP_SMTP_PASSWORD
+////////////////////////////////////////////
+$sp_env_map = array( 'SP_DB_HOST' => 'hname', 'SP_DB_PORT' => 'db_port', 'SP_DB_NAME' => 'dbName_SPlus', 'SP_DB_USER' => 'uname',
+                     'SP_DB_PASSWORD' => 'pword', 'SP_SALT' => 'salt', 'SP_ENCRYPTION_KEY' => 'sp_encryption_key',
+                     'SP_API_KEY' => 'api_key', 'SP_SMTP_PASSWORD' => 'email_password' );
+$sp_env_file = getenv( 'SP_ENV_FILE' ) ?: dirname( __DIR__, 3 ) . DIRECTORY_SEPARATOR . '.env';
+$sp_env_vals = array();
+if ( is_file( $sp_env_file ) && is_readable( $sp_env_file ) ) {
+	foreach ( (array) @file( $sp_env_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES ) as $sp_env_line ) {
+		if ( preg_match( '/^\s*(?:export\s+)?([A-Z_][A-Z0-9_]*)\s*=\s*(.*)$/', $sp_env_line, $sp_env_m ) && isset( $sp_env_map[ $sp_env_m[1] ] ) ) {
+			$sp_env_vals[ $sp_env_m[1] ] = trim( trim( $sp_env_m[2] ), "\"'" );
+		}
+	}
+}
+foreach ( $sp_env_map as $sp_env_key => $sp_env_var ) {
+	$sp_env_val = getenv( $sp_env_key );
+	if ( $sp_env_val === false && isset( $sp_env_vals[ $sp_env_key ] ) ) {
+		$sp_env_val = $sp_env_vals[ $sp_env_key ];
+	}
+	if ( $sp_env_val !== false && $sp_env_val !== '' ) {
+		$$sp_env_var = $sp_env_val;
+	}
+}
+unset( $sp_env_map, $sp_env_file, $sp_env_vals, $sp_env_line, $sp_env_m, $sp_env_key, $sp_env_var, $sp_env_val );
+
 ?>
