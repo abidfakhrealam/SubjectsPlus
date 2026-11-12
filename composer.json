@@ -1,0 +1,26 @@
+{
+    "name": "subjectsplus/subjectsplus",
+    "description": "SubjectsPlus: research guides, A-Z database list, staff directory, FAQs and TalkBack for libraries",
+    "version": "4.6.0",
+    "homepage": "https://github.com/subjectsplus/SubjectsPlus",
+    "keywords": ["library", "research guides", "a-z databases", "ezproxy", "openathens"],
+    "support": { "issues": "https://github.com/subjectsplus/SubjectsPlus/issues" },
+    "license": "GPL-2.0-or-later",
+    "type": "project",
+    "config": {
+        "vendor-dir": "lib/vendor",
+        "platform": { "php": "8.1.0" },
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "require": {
+        "php": ">=8.1",
+        "ext-mbstring": "*",
+        "ext-openssl": "*",
+        "ext-pdo_mysql": "*",
+        "ezyang/htmlpurifier": "^4.18",
+        "jumbojett/openid-connect-php": "^1.0",
+        "phpmailer/phpmailer": "^6.9",
+        "phpseclib/phpseclib": "^3.0"
+    }
+}

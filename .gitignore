@@ -1,0 +1,82 @@
+# ---------------------------------------------------------------------------
+# SubjectsPlus 4.6 — files that must never be committed
+# ---------------------------------------------------------------------------
+
+# Local configuration and secrets (created by the installer on each site)
+/control/includes/config.php
+/control/includes/db.ini
+/control/lti_controller/config.php
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Runtime caches (Assetic bundles, Book List covers, RSS feed cache)
+/assets/cache/*
+!/assets/cache/.gitkeep
+!/assets/cache/.cache
+!/assets/cache/.htaccess
+/subjects/includes/pgcache/
+/control/includes/pgcache/
+
+# Files uploaded by staff on a live site (headshots, CKEditor images, record attachments)
+/assets/users/*
+!/assets/users/.gitkeep
+!/assets/users/.htaccess
+!/assets/users/_admin/
+/assets/users/_admin/*
+!/assets/users/_admin/.gitkeep
+!/assets/users/_admin/headshot.jpg
+!/assets/users/_admin/headshot_large.jpg
+/assets/records/*
+!/assets/records/.gitkeep
+!/assets/records/.htaccess
+/assets/images/guide_thumbs/*
+!/assets/images/guide_thumbs/.gitkeep
+!/assets/images/guide_thumbs/books.jpg
+!/assets/images/guide_thumbs/collections_icon.jpg
+/control/lti_controller/temp_files/*
+!/control/lti_controller/temp_files/.gitkeep
+/control/lti_controller/log.txt
+
+# Local site customisations that stay on the server
+/subjects/.htaccess
+/subjects/themes/um-new/
+/subjects/themes/med/
+external_scripts/
+
+# Logs, dumps, imports
+*.log
+*.sql
+*.sql.gz
+php_errors.log
+import_log.html
+libguides.xml
+
+# Dependencies and build output (lib/vendor IS committed: no Composer needed on the server)
+/node_modules/
+/vendor/
+/dist/
+/build/out/
+*.zip
+*.tar.gz
+SHA256SUMS.txt
+
+# Test output
+/tests/e2e/results/
+/tests/_output/
+/test-results/
+/playwright-report/
+
+# Editors and operating systems
+.idea/
+*.iml
+.vscode/
+*.sublime-workspace
+*.swp
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini
+nul

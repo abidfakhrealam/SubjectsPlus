@@ -1,0 +1,20 @@
+# Files left out of `git archive` (release packages and GitHub's "Source code" downloads)
+/.github            export-ignore
+/tests              export-ignore
+/build              export-ignore
+/.gitignore         export-ignore
+/.gitattributes     export-ignore
+/package.json       export-ignore
+/package-lock.json  export-ignore
+
+# Windows script keeps CRLF; binaries are never diffed or converted
+*.ps1   text eol=crlf
+*.png   binary
+*.jpg   binary
+*.gif   binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.eot   binary
+*.zip   binary

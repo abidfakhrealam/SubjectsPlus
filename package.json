@@ -1,0 +1,27 @@
+{
+  "name": "subjectsplus",
+  "version": "4.6.0",
+  "private": true,
+  "description": "SubjectsPlus: research guides, A-Z database list, staff directory, FAQs and TalkBack for libraries.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/subjectsplus/SubjectsPlus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/subjectsplus/SubjectsPlus/issues"
+  },
+  "homepage": "https://github.com/subjectsplus/SubjectsPlus#readme",
+  "license": "GPL-2.0-or-later",
+  "scripts": {
+    "build": "php build/build-assets.php",
+    "lint:php": "find . -name '*.php' -not -path './.git/*' -not -path './node_modules/*' -print0 | xargs -0 -n 50 php -l | grep -v '^No syntax errors detected' || true",
+    "test:e2e": "node tests/e2e/sp-e2e.cjs",
+    "package": "bash build/package-release.sh"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
