@@ -109,16 +109,18 @@ jobs:
       - uses: actions/checkout@v4
       - name: Nginx + PHP 8.4-FPM
         run: |
+          set -euo pipefail
           sudo add-apt-repository -y ppa:ondrej/php
           sudo apt-get update -q
           sudo apt-get install -y -q nginx php8.4-fpm php8.4-mysql php8.4-mbstring php8.4-curl php8.4-gd php8.4-xml php8.4-intl php8.4-zip mysql-client
           sudo rm -rf /var/www/html && sudo cp -a "$GITHUB_WORKSPACE" /var/www/html
           sudo sed -i "s/^\$sp_db_sql_mode = .*/\$sp_db_sql_mode = 'server';/" /var/www/html/control/includes/config-default.php
           sudo rm -f /var/www/html/control/includes/config.php /etc/nginx/sites-enabled/default
-          tests/ci/nginx-ci-conf.sh /var/www/html /run/php/php8.4-fpm.sock 80 | sudo tee /etc/nginx/sites-enabled/subjectsplus > /dev/null
+          sh tests/ci/nginx-ci-conf.sh /var/www/html /run/php/php8.4-fpm.sock 80 | sudo tee /etc/nginx/sites-enabled/subjectsplus > /dev/null
           sudo nginx -t
           sudo chown -R www-data:www-data /var/www/html
           sudo systemctl restart php8.4-fpm nginx
+          curl -sS -o /dev/null -w 'site answers HTTP %{http_code}\n' http://localhost/
       - name: Strict SQL mode and a database administrator for the wizard
         run: |
           mysql -h127.0.0.1 -uroot -proot-ci-pass -e "SET GLOBAL sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
