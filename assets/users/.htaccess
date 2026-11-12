@@ -3,7 +3,7 @@ Options -Indexes -ExecCGI
 RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .php8 .phar .pht .cgi .pl .py
 RemoveType .php .phtml .php3 .php4 .php5 .php7 .php8 .phar .pht
 <IfModule mod_php.c>
-    php_admin_flag engine off
+    php_flag engine off
 </IfModule>
 <FilesMatch "\.(php\d?|phtml|phar|pht|cgi|pl|py|sh|htaccess|svg|html?|xhtml)$">
     Require all denied
