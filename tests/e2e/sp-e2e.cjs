@@ -403,8 +403,12 @@ async function suite(browser, vp) {
     // ------------------------------------------------------------ records, access rules, workflow, users
     await step('no "remove the installer" warning: the wizard switches itself off', async () => {
       await page.goto(BASE + '/control/index.php', { waitUntil: 'networkidle' });
-      const w = await page.locator('.sp-installer-left').count();
-      if (w) throw new Error('warning still shown: ' + await page.locator('.sp-installer-left').innerText());
+      const w = page.locator('.sp-installer-left');
+      if (!(await w.count())) return 'no warning';
+      const t = await w.innerText();
+      // read-only control/includes/: the installer cannot delete its code file, so that one reminder is expected
+      if (process.env.SP_UPLOAD_CONFIG_TO && /install code/.test(t) && !/installer\//.test(t)) return 'install-code reminder (read-only folder)';
+      throw new Error('warning still shown: ' + t);
     });
     await step('installer-configured EZproxy provider is listed under Off-campus Access', async () => {
       await page.goto(BASE + '/control/admin/access.php', { waitUntil: 'networkidle' });

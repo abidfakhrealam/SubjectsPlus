@@ -1,4 +1,4 @@
-# SubjectsPlus 4.6.0 — Security, Bug & Stack Compatibility Audit
+# SubjectsPlus 4.6.0 – 4.7.1 — Security, Bug & Stack Compatibility Audit
 
 **Scope:** the complete 4.6.0 code base (`control/`, `lib/`, `api/`, `subjects/`, `addons/`, `ckeditor/`, `tools/`),
 starting from the 4.6 maintenance build (`4.6.0-jgu.8`, October 2026).
@@ -188,3 +188,51 @@ install-code gate, wrong code, requirements, connection tests, database creation
 The XSS / SQL-error sweeps (81 public + 119 staff requests) were repeated on every stack with no findings.
 Fixed while testing: the guide editor's side panel was partly hidden under the fixed guide header whenever an
 admin notice was shown (`#main-options` z-index).
+
+---
+
+## 7. 4.7.1 audit and re-test
+
+New in this round: attribute-injection payloads (`x" data-spx="1`, `x' data-spy='1`) in the XSS sweeps, POSTed
+public forms, the new admin pages, PHPStan level 1 over the whole code base, and axe-core (WCAG 2.2 AA rules) on
+the public pages.
+
+| Severity | Finding | Where | Fix |
+|---|---|---|---|
+| High | Reflected XSS, public search: `?searchterm=x" autofocus onfocus="…"` broke out of the search box `value` (`scrubData()` turns `&quot;` back into `"`) | `lib/SubjectsPlus/Control/CompleteMe.php` (public and staff search) | every attribute escaped |
+| High | Reflected XSS, TalkBack form (all themes): comment and email echoed raw after a failed submit; reachable by cross-site POST | `subjects/views/talkback/comment_form*.php`, theme copies | escaped; comment put inside the textarea |
+| High | SQL injection, REST API `database/letter/…` (key required) | `lib/SubjectsPlus/API/DatabaseWebService.php` | quoted |
+| Medium | Guide-editor helpers did not check per-guide permissions (any *records* staff could change any guide through `save_tab`, `save_guide`, `guide_data`, `ajax_mod`, …) | `control/guides/helpers/*`, `metadata.php` | `GuideAccess` checks in every write path |
+| Medium | Box type name used as a class name without filtering (autoloader path) | `control/guides/helpers/guide_data.php` | letters and digits only |
+| Medium | Third-party scripts from another institution's web site in the SP-Lux theme; reCAPTCHA script loaded with reCAPTCHA off | `subjects/themes/splux/site-scripts.php`, TalkBack views | removed / conditional |
+| Low | LibGuides XML export (staff names, emails) servable from the importer folder | `control/guides/lgimporter/` | `.htaccess` + Nginx rule, `$libguides_xml_path` |
+| Low | Change-history SQL built with string concatenation | `changeMe()`, `lastModded()` | prepared statements |
+| Bug | Four staff email actions fatal (`new Mailer()` without a message) | record / FAQ / TalkBack bits, guide link report | `sp_send_mail()` |
+| Bug | TalkBack ignored the visitor's email (field name mismatch) | `subjects/talkback.php` | all field names accepted |
+| Bug | API `ONLY_FULL_GROUP_BY` error in the subjects sub-query (some filters returned nothing) | `DatabaseWebService` | ordering inside `GROUP_CONCAT` |
+| Bug | `count()` on an int (PHP 8 TypeError) when deleting a box; old stats page called a missing method | `guide_data.php`, `control/admin/stats.php` | fixed / page rewritten |
+| Bug | `$sp_version` never set (installer lock and pages without version) | `functions.php` | `sp_version()` |
+
+Test matrix (161 checks per stack: installer from the site root, editor, records, workflow, users, public pages,
+HTTP security checks, and the 4.7.1 features — vendor field, bulk edit, user types, audit log, statistics, API
+clients, backup / upgrade, link checker, per-guide permissions):
+
+| Stack | Install mode | Result | XSS / SQL sweeps (169 public + 435 staff requests) | PHP log |
+|---|---|---|---|---|
+| Nginx + PHP 8.4 + MariaDB 10.11 | wizard creates database + user | **161 / 161** | clean | clean |
+| Nginx + PHP 8.1 + MariaDB 10.11 | existing database | **161 / 161** | clean | clean |
+| Nginx + PHP 8.2 + MariaDB 10.11 | read-only `control/includes/` | **161 / 161** | clean | clean |
+| Nginx + PHP 8.4 + MySQL 8.4 | wizard creates database + user | **161 / 161** | clean | clean |
+| Apache 2.4 + PHP 8.3 + MariaDB 10.11 | existing database | **161 / 161** | clean | clean |
+
+"Clean" PHP log: only the expected lines (the CSRF test's refused request; no mail server on the test machine).
+Also tested: upgrade 4.7.0 → 4.7.1 through *Admin → Upgrade* (6 updates applied, version recorded, all 4.7.1
+checks pass afterwards); the downloaded backup restored into an empty database with identical row counts in
+every table; REST API keys in header / URL, per-key and per-IP limits (429 + `Retry-After`), service restriction,
+CORS; `$sp_csp = "strict"` with no CSP violations on 12 public and staff pages; axe-core: **0 violations** on 8
+public pages with the default theme (SP-Lux: one remaining `aria-controls` warning when a guide type has no
+guides). PHPStan level 1: 1,594 pre-existing findings in the baseline (mostly variables that come from included
+files), none in code added in 4.7.1.
+
+Still open (see §5): CKEditor 4 end-of-life; inline scripts prevent a CSP without `'unsafe-inline'`; records,
+FAQ and TalkBack permissions are per module; the guide editor still uses jQuery UI.

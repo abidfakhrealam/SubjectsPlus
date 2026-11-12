@@ -248,7 +248,10 @@ mb_internal_encoding('UTF-8');
 		}
 		if ( $sp_left ) {
 			print '<div role="alert" class="sp-installer-left" style="background:#fff4e5;border-left:5px solid #e07b00;margin:8px 16px;padding:10px 14px;font-size:15px">'
-				. _( 'Files from an earlier installation are still on the server. Remove them:' ) . ' <code>rm -r ' . sp_h( implode( ' ', $sp_left ) ) . '</code></div>';
+				. ( $sp_left === array( 'control/includes/install-code.php' )
+					? _( 'The one-time install code is still on the server (the installer could not delete it because the folder is read-only). Remove it:' )
+					: _( 'Files from an earlier installation are still on the server. Remove them:' ) )
+				. ' <code>rm ' . sp_h( implode( ' ', $sp_left ) ) . '</code></div>';
 		}
 	}
 
