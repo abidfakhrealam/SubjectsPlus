@@ -50,6 +50,7 @@ jobs:
           sudo rm -rf /var/www/html && sudo cp -a "$GITHUB_WORKSPACE" /var/www/html
           sudo sed -i "s/^\$sp_db_sql_mode = .*/\$sp_db_sql_mode = 'server';/" /var/www/html/control/includes/config-default.php
           printf '<Directory /var/www/html>\n  AllowOverride All\n</Directory>\n' | sudo tee /etc/apache2/conf-enabled/sp.conf
+          sudo rm -f /var/www/html/control/includes/config.php
           sudo chown -R www-data:www-data /var/www/html
           sudo systemctl restart apache2
       - name: Strict SQL mode on the server
@@ -61,7 +62,11 @@ jobs:
         run: |
           npm ci --ignore-scripts
           npx playwright install --with-deps chromium
-      - name: Install SubjectsPlus and run the browser suite
+      - name: Install code for the installer wizard
+        run: |
+          code=$(sudo -u www-data php /var/www/html/tools/install-code.php | grep -oE '[A-Z0-9]{4}(-[A-Z0-9]{4}){3}')
+          echo "SP_INSTALL_CODE=$code" >> "$GITHUB_ENV"
+      - name: Install SubjectsPlus through the wizard and run the browser suite (existing database)
         env:
           SP_BASE: http://localhost
           SP_DB_HOST: 127.0.0.1

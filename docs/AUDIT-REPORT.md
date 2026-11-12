@@ -11,7 +11,7 @@ public and staff `GET` parameter (81 public + 119 authenticated requests per sta
 escalation, PHP upload accepted, config files served, admin pages executing for non-admins, …); the
 4.6.0 release passes **133 / 133** on every stack (§4).
 
-Line numbers refer to the 4.6.0 release files.
+Line numbers refer to the 4.6.0 release files. In 4.7.0 `control/setup-config.php` and `control/install.php` were replaced by the installer wizard (`control/installer/`).
 
 ---
 
@@ -168,3 +168,23 @@ All databases ran with the strict server SQL mode listed in §3 and SubjectsPlus
    restricting scripts needs the inline scripts moved out first.
 5. **`scrubData()`** remains an HTML-cleaning helper, not an SQL escape; new code must use prepared statements.
 6. The LibGuides importer (`control/guides/lgimporter/`) throws when its XML file is missing (staff-only tool).
+
+---
+
+## 6. 4.7.0 installer re-test
+
+The installer wizard was added in 4.7.0 and the whole suite re-run (now 143 checks per stack, including the wizard:
+install-code gate, wrong code, requirements, connection tests, database creation, password rules, read-only
+`config.php` download/upload, lock-out after installation, sample content):
+
+| Stack | Install mode | Result | PHP log |
+|---|---|---|---|
+| Nginx 1.24 + PHP 8.4.27 + MariaDB 10.11.14 | wizard creates database + user (password with `$ " \ '`) | **143 / 143** | clean |
+| Nginx 1.24 + PHP 8.1.34 + MariaDB 10.11.14 | existing database | **143 / 143** | clean |
+| Nginx 1.24 + PHP 8.2.35 + MariaDB 10.11.14 | existing database, `control/includes/` read-only (config.php downloaded and uploaded) | **143 / 143** | clean |
+| Nginx 1.24 + PHP 8.4.27 + MySQL 8.4.6 | wizard creates database + user | **143 / 143** | clean |
+| Apache 2.4.58 + PHP 8.3.6 + MariaDB 10.11.14 | existing database | **143 / 143** | clean |
+
+The XSS / SQL-error sweeps (81 public + 119 staff requests) were repeated on every stack with no findings.
+Fixed while testing: the guide editor's side panel was partly hidden under the fixed guide header whenever an
+admin notice was shown (`#main-options` z-index).
