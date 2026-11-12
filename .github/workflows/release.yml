@@ -1,0 +1,101 @@
+# Release workflow: on a version tag (v4.6.0, v4.6.1 …) lint every PHP file on PHP 8.1–8.4, build and verify
+# the front-end bundles, package SubjectsPlus-<version>-stable.zip / .tar.gz with SHA256SUMS.txt and publish
+# them as a GitHub release.
+name: release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to package (default: control/includes/version.php)'
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: php -l (PHP ${{ matrix.php }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: true
+      matrix:
+        php: ['8.1', '8.2', '8.3', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, pdo_mysql, curl, gd, xml, intl
+          coverage: none
+          ini-values: error_reporting=E_ALL, display_errors=On
+      - name: Lint every PHP file (deprecations count as failures)
+        run: |
+          set -o pipefail
+          out=$(find . -name '*.php' -not -path './.git/*' -not -path './node_modules/*' -print0 \
+                | xargs -0 -n 50 -P 4 php -d error_reporting=E_ALL -l 2>&1 | grep -v '^No syntax errors detected' || true)
+          if [ -n "$out" ]; then echo "$out"; exit 1; fi
+          echo "all PHP files OK on PHP ${{ matrix.php }}"
+
+  build:
+    name: build & package
+    needs: lint
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql, curl, gd, xml, intl
+          coverage: none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build / verify front-end assets
+        run: |
+          npm ci --ignore-scripts
+          npm run build
+      - name: Check version matches the tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          v=$(php -r 'include "control/includes/version.php"; echo $sp_version;')
+          [ "v$v" = "${GITHUB_REF_NAME}" ] || { echo "version.php says $v but the tag is ${GITHUB_REF_NAME}"; exit 1; }
+      - name: Package release archives
+        run: build/package-release.sh ${{ github.event.inputs.version }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: subjectsplus-release
+          path: |
+            dist/*.zip
+            dist/*.tar.gz
+            dist/SHA256SUMS.txt
+          if-no-files-found: error
+
+  publish:
+    name: publish GitHub release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: subjectsplus-release
+          path: dist
+      - name: Release notes from CHANGELOG.md
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          awk -v v="$v" '$0 ~ "^## \\[" v "\\]" {f=1; next} /^## \[/ && f {exit} f' CHANGELOG.md > release-notes.md
+          [ -s release-notes.md ] || echo "SubjectsPlus $v" > release-notes.md
+      - name: Create release and upload archives
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" dist/*.zip dist/*.tar.gz dist/SHA256SUMS.txt \
+            --title "SubjectsPlus ${GITHUB_REF_NAME#v}" --notes-file release-notes.md --verify-tag

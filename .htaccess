@@ -1,0 +1,63 @@
+# SubjectsPlus 4.6.0 — Apache 2.4 hardening (works in the web root or in a sub-folder).
+# Needs "AllowOverride All" (or at least FileInfo AuthConfig Limit Options Indexes) for this folder.
+# The same rules for Nginx are in docs/server/nginx-subjectsplus.conf.
+
+Options -Indexes -MultiViews
+DirectoryIndex index.php index.html
+ServerSignature Off
+
+# ---- never serve dotfiles, source/config/build files or backups
+<FilesMatch "(^\.|\.(md|lock|dist|ini|log|sql|sh|ps1|bak|swp|orig|yml|yaml|txt|ser|phar|inc)$|^(composer|package|package-lock)\.json$)">
+    Require all denied
+</FilesMatch>
+# the CKEditor and robots text files are harmless and needed
+<FilesMatch "^(robots\.txt|ckeditor\.txt)$">
+    Require all granted
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # folders that are code, not web content
+    RewriteRule ^(lib|tools|build|tests|docs|\.git|\.github|node_modules)(/|$) - [R=404,L]
+    RewriteRule ^control/lti_controller/ - [R=404,L]
+    RewriteRule ^assets/records(/|$) - [R=404,L]
+
+    # control/includes: only the scripts that browsers call directly
+    RewriteCond %{REQUEST_URI} !/control/includes/(css|js_vendor|js_custom|configErrorPage|autocomplete_data|asset_manager_upload|set_bio|set_image|set_password|set_picture|config_bits|linkchecker)\.php$
+    RewriteCond %{REQUEST_URI} !/control/includes/images/
+    RewriteRule ^control/includes/ - [R=404,L]
+
+    # one-off upgrade script from 2009-era SubjectsPlus 0.9: never needed on a 4.x site
+    RewriteRule ^control/migrate_to_v1_from_v09\.php$ - [R=404,L]
+
+    # no PHP is ever executed from upload / cache folders
+    RewriteRule ^assets/(users|cache|images)/.*\.(php\d?|phtml|phar|pht|cgi|pl|py|sh)$ - [R=404,L,NC]
+</IfModule>
+
+# ---- security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+    Header always set Cross-Origin-Opener-Policy "same-origin"
+    # Content-Security-Policy: SubjectsPlus 4.x still uses inline scripts/styles and embeds
+    # (YouTube, Google Books, LibGuides-style widgets). This policy blocks plugins, base-tag hijacking
+    # and framing by other sites while keeping guides working; tighten it for your site.
+    Header always set Content-Security-Policy "object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self' https:"
+    # Enable once the site is HTTPS-only:
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    Header always unset X-Powered-By
+</IfModule>
+
+# ---- PHP settings (mod_php only; with PHP-FPM set these in php.ini / the pool)
+<IfModule mod_php.c>
+    php_flag display_errors Off
+    php_flag log_errors On
+    php_flag expose_php Off
+    php_value upload_max_filesize 20M
+    php_value post_max_size 24M
+    php_flag session.cookie_httponly On
+    php_flag session.use_strict_mode On
+</IfModule>

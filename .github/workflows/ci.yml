@@ -1,0 +1,76 @@
+# Continuous integration: syntax on PHP 8.1–8.4, then the real-browser suite (Playwright) against
+# Apache 2.4 + PHP 8.3 + MariaDB 10.11 in strict SQL mode, desktop and mobile viewports.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        php: ['8.1', '8.2', '8.3', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - run: |
+          out=$(find . -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n 50 -P 4 php -d error_reporting=E_ALL -l 2>&1 | grep -v '^No syntax errors detected' || true)
+          if [ -n "$out" ]; then echo "$out"; exit 1; fi
+
+  e2e:
+    needs: lint
+    runs-on: ubuntu-24.04
+    services:
+      mariadb:
+        image: mariadb:10.11
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: sp
+          MARIADB_USER: sp
+          MARIADB_PASSWORD: sp-ci-pass
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apache 2.4 + PHP 8.3 (Ubuntu packages)
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q apache2 libapache2-mod-php8.3 php8.3-mysql php8.3-mbstring php8.3-curl php8.3-gd php8.3-xml php8.3-intl mariadb-client
+          sudo a2enmod rewrite headers
+          sudo rm -rf /var/www/html && sudo cp -a "$GITHUB_WORKSPACE" /var/www/html
+          sudo sed -i "s/^\$sp_db_sql_mode = .*/\$sp_db_sql_mode = 'server';/" /var/www/html/control/includes/config-default.php
+          printf '<Directory /var/www/html>\n  AllowOverride All\n</Directory>\n' | sudo tee /etc/apache2/conf-enabled/sp.conf
+          sudo chown -R www-data:www-data /var/www/html
+          sudo systemctl restart apache2
+      - name: Strict SQL mode on the server
+        run: mysql -h127.0.0.1 -uroot -proot -e "SET GLOBAL sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Playwright
+        run: |
+          npm ci --ignore-scripts
+          npx playwright install --with-deps chromium
+      - name: Install SubjectsPlus and run the browser suite
+        env:
+          SP_BASE: http://localhost
+          SP_DB_HOST: 127.0.0.1
+          SP_DB_USER: sp
+          SP_DB_PASS: sp-ci-pass
+          SP_DB_NAME: sp
+        run: node tests/e2e/sp-e2e.cjs --install --label ci-apache-php8.3-mariadb10.11
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results
+          path: tests/e2e/results/
