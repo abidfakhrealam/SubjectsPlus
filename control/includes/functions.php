@@ -982,7 +982,7 @@ function showDocIcon( $extension ) {
 		case "gif":
 		case "jpg":
 		case "jpeg":
-		case "png";
+		case "png":
 		case "tif":
 		case "tiff":
 			return "picture.png";

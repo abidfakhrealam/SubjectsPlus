@@ -206,15 +206,15 @@ if ($is_um == TRUE) {
 
     // determine our default search/search box text
     switch ($subcat) {
-      case "records";
+      case "records":
         $input_text = _("Search records");
         $target_url = "record.php?record_id=";
         break;
-      case "guides";
+      case "guides":
         $input_text = _("Search guides");
         $target_url = "../guides/guide.php?subject_id=";
         break;
-      case "faq";
+      case "faq":
         $input_text = _("Search faqs");
         $target_url = "faq.php?faq_id=";
         break;
@@ -222,11 +222,11 @@ if ($is_um == TRUE) {
 	      $input_text = _("Search all");
         $target_url = "../control/guides/guide.php?subject_id=";
 	      break;
-      case "talkback";
+      case "talkback":
         $input_text = _("Search talkback");
         $target_url = "talkback.php?talkback_id=";
         break;
-      case "admin";
+      case "admin":
         $input_text = _("Search users");
         $target_url = "user.php?staff_id=";
         break;

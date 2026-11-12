@@ -85,7 +85,7 @@ class CompilerApiFilter extends BaseCompilerFilter
             }
             if ($this->proxy) {
                 $contextOptions['http']['proxy'] = $this->proxy;
-                $contextOptions['http']['request_fulluri'] = (Boolean) $this->proxyFullUri;
+                $contextOptions['http']['request_fulluri'] = (bool) $this->proxyFullUri;
             }
             $context = stream_context_create($contextOptions);
 
